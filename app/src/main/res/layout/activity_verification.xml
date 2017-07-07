@@ -1,0 +1,69 @@
+<android.support.design.widget.CoordinatorLayout
+	android:id="@+id/main_content"
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:fitsSystemWindows="true">
+
+
+	<LinearLayout
+			android:id="@+id/verify_root"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:gravity="center_horizontal"
+			android:orientation="vertical">
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="32dp"
+			android:text="Enter verification code"
+			android:textSize="20sp"
+			android:textColor="@color/colorPrimaryDark"/>
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="when you receive message from us"
+			android:textSize="20sp"
+			android:textColor="@color/colorPrimaryDark"/>
+
+
+			<EditText
+				android:id="@+id/verification_code"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginBottom="24dp"
+				android:layout_marginLeft="96dp"
+				android:layout_marginRight="96dp"
+				android:layout_marginTop="32dp"
+				android:gravity="center_horizontal"
+				android:hint="XXXXXX"
+				android:imeOptions="actionDone"
+				android:inputType="number"/>
+
+			<Button
+				android:id="@+id/verify_button"
+				android:layout_width="150dp"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="5dp"
+				android:fontFamily="sans-serif"
+				android:paddingLeft="16dp"
+				android:paddingRight="16dp"
+				android:text="Continue"/>
+
+			<TextView
+				android:id="@+id/resend_code"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="10dp"
+				android:clickable="true"
+				android:text="Resend code"
+				android:textColor="@color/colorPrimary"
+				android:textSize="15sp"/>
+
+	</LinearLayout>
+
+</android.support.design.widget.CoordinatorLayout>

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.Toolbar
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:layout_width="match_parent"
+	android:layout_height="50dp"
+	android:background="@color/colorPrimaryDark"
+	app:layout_scrollFlags="scroll">
+
+	<RelativeLayout
+		android:layout_width="match_parent"
+		android:layout_height="match_parent">
+
+		<RelativeLayout
+			android:layout_width="220dp"
+			android:layout_height="match_parent">
+
+			<ImageView
+				android:id="@+id/toolbarImage"
+				android:layout_width="36dp"
+				android:layout_height="36dp"
+				android:layout_alignParentLeft="true"
+				android:layout_centerVertical="true"
+				android:src="@drawable/jewelchat_logo"/>
+
+			<TextView
+				android:id="@+id/toolbarTitle"
+				android:layout_width="match_parent"
+				android:layout_height="25dp"
+				android:layout_alignParentTop="true"
+				android:layout_marginLeft="10dp"
+				android:layout_marginTop="13dp"
+				android:layout_toRightOf="@+id/toolbarImage"
+				android:text="JewelChat"
+				android:textColor="@android:color/white"
+				android:textSize="18sp"/>
+
+			<TextView
+				android:id="@+id/toolbarSubtitle"
+				android:layout_width="match_parent"
+				android:layout_height="12dp"
+				android:layout_below="@+id/toolbarTitle"
+				android:layout_marginBottom="1dp"
+				android:layout_marginLeft="12dp"
+				android:layout_toRightOf="@+id/toolbarImage"
+				android:text="Online"
+				android:textColor="@android:color/white"
+				android:textSize="11sp"
+				android:visibility="gone"/>
+
+		</RelativeLayout>
+
+
+
+		<ImageView
+			android:id="@+id/popup_menu"
+			android:layout_width="wrap_content"
+			android:layout_height="match_parent"
+			android:layout_alignParentRight="true"
+			android:src="@drawable/appbar_popup"
+			android:onClick="showPopUp"/>
+
+		<RelativeLayout
+			android:id="@+id/jewel_store"
+			android:layout_width="100dp"
+			android:layout_marginTop="2dp"
+			android:layout_marginBottom="2dp"
+			android:layout_height="match_parent"
+			android:layout_toLeftOf="@+id/popup_menu"
+			>
+
+			<ImageView
+				android:id="@+id/jewel_store_image"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_alignParentLeft="true"
+				android:src="@drawable/js_full"/>
+
+
+		</RelativeLayout>
+
+
+	</RelativeLayout>
+
+
+</android.support.v7.widget.Toolbar>

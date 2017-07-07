@@ -1,0 +1,99 @@
+<android.support.design.widget.CoordinatorLayout
+	android:id="@+id/main_content"
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:fitsSystemWindows="true"
+	tools:context="in.jewelchat.jewelchat.screens.ActivityInitialDetails">
+
+	<RelativeLayout
+		xmlns:android="http://schemas.android.com/apk/res/android"
+		xmlns:tools="http://schemas.android.com/tools"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent">
+
+		<ScrollView
+			android:layout_width="match_parent"
+			android:layout_height="match_parent">
+
+			<LinearLayout
+				android:id="@+id/mobile_entry_root_layout"
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
+				android:gravity="center_horizontal"
+				android:orientation="vertical">
+
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_marginTop="32sp"
+					android:text="Enter your name and"
+					android:textSize="20sp"
+					android:textColor="@color/colorPrimaryDark"/>
+
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="Click Continue"
+					android:textSize="20sp"
+					android:textColor="@color/colorPrimaryDark"/>
+
+				<RelativeLayout
+					android:layout_width="fill_parent"
+					android:layout_height="wrap_content"
+					android:layout_margin="16dp"
+					android:orientation="horizontal"
+					android:paddingLeft="48dp"
+					android:paddingRight="48dp">
+
+					<EditText
+						android:id="@+id/name"
+						android:layout_width="fill_parent"
+						android:layout_height="wrap_content"
+						android:gravity="center_horizontal"
+						android:hint="Name"
+						android:inputType="text"
+						android:textSize="16sp"/>
+
+					<EditText
+						android:id="@+id/reference"
+						android:layout_width="fill_parent"
+						android:layout_height="wrap_content"
+						android:gravity="center_horizontal"
+						android:layout_marginTop="8dp"
+						android:hint="Invited from Mobile(optional)"
+						android:layout_below="@+id/name"
+						android:inputType="phone"
+						android:textSize="16sp"/>
+
+				</RelativeLayout>
+
+
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="Enter a valid invited from mobile number"
+					android:textSize="14sp"/>
+
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="to get 2 extra diamonds."
+					android:textSize="14sp"/>
+
+				<Button
+					android:id="@+id/next_continue"
+					android:layout_width="150dp"
+					android:layout_height="wrap_content"
+					android:fontFamily="sans-serif"
+					android:text="Continue"/>
+
+			</LinearLayout>
+
+		</ScrollView>
+
+	</RelativeLayout>
+
+</android.support.design.widget.CoordinatorLayout>

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_margin="10dp"
+              android:layout_width="match_parent"
+              android:layout_height="200dp">
+
+	<ImageView
+		android:id="@+id/profile_pic"
+		android:layout_width="125dp"
+		android:layout_height="125dp"
+		android:background="@android:color/darker_gray"
+		android:src="@drawable/person"/>
+
+	<RelativeLayout
+		android:layout_width="225dp"
+		android:layout_height="125dp"
+		android:layout_alignParentRight="true">
+
+		<RelativeLayout
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginRight="50dp"
+			android:layout_alignParentTop="true"
+			android:layout_alignParentRight="true">
+
+			<ImageView
+				android:id="@+id/coin_icon"
+				android:layout_width="50dp"
+				android:layout_height="50dp"
+				android:src="@drawable/coin"/>
+
+			<TextView
+				android:id="@+id/coin_count"
+				android:layout_below="@+id/coin_icon"
+				android:layout_centerHorizontal="true"
+				android:text="1"
+				android:textSize="20dp"
+				android:gravity="center"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"/>
+
+		</RelativeLayout>
+
+		<RelativeLayout
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginLeft="50dp"
+			android:layout_alignParentTop="true"
+			android:layout_alignParentLeft="true">
+
+			<ImageView
+				android:id="@+id/diamond_icon"
+				android:layout_width="50dp"
+				android:layout_height="50dp"
+				android:src="@drawable/diamond_small"/>
+
+			<TextView
+				android:id="@+id/diamond_count"
+				android:layout_below="@+id/diamond_icon"
+				android:layout_centerHorizontal="true"
+				android:text="1"
+				android:textSize="20dp"
+				android:gravity="center"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"/>
+
+		</RelativeLayout>
+
+		<Button
+			android:layout_width="180dp"
+			android:layout_height="50dp"
+			android:layout_alignParentBottom="true"
+			android:layout_centerHorizontal="true"
+			android:text="Edit Profile"
+			android:textSize="20dp"	/>
+
+	</RelativeLayout>
+
+	<TextView
+		android:id="@+id/name"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="Mayukh Chakraborty"
+		android:textAllCaps="false"
+		android:gravity="center"
+		android:textSize="20dp"
+		android:paddingTop="4dp"
+		android:textStyle="bold"
+		android:layout_below="@+id/profile_pic"/>
+
+
+</RelativeLayout>

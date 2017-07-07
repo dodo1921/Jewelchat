@@ -1,0 +1,15 @@
+<resources>
+	<string name="app_name">JewelChat</string>
+	
+	<string name="navigation_drawer_open">Open navigation drawer</string>
+	<string name="navigation_drawer_close">Close navigation drawer</string>
+	
+	<string name="action_settings">Settings</string>
+	<string name="error_msg_number_length_zero">Enter your Mobile Number</string>
+	<string name="please_wait">Please Wait...</string>
+	<string name="error_enter_number_name">Enter your number and name</string>
+	<string name="error_msg_number_length_not_ten">Enter your 10 digit mobile number</string>
+	<string name="enter_name">Enter your name</string>
+	<string name="error_default_entry_app">Enter correct number and name</string>
+
+</resources>

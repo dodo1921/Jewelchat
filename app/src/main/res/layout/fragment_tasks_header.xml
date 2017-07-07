@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:paddingLeft="10dp"
+              android:paddingRight="10dp"
+              android:paddingTop="10dp"
+              android:layout_width="match_parent"
+              android:layout_height="250dp">
+
+	<RelativeLayout
+		android:layout_width="match_parent"
+		android:layout_height="90dp">
+
+		<ImageView
+			android:layout_width="80dp"
+			android:layout_height="80dp"
+			android:src="@drawable/wallet"
+			android:padding="5dp"
+			android:background="@drawable/image_button_states"
+			android:layout_alignParentLeft="true"/>
+
+		<ImageView
+			android:layout_width="80dp"
+			android:layout_height="80dp"
+			android:padding="5dp"
+			android:src="@drawable/refer"
+			android:background="@drawable/image_button_states"
+			android:layout_alignParentRight="true"/>
+
+		<ImageView
+			android:layout_width="80dp"
+			android:layout_height="80dp"
+			android:padding="5dp"
+			android:src="@drawable/leaderboard"
+			android:background="@drawable/image_button_states"
+			android:layout_centerHorizontal="true"/>
+
+
+	</RelativeLayout>
+
+	<Button
+		android:layout_width="match_parent"
+		android:layout_height="100dp"
+		android:paddingLeft="30dp"
+		android:text="Jewel Factory"
+		android:textSize="30dp"
+		android:drawableLeft="@drawable/factory"/>
+
+</LinearLayout>

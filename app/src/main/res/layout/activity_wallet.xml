@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+	android:id="@+id/main_content"
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:fitsSystemWindows="true"
+	tools:context="in.jewelchat.jewelchat.screens.ActivityJewelFactories">
+
+	<android.support.design.widget.AppBarLayout
+		android:id="@+id/appbar"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content">
+
+		<include
+			android:id="@+id/jewelchat_toolbar"
+			layout="@layout/jewelchat_toolbar"/>
+
+		<include
+			android:id="@+id/jewelchat_xpbar"
+			layout="@layout/jewelchat_xpbar"/>
+
+	</android.support.design.widget.AppBarLayout>
+
+
+	<android.support.v4.widget.NestedScrollView
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+
+		<LinearLayout android:orientation="vertical"
+		              android:layout_width="match_parent"
+		              android:layout_height="match_parent">
+
+			<TextView
+				android:layout_marginTop="50dp"
+				android:layout_marginBottom="50dp"
+				android:layout_gravity="center"
+				android:text="100.00"
+				android:textSize="35dp"
+				android:textStyle="bold"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"/>
+
+			<RelativeLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content">
+
+				<Button
+					android:text="Redeem 50 rupees"
+					android:layout_marginLeft="25dp"
+					android:layout_width="150dp"
+					android:layout_height="100dp"/>
+				<Button
+					android:text="Add money to wallet"
+					android:layout_marginRight="25dp"
+					android:layout_alignParentRight="true"
+					android:layout_width="150dp"
+					android:layout_height="100dp"/>
+
+			</RelativeLayout>
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="25dp"
+				android:layout_marginLeft="30dp"
+				android:layout_marginBottom="15dp"
+				android:textSize="25dp"
+				android:textStyle="bold"
+				android:text="Buy"/>
+
+			<RelativeLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content">
+
+				<ImageView
+					android:id="@+id/d1"
+					android:src="@drawable/d1"
+					android:layout_marginLeft="25dp"
+					android:layout_width="100dp"
+					android:layout_height="100dp"/>
+
+				<ImageView
+					android:id="@+id/d2"
+					android:src="@drawable/d1"
+					android:layout_centerHorizontal="true"
+					android:layout_width="100dp"
+					android:layout_height="100dp"/>
+
+				<ImageView
+					android:id="@+id/d3"
+					android:src="@drawable/d1"
+					android:layout_marginRight="25dp"
+					android:layout_alignParentRight="true"
+					android:layout_width="100dp"
+					android:layout_height="100dp"/>
+
+			</RelativeLayout>
+
+			<RelativeLayout
+				android:layout_marginTop="10dp"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content">
+
+				<ImageView
+					android:id="@+id/c1"
+					android:src="@drawable/c1"
+					android:layout_marginLeft="25dp"
+					android:layout_width="100dp"
+					android:layout_height="100dp"/>
+
+				<ImageView
+					android:id="@+id/c2"
+					android:src="@drawable/c1"
+					android:layout_centerHorizontal="true"
+					android:layout_width="100dp"
+					android:layout_height="100dp"/>
+
+				<ImageView
+					android:id="@+id/c3"
+					android:src="@drawable/c1"
+					android:layout_marginRight="25dp"
+					android:layout_alignParentRight="true"
+					android:layout_width="100dp"
+					android:layout_height="100dp"/>
+
+			</RelativeLayout>
+
+		</LinearLayout>
+
+	</android.support.v4.widget.NestedScrollView>
+
+
+</android.support.design.widget.CoordinatorLayout>
+
+
