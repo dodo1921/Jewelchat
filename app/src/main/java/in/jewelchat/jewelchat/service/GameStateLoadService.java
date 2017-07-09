@@ -85,7 +85,7 @@ public class GameStateLoadService extends IntentService
 			}
 		}
 
-		JewelChatApp.appLog("GameStateLoadService Volley error:"+errorMessage);
+		JewelChatApp.appLog(Log.ERROR, "SERVICE:OnError", "GameStateLoadService Volley error:"+errorMessage);
 		FirebaseCrash.report(error);
 
 	}
@@ -93,7 +93,7 @@ public class GameStateLoadService extends IntentService
 	@Override
 	public void onResponse(JSONObject response) {
 
-		JewelChatApp.appLog("GameStateLoadService" + ":onResponse");
+		JewelChatApp.appLog(Log.INFO, "SERVICE:OnResponse","GameStateLoadService" + ":onResponse");
 
 		try {
 
@@ -121,10 +121,12 @@ public class GameStateLoadService extends IntentService
 				JewelChatApp.getBusInstance().post(JewelChatApp.produceJewelChangeEvent());
 
 		} catch (JSONException e) {
-			Log.i(">>>>>>>>>>>>>>>>>", "GameStateLoadService:"+e);
+			//Log.i(">>>>>>>>>>>>>>>>>", "GameStateLoadService:"+e);
+			JewelChatApp.appLog(Log.ERROR, "SERVICE:OnResponse", "GameStateLoadService error:"+e);
 			FirebaseCrash.report(e);
 		} catch (Exception e) {
-			Log.i(">>>>>>>>>>>>>>>>>", "GameStateLoadService:"+e);
+			//Log.i(">>>>>>>>>>>>>>>>>", "GameStateLoadService:"+e);
+			JewelChatApp.appLog(Log.ERROR, "SERVICE:OnResponse", "GameStateLoadService error:"+e);
 			FirebaseCrash.report(e);
 		}
 

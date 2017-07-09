@@ -9,10 +9,16 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.View;
+import android.widget.ImageView;
+
+import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import in.jewelchat.jewelchat.models.GameStateChangeEvent;
+import in.jewelchat.jewelchat.models.NoInternet;
+import in.jewelchat.jewelchat.models._403NetworkErrorEvent;
 import in.jewelchat.jewelchat.screens.FragmentChatList;
 import in.jewelchat.jewelchat.service.DownloadBlockedUserService;
 import in.jewelchat.jewelchat.service.DownloadGroupsService;
@@ -123,7 +129,32 @@ public class JewelChat extends BaseNetworkActivity {
 
 	}
 
+	@Subscribe
+	public void onGameStateChangeEvent( GameStateChangeEvent event) {
 
+		ImageView store_image= 	(ImageView)appbarRoot.findViewById(R.id.jewel_store_image);
+		if(event.TOTAL==0) {
+			store_image.setImageResource(R.drawable.js_empty);
+		}else if(event.TOTAL>0 && event.TOTAL<25){
+			store_image.setImageResource(R.drawable.js_half);
+		}else if(event.TOTAL == 25){
+			store_image.setImageResource(R.drawable.js_full);
+		}
+		LEVEL.setText(event.LEVEL+"");
+		XP.setMax(event.LEVEL_XP);XP.setProgress(event.XP);
+		LEVEL_SCORE.setText(event.XP+"/"+event.LEVEL_XP);
+
+	}
+
+	@Subscribe
+	public void OnNoInternetEvent( NoInternet event) {
+		showNoInternetDialog();
+	}
+
+	@Subscribe
+	public void on_403NetworkErrorEvent( _403NetworkErrorEvent event) {
+		show403Dialog();
+	}
 
 	public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 

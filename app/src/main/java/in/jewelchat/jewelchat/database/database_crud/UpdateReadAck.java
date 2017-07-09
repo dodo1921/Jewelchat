@@ -32,7 +32,7 @@ public class UpdateReadAck extends IntentService {
 			cv.put(ChatMessageContract.TIME_READ, data.getInt("read"));
 
 			Uri urimsg = Uri.parse(JewelChatDataProvider.SCHEME+"://" + JewelChatDataProvider.AUTHORITY + "/"+ ChatMessageContract.SQLITE_TABLE_NAME);
-			getContentResolver().update(urimsg, cv, ChatMessageContract.SERVER_ID + "= ?", new String[]{ data.getInt("serverid")+"" }  );
+			getContentResolver().update(urimsg, cv, ChatMessageContract.KEY_ROWID + "= ?", new String[]{ data.getInt("sender_msgid")+"" }  );
 
 
 

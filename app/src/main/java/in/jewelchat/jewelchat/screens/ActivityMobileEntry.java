@@ -44,10 +44,10 @@ public class ActivityMobileEntry extends BaseActivity{
 		ll_dots = (LinearLayout) findViewById(R.id.ll_dots);
 
 		slider_image_list = new ArrayList<Integer>();
-		slider_image_list.add(0,R.drawable.t3);
-		slider_image_list.add(1,R.drawable.t4);
-		slider_image_list.add(2,R.drawable.t5);
-		slider_image_list.add(3,R.drawable.t6);
+		slider_image_list.add(0,R.drawable.tutorial1);
+		slider_image_list.add(1,R.drawable.tutorial2);
+		slider_image_list.add(2,R.drawable.tutorial3);
+		//slider_image_list.add(3,R.drawable.t6);
 
 
 		sliderPagerAdapter = new SliderPagerAdapter(ActivityMobileEntry.this, slider_image_list);
@@ -78,14 +78,14 @@ public class ActivityMobileEntry extends BaseActivity{
 		ll_dots.removeAllViews();
 		for (int i = 0; i < dots.length; i++) {
 			ImageView t = new ImageView(this);
-			t.setImageResource(R.drawable.indicator_b);
+			t.setImageResource(R.drawable.b_dot);
 			dots[i] = t;
 			ll_dots.addView(dots[i]);
 
 		}
 
 		if (dots.length > 0)
-			((ImageView)dots[currentPage]).setImageResource(R.drawable.indicator_w);
+			((ImageView)dots[currentPage]).setImageResource(R.drawable.w_dot);
 	}
 	
 	@Override

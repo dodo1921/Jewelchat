@@ -97,10 +97,10 @@ public class JewelChatDataProvider extends ContentProvider {
 						+ ContactContract.SQLITE_TABLE_NAME+"."+ContactContract.IS_REGIS + ", "
 						+ ContactContract.SQLITE_TABLE_NAME+"."+ContactContract.IS_GROUP + ", "
 						+ ContactContract.SQLITE_TABLE_NAME+"."+ContactContract.IS_GROUP_ADMIN + ", "
-						+ ContactContract.SQLITE_TABLE_NAME+"."+ContactContract.IS_INVITED+ ", "
-						+ ContactContract.SQLITE_TABLE_NAME+"."+ContactContract.IS_BLOCKED+ ", "
-						+ ContactContract.SQLITE_TABLE_NAME+"."+ContactContract.STATUS_MSG+ ", "
-						+ ContactContract.SQLITE_TABLE_NAME+"."+ContactContract.UNREAD_COUNT+ ", "
+						+ ContactContract.SQLITE_TABLE_NAME+"."+ContactContract.IS_INVITED + ", "
+						+ ContactContract.SQLITE_TABLE_NAME+"."+ContactContract.IS_BLOCKED + ", "
+						+ ContactContract.SQLITE_TABLE_NAME+"."+ContactContract.STATUS_MSG + ", "
+						+ ContactContract.SQLITE_TABLE_NAME+"."+ContactContract.UNREAD_COUNT + ", "
 						+ ChatMessageContract.SQLITE_TABLE_NAME+"."+ChatMessageContract.MSG_TYPE + ", "
 						+ ChatMessageContract.SQLITE_TABLE_NAME+"."+ChatMessageContract.MSG_TEXT + ", "
 						+ ChatMessageContract.SQLITE_TABLE_NAME+"."+ChatMessageContract.CREATED_TIME + ", "
@@ -112,7 +112,8 @@ public class JewelChatDataProvider extends ContentProvider {
 						+ " FROM "
 						+ ContactContract.SQLITE_TABLE_NAME + ", "+ ChatMessageContract.SQLITE_TABLE_NAME
 						+ " WHERE "+ ContactContract.SQLITE_TABLE_NAME+"."+ContactContract.JEWELCHAT_ID+" = "+ ChatMessageContract.SQLITE_TABLE_NAME+"."+ChatMessageContract.CHAT_ROOM
-						//+ " AND " + ContactContract.SQLITE_TABLE_NAME+"."+ContactContract.IS_BLOCKED + " = 0 "
+						+ " AND " + ContactContract.SQLITE_TABLE_NAME+"."+ContactContract.IS_BLOCKED + " = 0 "
+						+ " AND " + ContactContract.SQLITE_TABLE_NAME+"."+ContactContract.IS_REGIS + " = 1 "
 						+ " GROUP BY "+ ChatMessageContract.SQLITE_TABLE_NAME+"."+ChatMessageContract.CHAT_ROOM;
 				Log.i(">>", query);
 				Cursor returnCursor = db.rawQuery(query, null);

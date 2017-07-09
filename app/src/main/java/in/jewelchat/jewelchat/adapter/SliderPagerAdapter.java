@@ -33,6 +33,8 @@ public class SliderPagerAdapter extends PagerAdapter {
 		View view = layoutInflater.inflate(R.layout.layout_slider, container, false);
 		ImageView im_slider = (ImageView) view.findViewById(R.id.im_slider);
 
+		im_slider.setPadding(70,70,70,70);
+
 		im_slider.setImageResource(this.image_arraylist.get(position));
 
 		container.addView(view);

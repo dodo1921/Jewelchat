@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
@@ -51,8 +52,12 @@ public class JewelChatApp extends Application {
 	}
 
 
+	public static void appLog(int level, String TAG, @NonNull String message) {
+		FirebaseCrash.logcat(level, TAG, Thread.currentThread().getName() + ":" + message);
+	}
+
 	public static void appLog(@NonNull String message) {
-		FirebaseCrash.logcat(0, "info" , Thread.currentThread().getName() + ":" + message);
+		FirebaseCrash.log(Thread.currentThread().getName() + ":" + message);
 	}
 
 	public static SharedPreferences getSharedPref() {
@@ -114,6 +119,7 @@ public class JewelChatApp extends Application {
 	@Produce
 	public static GameStateChangeEvent produceJewelChangeEvent() {
 		// Provide an initial value for location based on the last known position.
+		Log.i("GAMESTATE",">>>>>>>");
 		int sum=0;
 		for(int i=3; i<30; i++){
 			sum += getSharedPref().getInt(i+"",0);
@@ -154,6 +160,7 @@ public class JewelChatApp extends Application {
 	@Override
 	public void onTerminate() {
 		super.onTerminate();
+		getJCSocket().getSocket().disconnect();
 	}
 
 }

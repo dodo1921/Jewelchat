@@ -68,6 +68,7 @@ public class InsertNewGroupMessage extends IntentService {
 				ContentValues cv1 = new ContentValues();
 				cv1.put(ContactContract.JEWELCHAT_ID, data.getInt("group_id"));
 				cv1.put(ContactContract.IS_GROUP, 1);
+				cv1.put(ContactContract.IS_REGIS, 1);
 				cv1.put(ContactContract.CONTACT_NAME, data.getInt("name"));
 				cv1.put(ContactContract.UNREAD_COUNT, 1);
 

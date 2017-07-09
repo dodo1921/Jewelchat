@@ -7,6 +7,7 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.PopupMenu;
 import android.util.Log;
 import android.view.MenuItem;
@@ -18,15 +19,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.squareup.otto.Subscribe;
-
-import in.jewelchat.jewelchat.models.GameStateChangeEvent;
-import in.jewelchat.jewelchat.models.NoInternet;
-import in.jewelchat.jewelchat.models._403NetworkErrorEvent;
 import in.jewelchat.jewelchat.screens.ActivitySplashScreen;
 import in.jewelchat.jewelchat.screens.DialogJewelStore;
 import in.jewelchat.jewelchat.screens.DialogJewelStoreFull;
-import in.jewelchat.jewelchat.screens.DialogNoInternet;
 
 /**
  * Created by mayukhchakraborty on 06/03/16.
@@ -44,7 +39,8 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
 	protected RelativeLayout jewel_store_button;
 
 	protected DialogJewelStore jewelStoreDialog;
-	protected DialogNoInternet noInternetDialog;
+	protected AlertDialog noInternetDialog;
+	protected AlertDialog _403Dialog;
 
 	protected DialogJewelStoreFull jewelStoreFull;
 
@@ -62,32 +58,32 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		className = getClass().getSimpleName();
-		JewelChatApp.appLog(className + ":onCreate");
+		JewelChatApp.appLog(Log.INFO, "Activity",className + ":onCreate");
 		super.onCreate(savedInstanceState);
 	}
 
 	@Override
 	protected void onStop() {
-		JewelChatApp.appLog(className + ":onStop");
+		JewelChatApp.appLog(Log.INFO, "Activity",className + ":onStop");
 		super.onStop();
 	}
 
 	@Override
 	protected void onDestroy() {
-		JewelChatApp.appLog(className + ":onDestroy");
+		JewelChatApp.appLog(Log.INFO, "Activity",className + ":onDestroy");
 		super.onDestroy();
 	}
 
 	@Override
 	protected void onPause() {
-		JewelChatApp.appLog(className + ":onPause");
+		JewelChatApp.appLog(Log.INFO, "Activity",className + ":onPause");
 		super.onPause();
 		JewelChatApp.getBusInstance().unregister(this);
 	}
 
 	@Override
 	protected void onResume() {
-		JewelChatApp.appLog(className + ":onResume");
+		JewelChatApp.appLog(Log.INFO, "Activity",className + ":onResume");
 		super.onResume();
 		JewelChatApp.getBusInstance().register(this);
 		JewelChatApp.getBusInstance().post(JewelChatApp.produceJewelChangeEvent());
@@ -95,7 +91,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
 
 	@Override
 	protected void onStart() {
-		JewelChatApp.appLog(className + ":onStart");
+		JewelChatApp.appLog(Log.INFO, "Activity", className + ":onStart");
 		super.onStart();
 
 	}
@@ -113,16 +109,44 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
 
 	protected void showNoInternetDialog() {
 
-		noInternetDialog = new DialogNoInternet();
-		noInternetDialog.show(getFragmentManager(), "No Internet");
-		noInternetDialog.setCancelable(true);
+		if( noInternetDialog == null ) {
+			noInternetDialog = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.AppTheme)).create();
+			noInternetDialog.setTitle("No Internet");
+			noInternetDialog.setMessage("There is no internet connection.");
+			noInternetDialog.show();
+			return;
+		}else{
+			noInternetDialog.show();
+			return;
+		}
+	}
 
+	protected void show403Dialog() {
+
+		if( _403Dialog == null ) {
+			_403Dialog = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.AppTheme)).create();
+			_403Dialog.setTitle("Verification Error");
+			_403Dialog.setMessage("Your phone number is registered with another device. Please verify your number.");
+			_403Dialog.setButton(DialogInterface.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					Intent intent = new Intent(getApplicationContext(), ActivitySplashScreen.class);
+					startActivity(intent);
+					finish();
+				}
+			});
+			_403Dialog.show();
+			return;
+		}else{
+			_403Dialog.show();
+			return;
+		}
 	}
 
 
 
 	protected void setUpAppbar() {
-		JewelChatApp.appLog(className + ":setUpAppbar");
+		JewelChatApp.appLog(Log.INFO, "Activity", className + ":setUpAppbar");
 		appbarRoot = (AppBarLayout)findViewById(R.id.appbar);
 
 		jewel_store_button = (RelativeLayout)appbarRoot.findViewById(R.id.jewel_store);
@@ -147,57 +171,10 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
 
 	}
 
+/*
 
-	@Subscribe
-	public void OnNoInternetEvent( NoInternet event) {
+*/
 
-		AlertDialog dialog = new AlertDialog.Builder(getApplicationContext()).create();
-		dialog.setTitle("No Internet");
-		dialog.setMessage("There is no Internet connection...");
-		dialog.setCancelable(true);
-		dialog.show();
-		return;
-
-	}
-
-
-
-	@Subscribe
-	public void on_403NetworkErrorEvent( _403NetworkErrorEvent event) {
-
-		AlertDialog dialog = new AlertDialog.Builder(getApplicationContext()).create();
-		dialog.setTitle("Verification Error");
-		dialog.setMessage("Your phone number is registered with another device. Please verify your number.");
-		dialog.setButton(DialogInterface.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				Intent intent = new Intent(getApplicationContext(), ActivitySplashScreen.class);
-				startActivity(intent);
-				finish();
-			}
-		});
-		dialog.show();
-		return;
-
-	}
-
-	@Subscribe
-	public void onGameStateChangeEvent( GameStateChangeEvent event) {
-
-		Log.i(">>>>>>>", event.TOTAL+" ");
-		ImageView store_image= 	(ImageView)appbarRoot.findViewById(R.id.jewel_store_image);
-		if(event.TOTAL==0) {
-			store_image.setImageResource(R.drawable.js_empty);
-		}else if(event.TOTAL>0 && event.TOTAL<25){
-			store_image.setImageResource(R.drawable.js_half);
-		}else if(event.TOTAL == 25){
-			store_image.setImageResource(R.drawable.js_full);
-		}
-		LEVEL.setText(event.LEVEL+"");
-		XP.setMax(event.LEVEL_XP);XP.setProgress(event.XP);
-		LEVEL_SCORE.setText(event.XP+"/"+event.LEVEL_XP);
-
-	}
 
 	protected void makeToast(String message) {
 		if (getApplicationContext() != null)

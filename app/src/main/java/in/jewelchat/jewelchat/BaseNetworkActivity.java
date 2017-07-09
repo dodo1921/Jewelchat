@@ -7,6 +7,8 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.view.ContextThemeWrapper;
+import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 
@@ -50,7 +52,7 @@ public abstract class BaseNetworkActivity extends in.jewelchat.jewelchat.BaseAct
 
 
 	protected void dismissDialog() {
-		JewelChatApp.appLog(className + ":dismissDialog");
+		JewelChatApp.appLog( Log.INFO, "Activity", className + ":dismissDialog");
 		//TODO implement this isShowing check for every dialog in system
 		if (progressDialog != null && progressDialog.isShowing() ) { //&& !isDestroyed()
 			progressDialog.dismiss();
@@ -58,7 +60,7 @@ public abstract class BaseNetworkActivity extends in.jewelchat.jewelchat.BaseAct
 	}
 
 	protected void createDialog(String message) {
-		JewelChatApp.appLog(className + ":createDialog");
+		JewelChatApp.appLog(Log.INFO, "Activity", className + ":createDialog");
 		//if (isDestroyed())
 			//return;
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -73,11 +75,11 @@ public abstract class BaseNetworkActivity extends in.jewelchat.jewelchat.BaseAct
 	}
 
 	protected boolean addRequest(JewelChatRequest request) {
-		JewelChatApp.appLog(className + ":addrequest");
+		JewelChatApp.appLog(Log.INFO, "Activity", className + ":addrequest");
 		if (NetworkConnectivityStatus.getConnectivityStatus() == NetworkConnectivityStatus.CONNECTED) {
 			isNotConnectedToastShown = false;
 			JewelChatApp.getRequestQueue().add(request);
-			JewelChatApp.appLog(className + ":added:" + request.toString());
+			JewelChatApp.appLog(Log.INFO, "Activity", className + ":added:" + request.toString());
 			return true;
 		} else {
 			dismissDialog();
@@ -120,7 +122,7 @@ public abstract class BaseNetworkActivity extends in.jewelchat.jewelchat.BaseAct
 				editor.putString(JewelChatPrefs.MY_ID, "");
 				editor.commit();
 
-				AlertDialog dialog = new AlertDialog.Builder(getApplicationContext()).create();
+				AlertDialog dialog = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.AppTheme)).create();
 				dialog.setTitle("Verification Error");
 				dialog.setMessage("Your phone number is registered with another device. Please verify your number.");
 				dialog.setButton(DialogInterface.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
