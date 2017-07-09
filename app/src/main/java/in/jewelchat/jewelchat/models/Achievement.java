@@ -5,4 +5,12 @@ package in.jewelchat.jewelchat.models;
  */
 
 public class Achievement {
+	public int id;
+	public int level;
+	public int aid;
+	public String text;
+	public String note;
+	public int diamond;
+
 }
+

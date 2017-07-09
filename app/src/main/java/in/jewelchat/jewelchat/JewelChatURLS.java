@@ -25,6 +25,8 @@ public class JewelChatURLS {
 	public static final String GETBLOCKEDUSERS = baseURL + "/getBlockedUsers";
 
 	public static final String GETFACTORIES = baseURL + "/getFactories";
+	public static final String GETACHIEVEMENTS = baseURL + "/getAchievements";
+	public static final String GETTASKS = baseURL + "/getTasks";
 
 
 

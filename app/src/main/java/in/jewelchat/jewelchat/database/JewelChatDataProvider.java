@@ -90,25 +90,25 @@ public class JewelChatDataProvider extends ContentProvider {
 			}
 			case CHAT_LIST:{
 				String query = "SELECT "
-						+ ContactContract.SQLITE_TABLE_NAME+"."+ContactContract.JEWELCHAT_ID + ", "
-						+ ContactContract.SQLITE_TABLE_NAME+"."+ContactContract.CONTACT_NAME + ", "
-						+ ContactContract.SQLITE_TABLE_NAME+"."+ContactContract.CONTACT_NUMBER + ", "
-						+ ContactContract.SQLITE_TABLE_NAME+"."+ContactContract.IMAGE_PATH + ", "
-						+ ContactContract.SQLITE_TABLE_NAME+"."+ContactContract.IS_REGIS + ", "
-						+ ContactContract.SQLITE_TABLE_NAME+"."+ContactContract.IS_GROUP + ", "
-						+ ContactContract.SQLITE_TABLE_NAME+"."+ContactContract.IS_GROUP_ADMIN + ", "
-						+ ContactContract.SQLITE_TABLE_NAME+"."+ContactContract.IS_INVITED + ", "
-						+ ContactContract.SQLITE_TABLE_NAME+"."+ContactContract.IS_BLOCKED + ", "
-						+ ContactContract.SQLITE_TABLE_NAME+"."+ContactContract.STATUS_MSG + ", "
-						+ ContactContract.SQLITE_TABLE_NAME+"."+ContactContract.UNREAD_COUNT + ", "
-						+ ChatMessageContract.SQLITE_TABLE_NAME+"."+ChatMessageContract.MSG_TYPE + ", "
-						+ ChatMessageContract.SQLITE_TABLE_NAME+"."+ChatMessageContract.MSG_TEXT + ", "
-						+ ChatMessageContract.SQLITE_TABLE_NAME+"."+ChatMessageContract.CREATED_TIME + ", "
-						+ ChatMessageContract.SQLITE_TABLE_NAME+"."+ChatMessageContract.IS_READ + ", "
-						+ ContactContract.SQLITE_TABLE_NAME+"."+ContactContract.KEY_ROWID + ", "
-						+ ChatMessageContract.SQLITE_TABLE_NAME+"."+ChatMessageContract.CREATOR_ID + ", "
-						+ ChatMessageContract.SQLITE_TABLE_NAME+"."+ChatMessageContract.CHAT_ROOM + ", "
-						+ "MAX("+ChatMessageContract.SQLITE_TABLE_NAME+"."+ChatMessageContract.KEY_ROWID+")"
+						+ ContactContract.SQLITE_TABLE_NAME+"."+ContactContract.JEWELCHAT_ID + ", " //0
+						+ ContactContract.SQLITE_TABLE_NAME+"."+ContactContract.CONTACT_NAME + ", " //1
+						+ ContactContract.SQLITE_TABLE_NAME+"."+ContactContract.CONTACT_NUMBER + ", " //2
+						+ ContactContract.SQLITE_TABLE_NAME+"."+ContactContract.IMAGE_PATH + ", " //3
+						+ ContactContract.SQLITE_TABLE_NAME+"."+ContactContract.IS_REGIS + ", "//4
+						+ ContactContract.SQLITE_TABLE_NAME+"."+ContactContract.IS_GROUP + ", "//5
+						+ ContactContract.SQLITE_TABLE_NAME+"."+ContactContract.IS_GROUP_ADMIN + ", "//6
+						+ ContactContract.SQLITE_TABLE_NAME+"."+ContactContract.IS_INVITED + ", " //7
+						+ ContactContract.SQLITE_TABLE_NAME+"."+ContactContract.IS_BLOCKED + ", " //8
+						+ ContactContract.SQLITE_TABLE_NAME+"."+ContactContract.STATUS_MSG + ", " //9
+						+ ContactContract.SQLITE_TABLE_NAME+"."+ContactContract.UNREAD_COUNT + ", " //10
+						+ ChatMessageContract.SQLITE_TABLE_NAME+"."+ChatMessageContract.MSG_TYPE + ", " //11
+						+ ChatMessageContract.SQLITE_TABLE_NAME+"."+ChatMessageContract.MSG_TEXT + ", " //12
+						+ ChatMessageContract.SQLITE_TABLE_NAME+"."+ChatMessageContract.CREATED_TIME + ", " //13
+						+ ChatMessageContract.SQLITE_TABLE_NAME+"."+ChatMessageContract.IS_READ + ", " //14
+						+ ContactContract.SQLITE_TABLE_NAME+"."+ContactContract.KEY_ROWID + ", " // 15
+						+ ChatMessageContract.SQLITE_TABLE_NAME+"."+ChatMessageContract.CREATOR_ID + ", " //16
+						+ ChatMessageContract.SQLITE_TABLE_NAME+"."+ChatMessageContract.CHAT_ROOM + ", " //17
+						+ "MAX("+ChatMessageContract.SQLITE_TABLE_NAME+"."+ChatMessageContract.KEY_ROWID+")" //18
 						+ " FROM "
 						+ ContactContract.SQLITE_TABLE_NAME + ", "+ ChatMessageContract.SQLITE_TABLE_NAME
 						+ " WHERE "+ ContactContract.SQLITE_TABLE_NAME+"."+ContactContract.JEWELCHAT_ID+" = "+ ChatMessageContract.SQLITE_TABLE_NAME+"."+ChatMessageContract.CHAT_ROOM

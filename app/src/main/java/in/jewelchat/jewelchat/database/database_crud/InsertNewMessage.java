@@ -29,6 +29,8 @@ public class InsertNewMessage extends IntentService {
 	protected void onHandleIntent(Intent intent) {
 
 		try {
+
+
 			JSONObject data = new JSONObject(intent.getStringExtra("json"));
 
 
@@ -48,6 +50,7 @@ public class InsertNewMessage extends IntentService {
 			cv.put(ChatMessageContract.SENDER_PHONE, data.getInt("sender_phone"));
 			cv.put(ChatMessageContract.SENDER_NAME, data.getString("name"));
 			cv.put(ChatMessageContract.JEWEL_TYPE, data.getInt("jeweltype_id"));
+			Log.i("CREATED_AT", data.getLong("created_at")+"");
 			cv.put(ChatMessageContract.CREATED_TIME, data.getLong("created_at"));
 			cv.put(ChatMessageContract.MSG_TYPE, data.getInt("type"));
 

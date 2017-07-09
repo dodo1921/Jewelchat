@@ -7,10 +7,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.List;
 
+import in.jewelchat.jewelchat.JewelChatApp;
+import in.jewelchat.jewelchat.JewelChatPrefs;
 import in.jewelchat.jewelchat.R;
 import in.jewelchat.jewelchat.models.Achievement;
 
@@ -21,7 +25,7 @@ import in.jewelchat.jewelchat.models.Achievement;
 public class AchievementAdapter  extends RecyclerView.Adapter<AchievementAdapter.MyViewHolder>  {
 
 	private final int HEADER = 0;
-	public TasksAdapter.OnItemClickListener mItemClickListener = null;
+	public AchievementAdapter.OnItemClickListener mItemClickListener = null;
 	private Context mContext;
 	private List<Achievement> achievementList;
 
@@ -31,9 +35,10 @@ public class AchievementAdapter  extends RecyclerView.Adapter<AchievementAdapter
 		void onItemClick(View view, int position);
 	}
 
-	public AchievementAdapter(Context context, List<Achievement> achievementList) {
+	public AchievementAdapter(Context context, List<Achievement> achievementList, AchievementAdapter.OnItemClickListener mItemClickListener) {
 		this.mContext = mContext;
 		this.achievementList = achievementList;
+		this.mItemClickListener = mItemClickListener;
 	}
 
 	@Override
@@ -56,9 +61,28 @@ public class AchievementAdapter  extends RecyclerView.Adapter<AchievementAdapter
 
 		switch (position) {
 			case HEADER:
+				holder.diamond_count_header.setText(JewelChatApp.getSharedPref().getInt("0",0)+"");
+				holder.coin_count.setText(JewelChatApp.getSharedPref().getInt("1",1)+"");
+				holder.name.setText(JewelChatApp.getSharedPref().getString(JewelChatPrefs.NAME,""));
 				break;
 			default:
 				int pos = position - 1;
+				holder.main_text.setText(achievementList.get(pos).text);
+				holder.note.setText(achievementList.get(pos).note);
+				holder.loading_details.setEnabled(false);
+				if(achievementList.get(pos).diamond==1)
+					holder.diamond_count.setText("");
+				else
+					holder.diamond_count.setText(achievementList.get(pos).diamond+"");
+				if(achievementList.get(pos).level > JewelChatApp.getSharedPref().getInt(JewelChatPrefs.LEVEL,0)){
+					holder.level_lock.setVisibility(View.VISIBLE);
+					holder.check.setEnabled(false);
+				}else{
+					holder.level_lock.setVisibility(View.GONE);
+					holder.check.setEnabled(true);
+				}
+
+
 		}
 	}
 
@@ -76,39 +100,45 @@ public class AchievementAdapter  extends RecyclerView.Adapter<AchievementAdapter
 		return achievementList.size() + 1;
 	}
 
-	public class MyViewHolder extends RecyclerView.ViewHolder {
-		public TextView karma_user_name;
-		public TextView total_karma;
-		public ImageView userAvatar;
-		public ImageView leaderBoard;
+	public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener  {
+		public TextView coin_count;
+		public TextView diamond_count_header;
+		public Button edit_profile;
+		public ImageView profile_pic;
+		public TextView name;
 
-
-		public TextView contest_name;
-		public TextView contest_text;
-		public TextView contest_total_karma;
-		public TextView contest_winners_count;
-		public Button redeem_offer;
+		public TextView main_text;
+		public TextView note;
+		public TextView diamond_count;
+		public ProgressBar loading_details;
+		public Button check;
+		public LinearLayout level_lock;
+		public TextView level_lock_text;
 
 		public MyViewHolder(View itemView, int pos) {
 			super(itemView);
-			/*switch (pos) {
+			switch (pos) {
 				case HEADER:
-					leaderBoard.setOnClickListener(this);
-					userAvatar.setOnClickListener(this);
+					coin_count = (TextView)itemView.findViewById(R.id.coin_count);
+					diamond_count_header = (TextView)itemView.findViewById(R.id.diamond_count_header);
+					edit_profile = (Button)itemView.findViewById(R.id.edit_profile);
+					profile_pic = (ImageView)itemView.findViewById(R.id.profile_pic);
+					name = (TextView) itemView.findViewById(R.id.name);
+					edit_profile.setOnClickListener(this);
 					break;
 				default:
-					contest_name = (TextView) itemView.findViewById(R.id.contest_name);
-					contest_text = (TextView) itemView.findViewById(R.id.contest_text);
-					contest_image = (SquareImageView) itemView.findViewById(R.id.contest_image);
-					contest_total_karma = (TextView) itemView.findViewById(R.id.contest_total_karma);
-					contest_winners_count = (TextView) itemView.findViewById(R.id.contest_winners_count);
-					redeem_offer = (Button) itemView.findViewById(R.id.redeem_offer);
-					redeem_offer.setOnClickListener(this);
-					contest_image.setOnClickListener(this);
-			}*/
+					main_text = (TextView) itemView.findViewById(R.id.main_content);
+					note = (TextView)itemView.findViewById(R.id.note);
+					diamond_count = (TextView) itemView.findViewById(R.id.diamond_count);
+					loading_details = (ProgressBar) itemView.findViewById(R.id.loading_details);
+					check = (Button) itemView.findViewById(R.id.check);
+					check.setOnClickListener(this);
+					level_lock = (LinearLayout) itemView.findViewById(R.id.level_lock);
+					level_lock_text = (TextView) itemView.findViewById(R.id.level_lock_text);
+			}
 		}
 
-
+		@Override
 		public void onClick(View v) {
 			if (mItemClickListener != null)
 				mItemClickListener.onItemClick(v, getAdapterPosition());

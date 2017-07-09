@@ -14,6 +14,7 @@ public class JewelChatPrefs {
 	public static final String TOKEN_UPLOADED = "token_uploaded";
 	public static final String LAST_OTO_MSG = "last_oto_msg";
 	public static final String LAST_GROUP_MSG = "last_group_msg";
+	public static final String TEAM_JC_ID = "team_jc_id";
 
 	public static final String ACTIVE = "active";
 	public static final String MY_COUNTRY_CODE = "myCountryCode";
