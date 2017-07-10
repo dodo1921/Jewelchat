@@ -25,7 +25,7 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.MyViewHolder
 	private Context mContext;
 	private List<Task> taskList;
 
-	public TasksAdapter(List<Task> listTask, OnItemClickListener mItemClickListener, Context context) {
+	public TasksAdapter(Context context, List<Task> listTask, OnItemClickListener mItemClickListener ) {
 		this.mContext = context;
 		this.taskList = listTask;
 		this.mItemClickListener = mItemClickListener;
@@ -93,21 +93,13 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.MyViewHolder
 
 		public MyViewHolder(View itemView, int pos) {
 			super(itemView);
-			/*switch (pos) {
+			switch (pos) {
 				case HEADER:
-					leaderBoard.setOnClickListener(this);
-					userAvatar.setOnClickListener(this);
+
 					break;
 				default:
-					contest_name = (TextView) itemView.findViewById(R.id.contest_name);
-					contest_text = (TextView) itemView.findViewById(R.id.contest_text);
-					contest_image = (SquareImageView) itemView.findViewById(R.id.contest_image);
-					contest_total_karma = (TextView) itemView.findViewById(R.id.contest_total_karma);
-					contest_winners_count = (TextView) itemView.findViewById(R.id.contest_winners_count);
-					redeem_offer = (Button) itemView.findViewById(R.id.redeem_offer);
-					redeem_offer.setOnClickListener(this);
-					contest_image.setOnClickListener(this);
-			}*/
+			}
+
 		}
 
 

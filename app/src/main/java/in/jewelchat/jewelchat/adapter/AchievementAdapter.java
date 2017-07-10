@@ -2,6 +2,8 @@ package in.jewelchat.jewelchat.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.Spanned;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,12 +24,13 @@ import in.jewelchat.jewelchat.models.Achievement;
  * Created by mayukhchakraborty on 22/06/17.
  */
 
-public class AchievementAdapter  extends RecyclerView.Adapter<AchievementAdapter.MyViewHolder>  {
+public class AchievementAdapter  extends RecyclerView.Adapter<AchievementAdapter.MyViewHolder> {
 
 	private final int HEADER = 0;
 	public AchievementAdapter.OnItemClickListener mItemClickListener = null;
 	private Context mContext;
 	private List<Achievement> achievementList;
+
 
 
 	public interface OnItemClickListener {
@@ -36,7 +39,7 @@ public class AchievementAdapter  extends RecyclerView.Adapter<AchievementAdapter
 	}
 
 	public AchievementAdapter(Context context, List<Achievement> achievementList, AchievementAdapter.OnItemClickListener mItemClickListener) {
-		this.mContext = mContext;
+		this.mContext = context;
 		this.achievementList = achievementList;
 		this.mItemClickListener = mItemClickListener;
 	}
@@ -67,23 +70,81 @@ public class AchievementAdapter  extends RecyclerView.Adapter<AchievementAdapter
 				break;
 			default:
 				int pos = position - 1;
-				holder.main_text.setText(achievementList.get(pos).text);
+				int aid = achievementList.get(pos).aid;
+				int level = achievementList.get(pos).level;
+				String t;Spanned spanned;
+				if(aid == 1 || aid == 2 || aid > 17 ) {
+					t = achievementList.get(pos).text.replaceAll("<x>", level+"");
+					holder.main_text.setText(t);
+					holder.collect.setVisibility(View.GONE);
+				}else {
+					t = achievementList.get(pos).text.replaceAll("<x>", (level*10)+"");
+					t = t.replaceAll("<img .*>","");
+					holder.collect.setVisibility(View.VISIBLE);
+					holder.collect.setImageResource(getJewelDrawable(achievementList.get(pos).aid));
+					holder.main_text.setText(t);
+				}
+
+
 				holder.note.setText(achievementList.get(pos).note);
 				holder.loading_details.setEnabled(false);
-				if(achievementList.get(pos).diamond==1)
-					holder.diamond_count.setText("");
-				else
-					holder.diamond_count.setText(achievementList.get(pos).diamond+"");
+
+
+				holder.diamond_count.setText("Win "+achievementList.get(pos).diamond+"");
+				Log.i("Fragment>>>>", JewelChatApp.getSharedPref().getInt(JewelChatPrefs.LEVEL,0)+":"+achievementList.get(pos).level);
 				if(achievementList.get(pos).level > JewelChatApp.getSharedPref().getInt(JewelChatPrefs.LEVEL,0)){
 					holder.level_lock.setVisibility(View.VISIBLE);
 					holder.check.setEnabled(false);
+					holder.loading_details.setVisibility(View.GONE);
+					holder.level_lock_text.setText(" LEVEL "+achievementList.get(pos).level);
 				}else{
 					holder.level_lock.setVisibility(View.GONE);
 					holder.check.setEnabled(true);
+					if(achievementList.get(pos).progress_enabled){
+						holder.loading_details.setVisibility(View.VISIBLE);
+						holder.loading_details.setProgress(achievementList.get(pos).progress);
+					}else
+						holder.loading_details.setVisibility(View.GONE);
+
 				}
 
 
 		}
+	}
+
+	private int getJewelDrawable(int aid){
+		if(aid == 3)
+			return R.drawable.t3;
+		else if(aid == 4)
+			return R.drawable.t4;
+		else if(aid == 5)
+			return R.drawable.t5;
+		else if(aid == 6)
+			return R.drawable.t6;
+		else if(aid == 7)
+			return R.drawable.t7;
+		else if(aid == 8)
+			return R.drawable.t8;
+		else if(aid == 9)
+			return R.drawable.t9;
+		else if(aid == 10)
+			return R.drawable.t10;
+		else if(aid == 11)
+			return R.drawable.t11;
+		else if(aid == 12)
+			return R.drawable.t12;
+		else if(aid == 13)
+			return R.drawable.t13;
+		else if(aid == 14)
+			return R.drawable.t14;
+		else if(aid == 15)
+			return R.drawable.t15;
+		else if(aid == 16)
+			return R.drawable.t16;
+		else if(aid == 17)
+			return R.drawable.t17;
+		else
+			return 0;
 	}
 
 	@Override
@@ -95,10 +156,13 @@ public class AchievementAdapter  extends RecyclerView.Adapter<AchievementAdapter
 
 
 
+
 	@Override
 	public int getItemCount() {
-		return achievementList.size() + 1;
+		return achievementList.size()+1;
 	}
+
+
 
 	public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener  {
 		public TextView coin_count;
@@ -108,6 +172,7 @@ public class AchievementAdapter  extends RecyclerView.Adapter<AchievementAdapter
 		public TextView name;
 
 		public TextView main_text;
+		public ImageView collect;
 		public TextView note;
 		public TextView diamond_count;
 		public ProgressBar loading_details;
@@ -127,7 +192,8 @@ public class AchievementAdapter  extends RecyclerView.Adapter<AchievementAdapter
 					edit_profile.setOnClickListener(this);
 					break;
 				default:
-					main_text = (TextView) itemView.findViewById(R.id.main_content);
+					main_text = (TextView) itemView.findViewById(R.id.main_text);
+					collect = (ImageView) itemView.findViewById(R.id.collect);
 					note = (TextView)itemView.findViewById(R.id.note);
 					diamond_count = (TextView) itemView.findViewById(R.id.diamond_count);
 					loading_details = (ProgressBar) itemView.findViewById(R.id.loading_details);
@@ -140,6 +206,8 @@ public class AchievementAdapter  extends RecyclerView.Adapter<AchievementAdapter
 
 		@Override
 		public void onClick(View v) {
+
+			Log.i("omgomg", "click click");
 			if (mItemClickListener != null)
 				mItemClickListener.onItemClick(v, getAdapterPosition());
 		}

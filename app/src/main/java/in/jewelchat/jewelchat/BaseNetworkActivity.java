@@ -51,7 +51,7 @@ public abstract class BaseNetworkActivity extends in.jewelchat.jewelchat.BaseAct
 
 
 
-	protected void dismissDialog() {
+	public void dismissDialog() {
 		JewelChatApp.appLog( Log.INFO, "Activity", className + ":dismissDialog");
 		//TODO implement this isShowing check for every dialog in system
 		if (progressDialog != null && progressDialog.isShowing() ) { //&& !isDestroyed()
@@ -59,7 +59,7 @@ public abstract class BaseNetworkActivity extends in.jewelchat.jewelchat.BaseAct
 		}
 	}
 
-	protected void createDialog(String message) {
+	public void createDialog(String message) {
 		JewelChatApp.appLog(Log.INFO, "Activity", className + ":createDialog");
 		//if (isDestroyed())
 			//return;

@@ -11,6 +11,8 @@ public class Achievement {
 	public String text;
 	public String note;
 	public int diamond;
+	public boolean progress_enabled;
+	public int progress;
 
 }
 

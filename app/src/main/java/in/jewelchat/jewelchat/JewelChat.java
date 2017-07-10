@@ -19,6 +19,7 @@ import java.util.List;
 import in.jewelchat.jewelchat.models.GameStateChangeEvent;
 import in.jewelchat.jewelchat.models.NoInternet;
 import in.jewelchat.jewelchat.models._403NetworkErrorEvent;
+import in.jewelchat.jewelchat.screens.FragmentAchievements;
 import in.jewelchat.jewelchat.screens.FragmentChatList;
 import in.jewelchat.jewelchat.service.DownloadBlockedUserService;
 import in.jewelchat.jewelchat.service.DownloadGroupsService;
@@ -172,7 +173,7 @@ public class JewelChat extends BaseNetworkActivity {
 			else if(position==1)
 				return new FragmentChatList(); //FragmentTasks();
 			else if(position==2)
-				return new FragmentChatList();// FragmentAchievements();
+				return new FragmentAchievements();// FragmentAchievements();
 
 			return null;
 

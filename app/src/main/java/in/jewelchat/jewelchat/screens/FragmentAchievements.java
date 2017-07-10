@@ -1,8 +1,12 @@
 package in.jewelchat.jewelchat.screens;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -19,6 +23,7 @@ import com.android.volley.VolleyError;
 import com.google.firebase.crash.FirebaseCrash;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.squareup.otto.Subscribe;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -28,14 +33,17 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
+import in.jewelchat.jewelchat.JewelChat;
 import in.jewelchat.jewelchat.JewelChatApp;
 import in.jewelchat.jewelchat.JewelChatPrefs;
 import in.jewelchat.jewelchat.JewelChatURLS;
 import in.jewelchat.jewelchat.R;
 import in.jewelchat.jewelchat.adapter.AchievementAdapter;
 import in.jewelchat.jewelchat.models.Achievement;
+import in.jewelchat.jewelchat.models.GameStateChangeEvent;
 import in.jewelchat.jewelchat.models._403NetworkErrorEvent;
 import in.jewelchat.jewelchat.network.JewelChatRequest;
+import in.jewelchat.jewelchat.service.GameStateLoadService;
 import in.jewelchat.jewelchat.util.NetworkConnectivityStatus;
 
 import static in.jewelchat.jewelchat.R.id.achivement;
@@ -58,7 +66,7 @@ public class FragmentAchievements extends Fragment implements Response.ErrorList
 	private boolean loading = true;
 	private int pageCounter = 0;
 	private boolean no_more_items_to_load = false;
-
+	private int pos;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -89,11 +97,33 @@ public class FragmentAchievements extends Fragment implements Response.ErrorList
 		recyclerView = (RecyclerView) view.findViewById(achivement);
 		final LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
 		recyclerView.setLayoutManager(mLayoutManager);
+
+		mOnItemClickListener = new AchievementAdapter.OnItemClickListener() {
+			@Override
+			public void onItemClick(View view, int position) {
+
+				pos = position - 1;
+				switch (view.getId()) {
+					case R.id.check:
+						checkAchievement(achivementList.get(pos).id);
+						break;
+					case R.id.edit_profile:
+
+						Intent intent = new Intent(getActivity(), ActivityEditProfile.class);
+						//intent.putExtra("image_url", contestList.get(pos).contest.small_picture);
+						startActivity(intent);
+						break;
+
+				}
+
+			}
+		};
+
 		achievementAdapter = new AchievementAdapter(getContext(), achivementList, mOnItemClickListener);
 		recyclerView.setAdapter(achievementAdapter);
 
 		if (achivementList.size() < 1) {
-		/*if (lastLocationForFirstPage != null)*/
+
 			loadAchivements();
 		}
 
@@ -104,29 +134,29 @@ public class FragmentAchievements extends Fragment implements Response.ErrorList
 				visibleItemCount = recyclerView.getChildCount();
 				totalItemCount = mLayoutManager.getItemCount();
 				firstVisibleItem = mLayoutManager.findFirstVisibleItemPosition();
-
+				/*
 				if (loading) {
 					if (totalItemCount > previousTotal) {
 						loading = false;
 						previousTotal = totalItemCount;
 					}
 				}
+				*/
 				if (!loading && (totalItemCount - visibleItemCount) <= (firstVisibleItem)) {
-				    /*if (lastLocationForFirstPage != null) {*/
 					loading = true;
 					loadAchivements();
-                    /*}*/
 				}
 			}
 
 		});
 
-		mOnItemClickListener = new AchievementAdapter.OnItemClickListener() {
-			@Override
-			public void onItemClick(View view, int position) {
 
-			}
-		};
+	}
+
+
+	@Subscribe
+	public void onGameStateChangeEvent( GameStateChangeEvent event) {
+		achievementAdapter.notifyDataSetChanged();
 	}
 
 	@Override
@@ -143,6 +173,83 @@ public class FragmentAchievements extends Fragment implements Response.ErrorList
 	}
 
 
+
+	private void checkAchievement(int id){
+
+
+		Response.Listener<JSONObject> response = new Response.Listener<JSONObject>() {
+			@Override
+			public void onResponse(JSONObject response) {
+				JewelChatApp.appLog(Log.INFO,"CHECKACHIEVEMENT","CheckAchievement" + ":onResponse");
+				try {
+
+					Boolean error = response.getBoolean("error");
+					if(error){
+						String err_msg = response.getString("message");
+						throw new Exception(err_msg);
+					}
+					int d = achivementList.get(pos).diamond;
+					if(response.getInt("percent")<100) {
+
+						Achievement a = achivementList.get(pos);
+						a.progress_enabled = true;
+						a.progress = response.getInt("percent");
+
+						achivementList.set(pos, a);
+						achievementAdapter.notifyDataSetChanged();
+						((JewelChat)getActivity()).dismissDialog();
+
+					}else{
+						((JewelChat)getActivity()).dismissDialog();
+						pageCounter = 0;
+						achivementList.clear();
+						achievementAdapter.notifyDataSetChanged();
+						loading = true;
+						Intent service1 = new Intent(getContext(), GameStateLoadService.class);
+						getActivity().startService(service1);
+						loadAchivements();
+						int new_count = JewelChatApp.getSharedPref().getInt("0",0) + d;
+						JewelChatApp.getSharedPref().edit().putInt("0",new_count).apply();
+
+						AlertDialog completed = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.AppTheme)).create();
+						completed.setTitle("Congratulation");
+						completed.setMessage("You have won "+d+" diamond.");
+						completed.setButton(DialogInterface.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+
+							}
+						});
+						completed.show();
+					}
+
+
+
+				} catch (JSONException e) {
+					FirebaseCrash.report(e);
+				} catch (Exception e) {
+					FirebaseCrash.report(e);
+				}
+			}
+		};
+
+
+		((JewelChat)getActivity()).createDialog("Please Wait");
+		JSONObject t = new JSONObject();
+		try {
+			t.put("id", id);
+			//Log.i(">>>NETWORK",pageCounter+"");
+			JewelChatRequest req = new JewelChatRequest(Request.Method.POST, JewelChatURLS.REDEEMACHIEVEMENT, t, response, this);
+			if (NetworkConnectivityStatus.getConnectivityStatus() == NetworkConnectivityStatus.CONNECTED)
+				JewelChatApp.getRequestQueue().add(req);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+
+
+	}
+
+
 	private void loadAchivements(){
 
 		if(no_more_items_to_load)
@@ -151,6 +258,7 @@ public class FragmentAchievements extends Fragment implements Response.ErrorList
 		JSONObject t = new JSONObject();
 		try {
 			t.put("page", pageCounter);
+			Log.i(">>>NETWORK",pageCounter+"");
 			JewelChatRequest req = new JewelChatRequest(Request.Method.POST, JewelChatURLS.GETACHIEVEMENTS, t, this, this);
 			if (NetworkConnectivityStatus.getConnectivityStatus() == NetworkConnectivityStatus.CONNECTED)
 				JewelChatApp.getRequestQueue().add(req);
@@ -206,7 +314,7 @@ public class FragmentAchievements extends Fragment implements Response.ErrorList
 
 	@Override
 	public void onResponse(JSONObject response) {
-		JewelChatApp.appLog("OneToOneChatDownloadService" + ":onResponse");
+		JewelChatApp.appLog(Log.INFO,"FRAGMENT","FragmentAchievements" + ":onResponse");
 		try {
 
 			Boolean error = response.getBoolean("error");
@@ -220,15 +328,17 @@ public class FragmentAchievements extends Fragment implements Response.ErrorList
 			Type listType = new TypeToken<List<Achievement>>() {}.getType();
 			Gson gson = new Gson();
 			List<Achievement> yourList = gson.fromJson(list.toString(), listType);
-
+			Log.i("FRAGMENT", yourList.size()+"");
 			if(pageCounter == 0)
 				achivementList.clear();
 
 			achivementList.addAll(yourList);
 			pageCounter++;
 			achievementAdapter.notifyDataSetChanged();
-			if(yourList.size() < 8)
+			if(yourList.size() < 9)
 				no_more_items_to_load = true;
+
+			loading = false;
 
 		} catch (JSONException e) {
 			FirebaseCrash.report(e);
@@ -236,4 +346,6 @@ public class FragmentAchievements extends Fragment implements Response.ErrorList
 			FirebaseCrash.report(e);
 		}
 	}
+
+
 }
