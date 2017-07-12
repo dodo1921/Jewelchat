@@ -17,15 +17,22 @@
 			android:orientation="vertical">
 
 			<RelativeLayout
-				android:id="@+id/factory"
+				android:id="@+id/task"
 				android:layout_width="match_parent"
 				android:layout_height="125dp"
 				android:background="@color/red">
 
+				<ImageView
+					android:src="@drawable/task_bkg"
+					android:scaleType="fitXY"
+					android:layout_width="match_parent"
+					android:layout_height="match_parent"/>
+
 
 				<LinearLayout
-					android:layout_width="110dp"
+					android:layout_width="wrap_content"
 					android:layout_height="110dp"
+					android:minWidth="140dp"
 					android:background="#8c8c8c8c"
 					android:layout_marginLeft="15dp"
 					android:paddingLeft="5dp"
@@ -40,7 +47,14 @@
 						android:layout_gravity="left"
 						android:orientation="horizontal">
 
+						<ImageView
+							android:layout_marginTop="3dp"
+							android:layout_width="20dp"
+							android:layout_height="20dp"
+							android:src="@drawable/points"/>
+
 						<TextView
+							android:id="@+id/points"
 							android:layout_width="wrap_content"
 							android:layout_height="wrap_content"
 							android:textColor="@android:color/white"
@@ -56,9 +70,17 @@
 					<LinearLayout
 						android:layout_width="wrap_content"
 						android:layout_height="wrap_content"
+						android:layout_gravity="left"
 						android:orientation="horizontal">
 
+						<ImageView
+							android:layout_marginTop="3dp"
+							android:layout_width="20dp"
+							android:layout_height="20dp"
+							android:src="@drawable/coinwithring"/>
+
 						<TextView
+							android:id="@+id/coins"
 							android:layout_width="wrap_content"
 							android:layout_height="wrap_content"
 							android:textColor="@android:color/white"
@@ -70,16 +92,25 @@
 					</LinearLayout>
 
 					<LinearLayout
+						android:id="@+id/money_row"
 						android:layout_width="wrap_content"
 						android:layout_height="wrap_content"
+						android:layout_gravity="left"
 						android:orientation="horizontal">
 
+						<ImageView
+							android:layout_marginTop="3dp"
+							android:layout_width="20dp"
+							android:layout_height="20dp"
+							android:src="@drawable/money"/>
+
 						<TextView
+							android:id="@+id/money"
 							android:layout_width="wrap_content"
 							android:layout_height="wrap_content"
 							android:textColor="@android:color/white"
 							android:textSize="20dp"
-							android:text="1 rupee"/>
+							android:text="1.75 rupee"/>
 
 					</LinearLayout>
 
@@ -120,6 +151,7 @@
 						android:src="@drawable/lock"/>
 
 					<TextView
+						android:id="@+id/level_lock_text"
 						android:layout_width="wrap_content"
 						android:layout_height="wrap_content"
 						android:textSize="35dp"
@@ -131,19 +163,19 @@
 
 			</RelativeLayout>
 
-			<ProgressBar
+			<!--ProgressBar
 				android:id="@+id/loading_details"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:indeterminate="true"
-				style="?android:attr/progressBarStyleHorizontal"/>
+				style="?android:attr/progressBarStyleHorizontal"/-->
 
 			<LinearLayout
 				android:id="@+id/task_details"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:layout_marginTop="20dp"
-				android:visibility="gone"
+				android:layout_marginTop="10dp"
+				android:visibility="visible"
 				android:orientation="vertical">
 
 				<RelativeLayout
@@ -326,15 +358,14 @@
 				<RelativeLayout
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
-					android:layout_marginTop="20dp">
+					android:layout_marginTop="10dp">
 
 					<Button
-						android:id="@+id/Redeem"
+						android:id="@+id/redeem"
 						android:layout_width="250dp"
 						android:layout_height="50dp"
 						android:layout_centerHorizontal="true"
 						android:enabled="true"
-						android:drawableRight="@drawable/indicator_w"
 						android:text="Redeem"/>
 
 

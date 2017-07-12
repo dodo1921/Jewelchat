@@ -55,6 +55,24 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
 		snackbar.show();
 	}
 
+	public void networkErrorMessage(String msg){
+		Snackbar snackbar = Snackbar
+				.make(rootLayout, msg+"...", Snackbar.LENGTH_LONG);
+
+		snackbar.show();
+	}
+
+
+
+	public void noInternet(){
+		Snackbar snackbar = Snackbar
+				.make(rootLayout, "Internet connection lost.", Snackbar.LENGTH_LONG);
+
+		snackbar.show();
+	}
+
+
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		className = getClass().getSimpleName();

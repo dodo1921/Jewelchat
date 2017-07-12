@@ -55,6 +55,7 @@ public abstract class BaseNetworkActivity extends in.jewelchat.jewelchat.BaseAct
 		JewelChatApp.appLog( Log.INFO, "Activity", className + ":dismissDialog");
 		//TODO implement this isShowing check for every dialog in system
 		if (progressDialog != null && progressDialog.isShowing() ) { //&& !isDestroyed()
+			//Log.i("Progressbar "," showing");
 			progressDialog.dismiss();
 		}
 	}
@@ -150,15 +151,17 @@ public abstract class BaseNetworkActivity extends in.jewelchat.jewelchat.BaseAct
 				}
 
 			}else{
-
-				if (error instanceof TimeoutError || error instanceof NoConnectionError) {
-						makeToast("Connection Timeout");
-				}else{
-						makeToast("Network Error");
-					}
-
+				makeToast("Network Error");
 			}
+
+		}else if (error instanceof TimeoutError || error instanceof NoConnectionError) {
+			makeToast("Connection Timeout");
+		}else if(error instanceof NoConnectionError){
+			makeToast("No Connection Error");
+		}else{
+			makeToast("Network Error");
 		}
+
 
 		JewelChatApp.appLog(className);
 		FirebaseCrash.report(error);

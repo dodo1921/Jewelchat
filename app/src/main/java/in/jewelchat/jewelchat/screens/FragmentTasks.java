@@ -1,8 +1,11 @@
 package in.jewelchat.jewelchat.screens;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -26,6 +29,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import in.jewelchat.jewelchat.JewelChat;
 import in.jewelchat.jewelchat.JewelChatApp;
 import in.jewelchat.jewelchat.JewelChatPrefs;
 import in.jewelchat.jewelchat.JewelChatURLS;
@@ -35,6 +39,7 @@ import in.jewelchat.jewelchat.models.Task;
 import in.jewelchat.jewelchat.models.TaskMaterials;
 import in.jewelchat.jewelchat.models._403NetworkErrorEvent;
 import in.jewelchat.jewelchat.network.JewelChatRequest;
+import in.jewelchat.jewelchat.service.GameStateLoadService;
 import in.jewelchat.jewelchat.util.NetworkConnectivityStatus;
 
 import static in.jewelchat.jewelchat.R.id.task;
@@ -92,7 +97,49 @@ public class FragmentTasks extends Fragment implements Response.ErrorListener, R
 		mOnItemClickListener = new TasksAdapter.OnItemClickListener() {
 			@Override
 			public void onItemClick(View view, int position) {
+				pos = position - 1;
+				switch (view.getId()) {
+					case R.id.task:
+						for (Task t:
+						     listTask) {
+							t.open = false;
+						}
+						listTask.get(pos).open = true;
+						List<TaskMaterials> list = listTask.get(pos).materials;
+						boolean r = true;
+						for (TaskMaterials tm:
+						     list) {
+							if(JewelChatApp.getSharedPref().getInt((tm.jeweltype_id+""),0)>=tm.count){
+								tm.tick = true;
+							}else{
+								tm.tick = false;
+								r = false;
+							}
+						}
+						listTask.get(pos).materials = list;
+						listTask.get(pos).redeem = r;
+						tasksAdapter.notifyDataSetChanged();
+						break;
 
+					case R.id.redeem:
+						taskRedeem(listTask.get(pos).id);
+						break;
+					case R.id.wallet:
+						Intent intent1 = new Intent(getActivity(), ActivityWallet.class);
+						startActivity(intent1);
+						break;
+					case R.id.leaderBoard:
+						Intent intent2 = new Intent(getActivity(), ActivityLeaderboard.class);
+						startActivity(intent2);
+						break;
+					case R.id.childrenList:
+						Intent intent3 = new Intent(getActivity(), ActivityReference.class);
+						startActivity(intent3);
+						break;
+					default:
+						Log.i("click event","Redeem");
+
+				}
 			}
 		};
 
@@ -100,7 +147,7 @@ public class FragmentTasks extends Fragment implements Response.ErrorListener, R
 		recyclerView.setAdapter(tasksAdapter);
 
 		if (listTask.size() < 1) {
-
+			loading = true;
 			loadAchivements();
 		}
 
@@ -123,7 +170,60 @@ public class FragmentTasks extends Fragment implements Response.ErrorListener, R
 
 	}
 
+	private void taskRedeem(int id) {
 
+		Response.Listener<JSONObject> response = new Response.Listener<JSONObject>() {
+			@Override
+			public void onResponse(JSONObject response) {
+				JewelChatApp.appLog(Log.INFO,"REDEEMTASK","REDEEMTASK" + ":onResponse");
+				((JewelChat)getActivity()).dismissDialog();
+				try {
+
+					Boolean error = response.getBoolean("error");
+					if(error){
+						String err_msg = response.getString("message");
+						throw new Exception(err_msg);
+					}
+
+					((JewelChat)getActivity()).dismissDialog();
+					pageCounter = 0;
+					listTask.clear();
+					tasksAdapter.notifyDataSetChanged();
+					loading = true;
+					Intent service1 = new Intent(getContext(), GameStateLoadService.class);
+					getActivity().startService(service1);
+					loadAchivements();
+
+					AlertDialog completed = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.AppTheme)).create();
+					completed.setTitle("Congratulation");
+					completed.setMessage("You have successfully completed the task.");
+					completed.setCancelable(true);
+					completed.show();
+
+				} catch (JSONException e) {
+					FirebaseCrash.report(e);
+				} catch (Exception e) {
+					FirebaseCrash.report(e);
+				}
+			}
+		};
+
+
+
+		JSONObject t = new JSONObject();
+		try {
+			t.put("id", id);
+			//Log.i(">>>NETWORK",pageCounter+"");
+			JewelChatRequest req = new JewelChatRequest(Request.Method.POST, JewelChatURLS.REDEEMTASK, t, response, this);
+			if (NetworkConnectivityStatus.getConnectivityStatus() == NetworkConnectivityStatus.CONNECTED) {
+				((JewelChat)getActivity()).createDialog("Please Wait");
+				JewelChatApp.getRequestQueue().add(req);
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+
+	}
 
 	@Override
 	public void onResume(){
@@ -147,10 +247,11 @@ public class FragmentTasks extends Fragment implements Response.ErrorListener, R
 		JSONObject t = new JSONObject();
 		try {
 			t.put("page", pageCounter);
-			Log.i(">>>NETWORK",pageCounter+"");
+			Log.i(">>>NETWORKTASK",pageCounter+"");
 			JewelChatRequest req = new JewelChatRequest(Request.Method.POST, JewelChatURLS.GETTASKS, t, this, this);
-			if (NetworkConnectivityStatus.getConnectivityStatus() == NetworkConnectivityStatus.CONNECTED)
+			if (NetworkConnectivityStatus.getConnectivityStatus() == NetworkConnectivityStatus.CONNECTED) {
 				JewelChatApp.getRequestQueue().add(req);
+			}
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
@@ -161,8 +262,8 @@ public class FragmentTasks extends Fragment implements Response.ErrorListener, R
 		String errorMessage = error.toString();
 		NetworkResponse response = error.networkResponse;
 
-		if(response != null && response.data != null){
-			if(response.statusCode == 403){
+		if (response != null && response.data != null) {
+			if (response.statusCode == 403) {
 
 				SharedPreferences.Editor editor = JewelChatApp.getSharedPref().edit();
 				editor.putBoolean(JewelChatPrefs.IS_LOGGED, false);
@@ -171,31 +272,31 @@ public class FragmentTasks extends Fragment implements Response.ErrorListener, R
 
 				JewelChatApp.getBusInstance().post(new _403NetworkErrorEvent());
 
-			}else if(response.statusCode == 500){
+			} else if (response.statusCode == 500) {
 
 				String json = new String(response.data);
-				try{
+				try {
 					JSONObject obj = new JSONObject(json);
-					errorMessage = "Please Try Again. Error 500. "+obj.getString("data");
+					errorMessage = obj.getString("data");
 					//makeToast(errorMessage);
 
-				} catch(JSONException e){
+				} catch (JSONException e) {
 					e.printStackTrace();
 
 				}
 
-			}else{
-
-				if (error instanceof TimeoutError || error instanceof NoConnectionError) {
-					errorMessage = "Connection Timeout";
-				}else{
-					errorMessage = "Network Error";
-				}
-
 			}
+		}else if (error instanceof TimeoutError ) {
+			errorMessage = "Connection Timeout";
+		}else if(error instanceof NoConnectionError){
+			errorMessage = "No Connection Error";
+		}else{
+			errorMessage = "Network Error";
 		}
 
-		JewelChatApp.appLog("FragmentTask Volley error:"+errorMessage);
+		((JewelChat)getActivity()).dismissDialog();
+		((JewelChat) getActivity()).networkErrorMessage(errorMessage);
+		JewelChatApp.appLog(Log.ERROR,"FragmentAchievement","FragmentAchievement Volley error:"+errorMessage);
 		FirebaseCrash.report(error);
 	}
 
@@ -205,53 +306,74 @@ public class FragmentTasks extends Fragment implements Response.ErrorListener, R
 		try {
 
 			Boolean error = response.getBoolean("error");
+			Log.i("INSIDE Loop", "Inside loop"+error);
 			if(error){
 				String err_msg = response.getString("message");
 				throw new Exception(err_msg);
 			}
 
 
-			JSONArray list = (JSONArray) response.get("tasks");
+			JSONArray list = response.getJSONArray("tasks");
 
 			HashMap<Integer, Task> hm = new HashMap<Integer, Task>();
 
 			for(int i=0; i<list.length();i++){
 
-				JSONObject t = (JSONObject)list.get(i);
+				JSONObject t = list.getJSONObject(i);
 				Task task;
+				boolean flag = true;
 
 				if(!hm.containsKey(t.getInt("id"))) {
 
 					task = new Task();
 					task.id = t.getInt("id");
 					task.task_id = t.getInt("task_id");
-					if (t.get("duration") == null)
+					if (t.opt("duration").toString().equals("null"))
 						task.has_duration = false;
 					else {
 						task.has_duration = true;
 						task.duration = t.getString("duration");
 					}
 
-					if (t.get("qty") == null)
+					if (t.opt("qty").toString().equals("null"))
 						task.has_qty = false;
 					else {
 						task.has_qty = true;
 						task.qty = t.getInt("qty");
+						if(task.qty == 0)
+							flag=false;
 					}
 					task.coins = t.getInt("coins");
 					task.points = t.getInt("points");
-					task.money = t.getDouble("money");
-					task.done = t.getBoolean("done");
 
+					task.show_money = t.optInt("show_money")==1?true:false;
+					task.money = t.getDouble("money");
+					if(!task.show_money || task.money == 0.00 )
+						task.color = R.color.green;
+					else if(task.money > 10.00)
+						task.color = R.color.red;
+					else
+						task.color = R.color.yellow;
+
+					task.done = t.optInt("done")==1?true:false;
+					if(task.done)
+						flag=false;
 					TaskMaterials m = new TaskMaterials();
 					m.jeweltype_id = t.getInt("jeweltype_id");
 					m.count = t.getInt("count");
 
 					task.materials.add(m);
-					hm.put(task.id, task);
+					task.redeem = false;
+
+					task.level = t.getInt("level");
+
+					//if(task.level>JewelChatApp.getSharedPref().getInt(JewelChatPrefs.LEVEL,0))
+					//		flag=false;
+					if(flag)
+						hm.put(task.id, task);
 
 				}else{
-
+					Log.i(">>>>>TASK", "OLD"+t.getInt("id"));
 					TaskMaterials m = new TaskMaterials();
 					m.jeweltype_id = t.getInt("jeweltype_id");
 					m.count = t.getInt("count");
@@ -265,21 +387,23 @@ public class FragmentTasks extends Fragment implements Response.ErrorListener, R
 
 			List<Task> yourList = new ArrayList<Task>(hm.values());
 
-			Log.i("FRAGMENT", yourList.size()+"");
+			Log.i("FRAGMENT<<<<<", yourList.size()+"");
 			if(pageCounter == 0)
 				listTask.clear();
 
 			listTask.addAll(yourList);
 			pageCounter++;
 			tasksAdapter.notifyDataSetChanged();
-			if(yourList.size() < 5)
+			if(yourList.size() == 0)
 				no_more_items_to_load = true;
 
 			loading = false;
 
 		} catch (JSONException e) {
+			e.printStackTrace();
 			FirebaseCrash.report(e);
 		} catch (Exception e) {
+			e.printStackTrace();
 			FirebaseCrash.report(e);
 		}
 	}

@@ -7,4 +7,5 @@ package in.jewelchat.jewelchat.models;
 public class TaskMaterials {
 	public int jeweltype_id;
 	public int count;
+	public boolean tick;
 }

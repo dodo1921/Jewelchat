@@ -21,6 +21,7 @@ import in.jewelchat.jewelchat.models.NoInternet;
 import in.jewelchat.jewelchat.models._403NetworkErrorEvent;
 import in.jewelchat.jewelchat.screens.FragmentAchievements;
 import in.jewelchat.jewelchat.screens.FragmentChatList;
+import in.jewelchat.jewelchat.screens.FragmentTasks;
 import in.jewelchat.jewelchat.service.DownloadBlockedUserService;
 import in.jewelchat.jewelchat.service.DownloadGroupsService;
 import in.jewelchat.jewelchat.service.GameStateLoadService;
@@ -149,7 +150,8 @@ public class JewelChat extends BaseNetworkActivity {
 
 	@Subscribe
 	public void OnNoInternetEvent( NoInternet event) {
-		showNoInternetDialog();
+		//showNoInternetDialog();
+		noInternet();
 	}
 
 	@Subscribe
@@ -171,7 +173,7 @@ public class JewelChat extends BaseNetworkActivity {
 			if(position==0)
 				return new FragmentChatList();
 			else if(position==1)
-				return new FragmentChatList(); //FragmentTasks();
+				return new FragmentTasks(); //FragmentTasks();
 			else if(position==2)
 				return new FragmentAchievements();// FragmentAchievements();
 

@@ -28,6 +28,7 @@ public class JewelChatURLS {
 	public static final String GETACHIEVEMENTS = baseURL + "/getAchievements";
 	public static final String REDEEMACHIEVEMENT = baseURL + "/redeemAchievement";
 	public static final String GETTASKS = baseURL + "/getTasks";
+	public static final String REDEEMTASK = baseURL + "/redeemTask";
 
 
 

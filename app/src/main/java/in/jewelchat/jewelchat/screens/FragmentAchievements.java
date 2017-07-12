@@ -181,6 +181,7 @@ public class FragmentAchievements extends Fragment implements Response.ErrorList
 			@Override
 			public void onResponse(JSONObject response) {
 				JewelChatApp.appLog(Log.INFO,"CHECKACHIEVEMENT","CheckAchievement" + ":onResponse");
+				((JewelChat)getActivity()).dismissDialog();
 				try {
 
 					Boolean error = response.getBoolean("error");
@@ -234,14 +235,16 @@ public class FragmentAchievements extends Fragment implements Response.ErrorList
 		};
 
 
-		((JewelChat)getActivity()).createDialog("Please Wait");
+
 		JSONObject t = new JSONObject();
 		try {
 			t.put("id", id);
 			//Log.i(">>>NETWORK",pageCounter+"");
 			JewelChatRequest req = new JewelChatRequest(Request.Method.POST, JewelChatURLS.REDEEMACHIEVEMENT, t, response, this);
-			if (NetworkConnectivityStatus.getConnectivityStatus() == NetworkConnectivityStatus.CONNECTED)
+			if (NetworkConnectivityStatus.getConnectivityStatus() == NetworkConnectivityStatus.CONNECTED) {
+				((JewelChat)getActivity()).createDialog("Please Wait");
 				JewelChatApp.getRequestQueue().add(req);
+			}
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
@@ -274,8 +277,8 @@ public class FragmentAchievements extends Fragment implements Response.ErrorList
 		String errorMessage = error.toString();
 		NetworkResponse response = error.networkResponse;
 
-		if(response != null && response.data != null){
-			if(response.statusCode == 403){
+		if (response != null && response.data != null) {
+			if (response.statusCode == 403) {
 
 				SharedPreferences.Editor editor = JewelChatApp.getSharedPref().edit();
 				editor.putBoolean(JewelChatPrefs.IS_LOGGED, false);
@@ -284,31 +287,31 @@ public class FragmentAchievements extends Fragment implements Response.ErrorList
 
 				JewelChatApp.getBusInstance().post(new _403NetworkErrorEvent());
 
-			}else if(response.statusCode == 500){
+			} else if (response.statusCode == 500) {
 
 				String json = new String(response.data);
-				try{
+				try {
 					JSONObject obj = new JSONObject(json);
-					errorMessage = "Please Try Again. Error 500. "+obj.getString("data");
+					errorMessage = obj.getString("data");
 					//makeToast(errorMessage);
 
-				} catch(JSONException e){
+				} catch (JSONException e) {
 					e.printStackTrace();
 
-				}
-
-			}else{
-
-				if (error instanceof TimeoutError || error instanceof NoConnectionError) {
-					errorMessage = "Connection Timeout";
-				}else{
-					errorMessage = "Network Error";
 				}
 
 			}
 		}
 
-		JewelChatApp.appLog("FragmentAchievement Volley error:"+errorMessage);
+		if (error instanceof TimeoutError ) {
+			errorMessage = "Connection Timeout";
+		}else if(error instanceof NoConnectionError){
+			errorMessage = "No Connection Error";
+		}
+
+		((JewelChat)getActivity()).dismissDialog();
+		((JewelChat) getActivity()).networkErrorMessage(errorMessage);
+		JewelChatApp.appLog(Log.ERROR,"FragmentAchievement","FragmentAchievement Volley error:"+errorMessage);
 		FirebaseCrash.report(error);
 	}
 
