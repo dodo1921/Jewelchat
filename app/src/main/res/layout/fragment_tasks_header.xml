@@ -5,8 +5,7 @@
               android:paddingRight="10dp"
               android:paddingTop="10dp"
               android:layout_margin="5dp"
-              android:elevation="3dp"
-              android:background="@color/colorPrimaryDark"
+              android:background="@android:color/white"
               android:layout_width="match_parent"
               android:layout_height="205dp">
 
@@ -14,31 +13,29 @@
 		android:layout_width="match_parent"
 		android:layout_height="90dp">
 
-		<ImageView
+		<com.mikhaellopez.circularimageview.CircularImageView
 			android:id="@+id/wallet"
 			android:layout_width="80dp"
 			android:layout_height="80dp"
 			android:src="@drawable/wallet"
-			android:padding="5dp"
-			android:background="@drawable/image_button_states"
+			android:padding="25dp"
 			android:layout_alignParentLeft="true"/>
 
-		<ImageView
-			android:id="@+id/leaderBoard"
-			android:layout_width="80dp"
-			android:layout_height="80dp"
-			android:padding="5dp"
-			android:src="@drawable/refer"
-			android:background="@drawable/image_button_states"
-			android:layout_alignParentRight="true"/>
-
-		<ImageView
+		<com.mikhaellopez.circularimageview.CircularImageView
 			android:id="@+id/childrenList"
 			android:layout_width="80dp"
 			android:layout_height="80dp"
 			android:padding="5dp"
+			android:src="@drawable/refer"
+
+			android:layout_alignParentRight="true"/>
+
+		<com.mikhaellopez.circularimageview.CircularImageView
+			android:id="@+id/leaderBoard"
+			android:layout_width="80dp"
+			android:layout_height="80dp"
+			android:padding="5dp"
 			android:src="@drawable/leaderboard"
-			android:background="@drawable/image_button_states"
 			android:layout_centerHorizontal="true"/>
 
 

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.view.ContextThemeWrapper;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -45,8 +46,6 @@ import in.jewelchat.jewelchat.models._403NetworkErrorEvent;
 import in.jewelchat.jewelchat.network.JewelChatRequest;
 import in.jewelchat.jewelchat.service.GameStateLoadService;
 import in.jewelchat.jewelchat.util.NetworkConnectivityStatus;
-
-import static in.jewelchat.jewelchat.R.id.achivement;
 
 /**
  * Created by mayukhchakraborty on 22/06/17.
@@ -94,7 +93,7 @@ public class FragmentAchievements extends Fragment implements Response.ErrorList
 
 		JewelChatApp.appLog(className + ":onViewCreated");
 		super.onViewCreated(view, savedInstanceState);
-		recyclerView = (RecyclerView) view.findViewById(achivement);
+		recyclerView = (RecyclerView) view.findViewById(R.id.achivement);
 		final LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
 		recyclerView.setLayoutManager(mLayoutManager);
 
@@ -120,6 +119,7 @@ public class FragmentAchievements extends Fragment implements Response.ErrorList
 		};
 
 		achievementAdapter = new AchievementAdapter(getContext(), achivementList, mOnItemClickListener);
+		recyclerView.setItemAnimator(new DefaultItemAnimator());
 		recyclerView.setAdapter(achievementAdapter);
 
 		if (achivementList.size() < 1) {

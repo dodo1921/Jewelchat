@@ -12,4 +12,9 @@
 	<color name="green">#4d824f</color>
 	<color name="blue">#2196f3</color>
 	<color name="yellow">#ffeb3b</color>
+
+	<color name="redd">#77f44336</color>
+	<color name="greenn">#774d824f</color>
+	<color name="bluee">#772196f3</color>
+	<color name="yelloww">#77ffeb3b</color>
 </resources>

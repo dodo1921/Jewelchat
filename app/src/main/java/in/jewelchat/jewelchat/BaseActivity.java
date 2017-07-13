@@ -9,6 +9,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.PopupMenu;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -34,7 +35,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
 
 	protected TextView jewel_count, LEVEL, LEVEL_SCORE;
 	protected ProgressBar XP;
-	protected ImageView jewel_store;
+	protected ImageView jewel_store, toolbar_back;
 
 	protected RelativeLayout jewel_store_button;
 
@@ -173,7 +174,12 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
 		XP = (ProgressBar)appbarRoot.findViewById(R.id.xpbar);
 		LEVEL_SCORE = (TextView)appbarRoot.findViewById(R.id.xpbar_value);
 
-		//Toolbar toolbar = (Toolbar) appbarRoot.findViewById(R.id.jewelchat_toolbar);
+		Toolbar toolbar = (Toolbar) appbarRoot.findViewById(R.id.jewelchat_toolbar);
+		toolbar_back = (ImageView) appbarRoot.findViewById(R.id.toolbar_back);
+		toolbar_back.setVisibility(View.GONE);
+
+
+
 		//setSupportActionBar(toolbar);
 
 		jewel_store_button.setOnClickListener(new View.OnClickListener() {

@@ -26,6 +26,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -41,8 +42,6 @@ import in.jewelchat.jewelchat.models._403NetworkErrorEvent;
 import in.jewelchat.jewelchat.network.JewelChatRequest;
 import in.jewelchat.jewelchat.service.GameStateLoadService;
 import in.jewelchat.jewelchat.util.NetworkConnectivityStatus;
-
-import static in.jewelchat.jewelchat.R.id.task;
 
 /**
  * Created by mayukhchakraborty on 22/06/17.
@@ -89,7 +88,7 @@ public class FragmentTasks extends Fragment implements Response.ErrorListener, R
 
 		JewelChatApp.appLog(className + ":onViewCreated");
 		super.onViewCreated(view, savedInstanceState);
-		recyclerView = (RecyclerView) view.findViewById(task);
+		recyclerView = (RecyclerView) view.findViewById(R.id.task);
 		final LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
 		recyclerView.setLayoutManager(mLayoutManager);
 
@@ -135,6 +134,10 @@ public class FragmentTasks extends Fragment implements Response.ErrorListener, R
 					case R.id.childrenList:
 						Intent intent3 = new Intent(getActivity(), ActivityReference.class);
 						startActivity(intent3);
+						break;
+					case R.id.factory:
+						Intent intent4 = new Intent(getActivity(), ActivityJewelFactories.class);
+						startActivity(intent4);
 						break;
 					default:
 						Log.i("click event","Redeem");
@@ -349,11 +352,11 @@ public class FragmentTasks extends Fragment implements Response.ErrorListener, R
 					task.show_money = t.optInt("show_money")==1?true:false;
 					task.money = t.getDouble("money");
 					if(!task.show_money || task.money == 0.00 )
-						task.color = R.color.green;
+						task.color = R.color.bluee;
 					else if(task.money > 10.00)
-						task.color = R.color.red;
+						task.color = R.color.redd;
 					else
-						task.color = R.color.yellow;
+						task.color = R.color.yelloww;
 
 					task.done = t.optInt("done")==1?true:false;
 					if(task.done)
@@ -386,6 +389,8 @@ public class FragmentTasks extends Fragment implements Response.ErrorListener, R
 			}
 
 			List<Task> yourList = new ArrayList<Task>(hm.values());
+
+			Collections.sort(yourList);
 
 			Log.i("FRAGMENT<<<<<", yourList.size()+"");
 			if(pageCounter == 0)

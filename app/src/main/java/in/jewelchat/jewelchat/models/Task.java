@@ -7,7 +7,7 @@ import java.util.List;
  * Created by mayukhchakraborty on 22/06/17.
  */
 
-public class Task {
+public class Task implements Comparable<Task> {
 
 	public int id;
 	public int task_id;
@@ -25,5 +25,11 @@ public class Task {
 	public boolean open;
 	public boolean redeem;
 	public int color;
+
+	@Override
+	public int compareTo(Task task) {
+		return (int)( task.money - this.money);
+	}
+
 
 }
