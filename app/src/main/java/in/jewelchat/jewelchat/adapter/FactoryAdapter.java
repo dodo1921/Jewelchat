@@ -56,7 +56,8 @@ public class FactoryAdapter extends RecyclerView.Adapter<FactoryAdapter.MyViewHo
 		//Factory f = this.factoryList.get(position);
 		//int pos = position;
 		holder.thumbnail.setImageResource(getJewelDrawable(factoryList.get(pos).factory_type));
-		holder.duration.setText("Duration: "+(int)(factoryList.get(pos).duration/1000) + "sec" );
+		holder.duration.setText("Duration: "+(int)(factoryList.get(pos).duration/60000) + "mins" );
+		holder.duration.setText("Qty: "+(int)(factoryList.get(pos).amount));
 		holder.factory_on.setVisibility(factoryList.get(pos).is_on?View.VISIBLE:View.GONE);
 		holder.factory_timer.setText(factoryList.get(pos).time_left);
 
@@ -182,6 +183,7 @@ public class FactoryAdapter extends RecyclerView.Adapter<FactoryAdapter.MyViewHo
 		public ProgressBar factory_on;
 		public TextView factory_timer;
 		public TextView duration;
+		public TextView amount;
 		public RelativeLayout factory;
 		public LinearLayout factory_details;
 		public Button start;
@@ -218,6 +220,7 @@ public class FactoryAdapter extends RecyclerView.Adapter<FactoryAdapter.MyViewHo
 			factory_on = (ProgressBar) itemView.findViewById(R.id.factory_on);
 			factory_timer = (TextView)itemView.findViewById(R.id.factory_timer);
 			duration = (TextView)itemView.findViewById(R.id.duration);
+			amount = (TextView)itemView.findViewById(R.id.amount);
 			factory = (RelativeLayout)itemView.findViewById(R.id.factory);
 			factory.setOnClickListener(this);
 			factory_details = (LinearLayout)itemView.findViewById(R.id.factory_details);

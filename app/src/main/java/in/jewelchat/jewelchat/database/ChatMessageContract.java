@@ -24,6 +24,7 @@ public class ChatMessageContract implements BaseColumns {
 	public static final String TIME_DELIVERED = "timeDelivered";
 	public static final String IS_SUBMITTED = "isSubmitted";
 	public static final String TIME_SUBMITTED = "timeSubmitted";
+	public static final String IS_ERROR = "isError";
 	public static final String MSG_TEXT = "msgtext";
 	public static final String IMAGE_BLOB = "imageBlob";
 	public static final String IS_IMAGE_DOWNLOADED = "isImageDownloaded";
@@ -60,6 +61,7 @@ public class ChatMessageContract implements BaseColumns {
 			TIME_DELIVERED + "  INTEGER" + "," +
 			IS_SUBMITTED + "  INTEGER DEFAULT 0 " + "," +
 			TIME_SUBMITTED + "  INTEGER" + "," +
+			IS_ERROR + "  INTEGER DEFAULT 0 " + "," +
 			JEWEL_TYPE + "  INTEGER" + "," +
 			IS_JEWEL_PICKED + "  INTEGER DEFAULT 0 " + "," +
 			MSG_TEXT + "  TEXT" + "," +

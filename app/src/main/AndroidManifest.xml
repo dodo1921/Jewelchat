@@ -63,6 +63,35 @@
 			android:launchMode="singleTask"
 			android:screenOrientation="portrait">
 		</activity>
+		<activity
+			android:name=".screens.ActivityWallet"
+			android:label="@string/app_name"
+			android:theme="@style/AppTheme.NoActionBar"
+			android:launchMode="singleTask"
+			android:screenOrientation="portrait">
+		</activity>
+		<activity
+			android:name=".screens.ActivityLeaderboard"
+			android:label="@string/app_name"
+			android:theme="@style/AppTheme.NoActionBar"
+			android:launchMode="singleTask"
+			android:screenOrientation="portrait">
+		</activity>
+		<activity
+			android:name=".screens.ActivityReference"
+			android:label="@string/app_name"
+			android:theme="@style/AppTheme.NoActionBar"
+			android:launchMode="singleTask"
+			android:screenOrientation="portrait">
+		</activity>
+
+		<activity
+			android:name=".screens.ActivityEditProfile"
+			android:label="@string/app_name"
+			android:theme="@style/AppTheme.NoActionBar"
+			android:launchMode="singleTask"
+			android:screenOrientation="portrait">
+		</activity>
 
 		<service
 			android:name=".service.JewelChatService">

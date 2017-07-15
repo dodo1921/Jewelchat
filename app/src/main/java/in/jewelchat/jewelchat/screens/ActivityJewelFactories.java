@@ -1,5 +1,6 @@
 package in.jewelchat.jewelchat.screens;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.design.widget.CoordinatorLayout;
@@ -38,6 +39,7 @@ import in.jewelchat.jewelchat.models.NoInternet;
 import in.jewelchat.jewelchat.models.TaskMaterials;
 import in.jewelchat.jewelchat.models._403NetworkErrorEvent;
 import in.jewelchat.jewelchat.network.JewelChatRequest;
+import in.jewelchat.jewelchat.service.GameStateLoadService;
 import in.jewelchat.jewelchat.util.NetworkConnectivityStatus;
 
 /**
@@ -103,6 +105,37 @@ public class ActivityJewelFactories extends BaseNetworkActivity implements Respo
 						factoryList.get(pos).all_materials_present = r;
 						adapterFactory.notifyDataSetChanged();
 						break;
+					case R.id.start :
+						if(factoryList.get(pos).all_materials_present && factoryList.get(pos).buttonState==0) {
+							//Start factory network call;
+							startFactory(factoryList.get(pos).id);
+						}else if(factoryList.get(pos).buttonState==1){
+							//Check diamond present, and jewel store space, stop factory
+							int sum=0;
+							for(int i=3; i<18; i++){
+								sum += JewelChatApp.getSharedPref().getInt(i+"",0);
+							}
+
+							if( 25-sum >= factoryList.get(pos).amount ) {
+								if (JewelChatApp.getSharedPref().getInt("0", 0) >= factoryList.get(pos).diamond)
+									stopFactory(factoryList.get(pos).id);
+								else
+									snackbarMsg("Not enough diamonds...");
+							}else
+								snackbarMsg("Not enough space in Jewel Store...");
+						}else if(factoryList.get(pos).buttonState==2){
+							//Jewel Store space,  stop factory
+							int sum=0;
+							for(int i=3; i<18; i++){
+								sum += JewelChatApp.getSharedPref().getInt(i+"",0);
+							}
+
+							if(25-sum >= factoryList.get(pos).amount)
+								stopFactory(factoryList.get(pos).id);
+							else
+								snackbarMsg("Not enough space in Jewel Store...");
+						}
+						break;
 					default:
 						Log.i("click event","Redeem");
 
@@ -133,6 +166,126 @@ public class ActivityJewelFactories extends BaseNetworkActivity implements Respo
 			}
 
 		});
+
+	}
+
+
+	private void startFactory(int id){
+
+		Response.Listener<JSONObject> response = new Response.Listener<JSONObject>() {
+			@Override
+			public void onResponse(JSONObject response) {
+				JewelChatApp.appLog(Log.INFO,"REDEEMTASK","REDEEMTASK" + ":onResponse");
+				dismissDialog();
+				try {
+
+					Boolean error = response.getBoolean("error");
+					if(error){
+						String err_msg = response.getString("message");
+						throw new Exception(err_msg);
+					}
+
+
+					factoryList.get(pos).buttonState = 1;
+					factoryList.get(pos).ct = new CountDownTimer(factoryList.get(pos).duration , 1000) {
+						@Override
+						public void onTick(long millis) {
+							long second = (millis / 1000) % 60;
+							long minute = (millis / (1000 * 60)) % 60;
+							long hour = (millis / (1000 * 60 * 60)) % 24;
+
+							factoryList.get(pos).time_left = String.format("%02d:%02d:%02d", hour, minute, second);
+
+							//fac.time_left = (long)(l/1000)+":";
+							adapterFactory.notifyDataSetChanged();
+						}
+
+						@Override
+						public void onFinish() {
+							factoryList.get(pos).is_on = false;
+							factoryList.get(pos).time_left = "DONE";
+							adapterFactory.notifyDataSetChanged();
+							factoryList.get(pos).buttonState = 2;
+						}
+					}.start();
+
+
+
+				} catch (JSONException e) {
+					FirebaseCrash.report(e);
+				} catch (Exception e) {
+					FirebaseCrash.report(e);
+				}
+
+			}
+		};
+
+
+
+		JSONObject t = new JSONObject();
+		try {
+			t.put("id", id);
+			JewelChatRequest req = new JewelChatRequest(Request.Method.POST, JewelChatURLS.STARTFACTORY, t, response, this);
+			if (NetworkConnectivityStatus.getConnectivityStatus() == NetworkConnectivityStatus.CONNECTED) {
+				createDialog("Please Wait");
+				JewelChatApp.getRequestQueue().add(req);
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+
+	}
+
+
+	private void stopFactory(int id){
+
+		Response.Listener<JSONObject> response = new Response.Listener<JSONObject>() {
+			@Override
+			public void onResponse(JSONObject response) {
+				JewelChatApp.appLog(Log.INFO,"REDEEMTASK","REDEEMTASK" + ":onResponse");
+				dismissDialog();
+				try {
+
+					Boolean error = response.getBoolean("error");
+					if(error){
+						String err_msg = response.getString("message");
+						throw new Exception(err_msg);
+					}
+
+					Intent service1 = new Intent(getApplicationContext(), GameStateLoadService.class);
+					startService(service1);
+
+					factoryList.clear();
+					pageCounter = 0;
+					loading = true;
+					no_more_items_to_load = false;
+					loadFactories();
+
+
+
+				} catch (JSONException e) {
+					FirebaseCrash.report(e);
+				} catch (Exception e) {
+					FirebaseCrash.report(e);
+				}
+			}
+		};
+
+
+
+		JSONObject t = new JSONObject();
+		try {
+			t.put("id", id);
+			//Log.i(">>>NETWORK",pageCounter+"");
+			JewelChatRequest req = new JewelChatRequest(Request.Method.POST, JewelChatURLS.STOPFACTORY, t, response, this);
+			if (NetworkConnectivityStatus.getConnectivityStatus() == NetworkConnectivityStatus.CONNECTED) {
+				createDialog("Please Wait");
+				JewelChatApp.getRequestQueue().add(req);
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+
 
 	}
 
@@ -192,6 +345,7 @@ public class ActivityJewelFactories extends BaseNetworkActivity implements Respo
 					fac.duration = t.optInt("duration")*1000l;
 					fac.is_on = t.optInt("is_on")==1?true:false;
 					fac.diamond = t.optInt("diamond");
+					fac.amount = t.optInt("amount");
 					if(fac.is_on) {
 						if (t.optString("start_time") != null) {
 							SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
@@ -224,8 +378,14 @@ public class ActivityJewelFactories extends BaseNetworkActivity implements Respo
 							fac.buttonState = 1;
 							fac.ct = new CountDownTimer(fac.duration - (fac.server_time-fac.start_time), 1000) {
 								@Override
-								public void onTick(long l) {
-									fac.time_left = (long)(l/1000)+"sec";
+								public void onTick(long millis) {
+									long second = (millis / 1000) % 60;
+									long minute = (millis / (1000 * 60)) % 60;
+									long hour = (millis / (1000 * 60 * 60)) % 24;
+
+									fac.time_left = String.format("%02d:%02d:%02d", hour, minute, second);
+
+									//fac.time_left = (long)(l/1000)+":";
 									adapterFactory.notifyDataSetChanged();
 								}
 

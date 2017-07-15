@@ -56,6 +56,13 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
 		snackbar.show();
 	}
 
+	public void snackbarMsg(String msg){
+		Snackbar snackbar = Snackbar
+				.make(rootLayout, msg+"...", Snackbar.LENGTH_LONG);
+
+		snackbar.show();
+	}
+
 	public void networkErrorMessage(String msg){
 		Snackbar snackbar = Snackbar
 				.make(rootLayout, msg+"...", Snackbar.LENGTH_LONG);
@@ -125,6 +132,8 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
 		jewelStoreFull.show(getFragmentManager(), "Jewel Store Full");
 		jewelStoreFull.setCancelable(true);
 	}
+
+
 
 	protected void showNoInternetDialog() {
 

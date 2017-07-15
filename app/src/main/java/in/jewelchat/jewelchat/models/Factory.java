@@ -14,6 +14,7 @@ public class Factory implements Comparable<Factory> {
 	public int id;
 	public int factory_type;
 	public long duration;
+	public int amount;
 	public int diamond;
 	public boolean is_on;
 	public List<TaskMaterials> materials = new ArrayList<TaskMaterials>();
