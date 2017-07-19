@@ -193,6 +193,7 @@ public class FragmentTasks extends Fragment implements Response.ErrorListener, R
 					listTask.clear();
 					tasksAdapter.notifyDataSetChanged();
 					loading = true;
+					no_more_items_to_load = false;
 					Intent service1 = new Intent(getContext(), GameStateLoadService.class);
 					getActivity().startService(service1);
 					loadAchivements();

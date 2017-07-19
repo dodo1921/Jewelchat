@@ -92,12 +92,15 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
 	protected void onStop() {
 		JewelChatApp.appLog(Log.INFO, "Activity",className + ":onStop");
 		super.onStop();
+
+
 	}
 
 	@Override
 	protected void onDestroy() {
 		JewelChatApp.appLog(Log.INFO, "Activity",className + ":onDestroy");
 		super.onDestroy();
+
 	}
 
 	@Override
@@ -105,6 +108,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
 		JewelChatApp.appLog(Log.INFO, "Activity",className + ":onPause");
 		super.onPause();
 		JewelChatApp.getBusInstance().unregister(this);
+
 	}
 
 	@Override

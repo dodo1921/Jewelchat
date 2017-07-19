@@ -21,7 +21,7 @@ public class DecrementUnreadCounterService extends IntentService {
 	@Override
 	protected void onHandleIntent(Intent intent) {
 
-		int chatroom = intent.getIntExtra("chatroom", 0);
+		int chatroom = intent.getIntExtra("chatroom", 1);
 
 		ContentValues cv = new ContentValues();
 		cv.put(ContactContract.UNREAD_COUNT, 0);

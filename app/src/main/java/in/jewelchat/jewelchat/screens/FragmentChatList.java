@@ -1,5 +1,6 @@
 package in.jewelchat.jewelchat.screens;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -12,11 +13,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import in.jewelchat.jewelchat.JewelChatApp;
 import in.jewelchat.jewelchat.R;
 import in.jewelchat.jewelchat.adapter.ChatListAdapter;
+import in.jewelchat.jewelchat.database.ChatMessageContract;
+import in.jewelchat.jewelchat.database.ContactContract;
 import in.jewelchat.jewelchat.database.JewelChatDataProvider;
 
 /**
@@ -54,13 +56,17 @@ public class FragmentChatList extends Fragment  implements LoaderManager.LoaderC
 
 				Cursor c = (Cursor)chatListAdapter.getItem(position);
 				c.moveToPosition(position);
-				Toast.makeText( getContext() , c.getInt(0)+"", Toast.LENGTH_SHORT).show();
-
 				Bundle bundle = new Bundle();
+				bundle.putInt(ContactContract.JEWELCHAT_ID, c.getInt(0));
+				bundle.putString(ContactContract.CONTACT_NAME, c.getString(1));
+				bundle.putLong(ContactContract.CONTACT_NUMBER, c.getLong(2));
+				bundle.putString(ContactContract.IMAGE_PATH, c.getString(3));
+				bundle.putInt(ChatMessageContract.CHAT_ROOM, c.getInt(17));
+				bundle.putBoolean(ContactContract.IS_GROUP, c.getInt(5)==1?true:false);
 
-
-				//Intent i = new Intent(getActivity(), ActivityChatRoom.class);
-				//startActivity(i);
+				Intent i = new Intent(getActivity(), ActivityChatRoom.class);
+				i.putExtras(bundle);
+				startActivity(i);
 
 			}
 		});

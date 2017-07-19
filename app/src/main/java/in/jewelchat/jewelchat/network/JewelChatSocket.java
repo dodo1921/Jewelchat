@@ -40,7 +40,7 @@ public class JewelChatSocket {
 
 		try {
 
-			this.socket = IO.socket("http://192.168.0.103:8081", opts);
+			this.socket = IO.socket("http://192.168.1.2:8080", opts);
 
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
@@ -133,6 +133,7 @@ public class JewelChatSocket {
 
 			@Override
 			public void call(Object... args) {
+				Log.i("NEW MSG", "NEW MSG");
 				Message msg = Message.obtain(null, 0, args[0]);
 				try {
 					mMessenger.send(msg);

@@ -5,8 +5,7 @@
               android:paddingLeft="10dp"
               android:paddingRight="10dp"
               android:paddingTop="10dp"
-              android:layout_margin="5dp"
-              android:background="@android:color/white"
+              android:background="@android:color/black"
               android:layout_width="match_parent"
               android:layout_height="205dp">
 
@@ -20,9 +19,9 @@
 			android:layout_height="80dp"
 			android:src="@drawable/wallet"
 			android:padding="5dp"
-			app:civ_border_color="#EEEEEE"
+			app:civ_border_color="@color/colorAccent"
 			app:civ_border_width="4dp"
-			android:background="@drawable/image_button_states"
+			android:background="@drawable/image_button_states2"
 			android:layout_alignParentLeft="true"/>
 
 		<com.mikhaellopez.circularimageview.CircularImageView
@@ -30,10 +29,10 @@
 			android:layout_width="80dp"
 			android:layout_height="80dp"
 			android:padding="5dp"
-			app:civ_border_color="#EEEEEE"
+			app:civ_border_color="@color/colorAccent"
 			app:civ_border_width="4dp"
 			android:src="@drawable/refer"
-			android:background="@drawable/image_button_states"
+			android:background="@drawable/image_button_states2"
 			android:layout_alignParentRight="true"/>
 
 		<com.mikhaellopez.circularimageview.CircularImageView
@@ -41,10 +40,10 @@
 			android:layout_width="80dp"
 			android:layout_height="80dp"
 			android:padding="5dp"
-			app:civ_border_color="#EEEEEE"
+			app:civ_border_color="@color/colorAccent"
 			app:civ_border_width="4dp"
 			android:src="@drawable/leaderboard"
-			android:background="@drawable/image_button_states"
+			android:background="@drawable/image_button_states2"
 			android:layout_centerHorizontal="true"/>
 
 
@@ -57,6 +56,6 @@
 		android:gravity="center"
 		android:text="Jewel Factory"
 		android:textSize="30dp"
-		android:drawableLeft="@drawable/factory"/>
+		android:drawableLeft="@drawable/factory1"/>
 
 </LinearLayout>

@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:card_view="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content">
+
+	<RelativeLayout
+		android:id="@+id/chatroom_msg_date"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:gravity="center_horizontal">
+
+		<android.support.v7.widget.CardView
+
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginBottom="10dp"
+			android:layout_marginTop="10dp"
+			card_view:cardCornerRadius="5dp"
+			card_view:contentPadding="7dp">
+
+			<TextView
+				android:id="@+id/msg_date"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:padding="4dp"
+				android:textAllCaps="true"
+				android:textSize="16sp"
+				android:textStyle="bold"
+				tools:text="8 SEPTEMBER 2015"/>
+
+		</android.support.v7.widget.CardView>
+
+	</RelativeLayout>
+
+	<RelativeLayout
+		android:id="@+id/chatroom_item"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:gravity="left"
+		android:layout_marginTop="5dp"
+		android:layout_marginBottom="5dp"
+		android:layout_below="@+id/chatroom_msg_date">
+
+		<RelativeLayout
+			android:id="@+id/jewel_type"
+			android:layout_centerVertical="true"
+			android:layout_width="55dp"
+			android:layout_height="45dp">
+
+			<ImageView
+				android:id="@+id/jewel"
+				android:layout_centerInParent="true"
+				android:src="@drawable/t15"
+				android:layout_width="35dp"
+				android:layout_height="35dp"/>
+
+		</RelativeLayout>
+
+
+		<android.support.v7.widget.CardView
+			android:id="@+id/chatroom_item_card"
+			android:layout_toRightOf="@+id/jewel_type"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginRight="5dp"
+			card_view:cardCornerRadius="5dp"
+			card_view:contentPadding="7dp">
+
+			<RelativeLayout
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content">
+
+				<LinearLayout
+					android:id="@+id/chat_item_content"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_marginBottom="2dp"
+					android:gravity="end">
+
+					<github.ankushsachdeva.emojicon.EmojiconTextView
+						android:id="@+id/chatroom_item_text"
+						android:visibility="visible"
+						android:maxWidth="250dp"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						tools:text="First chat of CitiTalk"/>
+
+					<!--RelativeLayout
+						android:id="@+id/chatroom_item_image_root"
+						android:layout_width="144dp"
+						android:layout_height="144dp"
+						android:visibility="visible">
+
+						<ImageView
+							android:id="@+id/chatroom_item_image"
+							android:layout_width="144dp"
+							android:layout_height="144dp"
+							android:visibility="visible"/>
+
+						<ProgressBar
+							android:id="@+id/chatroom_item_progress"
+							style="@android:style/Widget.ProgressBar.Horizontal"
+							android:layout_width="match_parent"
+							android:layout_height="6dp"
+							android:layout_centerVertical="true"
+							android:layout_margin="16dp"
+							android:indeterminateOnly="true"
+							android:visibility="gone"/>
+
+						<Button
+							android:id="@+id/chatroom_item_download"
+							android:layout_width="wrap_content"
+							android:layout_height="36dp"
+							android:layout_centerHorizontal="true"
+							android:layout_centerVertical="true"
+							android:background="@android:color/white"
+							android:padding="8dp"
+							android:text="Download"
+							android:visibility="gone"/>
+					</RelativeLayout-->
+
+				</LinearLayout>
+
+				<LinearLayout
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_below="@id/chat_item_content"
+					android:orientation="horizontal">
+
+					<TextView
+						android:id="@+id/chatroom_item_time"
+						android:layout_width="wrap_content"
+						android:layout_height="20dp"
+						android:layout_weight="0"
+						tools:text="23:59"/>
+
+					<ImageView
+						android:id="@+id/chatroom_item_delivery_status"
+						android:layout_width="14dp"
+						android:layout_height="14dp"
+						android:layout_marginLeft="2dp"
+						android:layout_marginTop="2dp"
+						android:layout_weight="0"
+						android:src="@drawable/inserted"/>
+
+				</LinearLayout>
+
+			</RelativeLayout>
+
+		</android.support.v7.widget.CardView>
+
+
+	</RelativeLayout>
+
+</RelativeLayout>

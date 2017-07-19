@@ -209,6 +209,10 @@ public class ActivityJewelFactories extends BaseNetworkActivity implements Respo
 						}
 					}.start();
 
+					factoryList.get(pos).is_on = true;
+					adapterFactory.notifyDataSetChanged();
+					Intent service1 = new Intent(getApplicationContext(), GameStateLoadService.class);
+					startService(service1);
 
 
 				} catch (JSONException e) {

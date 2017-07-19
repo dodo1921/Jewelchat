@@ -2,6 +2,7 @@ package in.jewelchat.jewelchat;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -16,6 +17,7 @@ import com.squareup.picasso.Picasso;
 
 import in.jewelchat.jewelchat.models.GameStateChangeEvent;
 import in.jewelchat.jewelchat.network.JewelChatSocket;
+import in.jewelchat.jewelchat.service.ScreenLockReceiveService;
 import in.jewelchat.jewelchat.util.JewelChatImageGetter;
 
 /**
@@ -155,12 +157,18 @@ public class JewelChatApp extends Application {
 		super.onCreate();
 		mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 		mInstance = this;
+
+		startService(new Intent(getBaseContext(), ScreenLockReceiveService.class));
+
+
 	}
 
 	@Override
 	public void onTerminate() {
 		super.onTerminate();
 		getJCSocket().getSocket().disconnect();
+
+		stopService(new Intent(getBaseContext(), ScreenLockReceiveService.class));
 	}
 
 }

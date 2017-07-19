@@ -92,7 +92,13 @@
 			android:launchMode="singleTask"
 			android:screenOrientation="portrait">
 		</activity>
-
+		<activity
+			android:name=".screens.ActivityChatRoom"
+			android:label="@string/app_name"
+			android:theme="@style/AppTheme.NoActionBar"
+			android:launchMode="singleTask"
+			android:screenOrientation="portrait">
+		</activity>
 		<service
 			android:name=".service.JewelChatService">
 			<intent-filter>
@@ -127,6 +133,9 @@
 			android:name=".service.DecrementUnreadCounterService"
 			android:exported="false"/>
 		<service
+			android:name=".service.ScreenLockReceiveService"
+			android:exported="false"/>
+		<service
 			android:name=".service.MyInstanceIDListenerService">
 			<intent-filter>
 				<action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
@@ -134,6 +143,12 @@
 		</service>
 		<service
 			android:name=".database.database_crud.InsertNewMessage"
+			android:exported="false"/>
+		<service
+			android:name=".database.database_crud.InsertSelfMessage"
+			android:exported="false"/>
+		<service
+			android:name=".database.database_crud.PickJewelService"
 			android:exported="false"/>
 		<service
 			android:name=".database.database_crud.InsertNewGroupMessage"
@@ -158,9 +173,15 @@
 			android:exported="false"/>
 
 
+
 		<receiver android:name=".receiver.NetworkReceiver">
 			<intent-filter>
 				<action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
+			</intent-filter>
+		</receiver>
+		<receiver android:name=".receiver.ScreenOffReceiver">
+			<intent-filter>
+				<action android:name="android.intent.action.SCREEN_OFF"/>
 			</intent-filter>
 		</receiver>
 		<provider

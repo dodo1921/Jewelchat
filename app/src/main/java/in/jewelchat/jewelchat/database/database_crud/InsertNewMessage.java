@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.util.Log;
 
+import org.apache.commons.lang3.StringUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -71,6 +72,16 @@ public class InsertNewMessage extends IntentService {
 
 			Uri urimsg = Uri.parse(JewelChatDataProvider.SCHEME+"://" + JewelChatDataProvider.AUTHORITY + "/"+ ChatMessageContract.SQLITE_TABLE_NAME);
 			String msg_id = getContentResolver().insert(urimsg, cv).getLastPathSegment();
+
+			if(!msg_id.equals("-1")){
+				String stack = JewelChatApp.getSharedPref().getString(JewelChatPrefs.MSG_STACK, "");
+				stack  = stack + ","+msg_id;
+				if(StringUtils.countMatches(stack, ".") == 30){
+					stack = stack.substring(stack.indexOf(",")+1);
+				}
+
+				JewelChatApp.getSharedPref().edit().putString(JewelChatPrefs.MSG_STACK, stack).commit();
+			}
 
 
 			Uri urimsg1 = Uri.parse(JewelChatDataProvider.SCHEME+"://" + JewelChatDataProvider.AUTHORITY + "/"+ ContactContract.SQLITE_TABLE_NAME);

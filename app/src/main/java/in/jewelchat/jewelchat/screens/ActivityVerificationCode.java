@@ -110,7 +110,9 @@ public class ActivityVerificationCode extends BaseNetworkActivity implements Tex
 
 				Uri urimsg = Uri.parse(JewelChatDataProvider.SCHEME+"://" + JewelChatDataProvider.AUTHORITY + "/"+ ContactContract.SQLITE_TABLE_NAME);
 				getContentResolver().delete(urimsg, null, null);
-				getContentResolver().insert(urimsg, cv);
+
+				if(JewelChatApp.getSharedPref().getLong(JewelChatPrefs.MY_ID,0) != response.getInt("teamjcid"))
+					getContentResolver().insert(urimsg, cv);
 
 				hideKeyBoard();
 				dismissDialog();

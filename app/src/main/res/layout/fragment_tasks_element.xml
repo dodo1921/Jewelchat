@@ -8,7 +8,10 @@
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
 		android:layout_gravity="center"
-		android:layout_margin="5dp"
+		android:layout_marginLeft="10dp"
+		android:layout_marginRight="10dp"
+		android:layout_marginTop="5dp"
+		android:layout_marginBottom="5dp"
 		android:elevation="3dp">
 
 		<LinearLayout
@@ -205,8 +208,8 @@
 
 						<ImageView
 							android:id="@+id/material1"
-							android:layout_width="25dp"
-							android:layout_height="25dp"
+							android:layout_width="30dp"
+							android:layout_height="30dp"
 							android:src="@drawable/t15"/>
 
 						<ImageView
@@ -241,8 +244,8 @@
 
 						<ImageView
 							android:id="@+id/material2"
-							android:layout_width="25dp"
-							android:layout_height="25dp"
+							android:layout_width="30dp"
+							android:layout_height="30dp"
 							android:src="@drawable/coin"/>
 
 						<ImageView
@@ -276,8 +279,8 @@
 
 						<ImageView
 							android:id="@+id/material3"
-							android:layout_width="25dp"
-							android:layout_height="25dp"
+							android:layout_width="30dp"
+							android:layout_height="30dp"
 							android:src="@drawable/coin"/>
 
 						<ImageView
@@ -311,8 +314,8 @@
 
 						<ImageView
 							android:id="@+id/material4"
-							android:layout_width="25dp"
-							android:layout_height="25dp"
+							android:layout_width="30dp"
+							android:layout_height="30dp"
 							android:src="@drawable/coin"/>
 
 						<ImageView
@@ -346,8 +349,8 @@
 
 						<ImageView
 							android:id="@+id/material5"
-							android:layout_width="25dp"
-							android:layout_height="25dp"
+							android:layout_width="30dp"
+							android:layout_height="30dp"
 							android:src="@drawable/coin"/>
 
 						<ImageView

@@ -147,18 +147,21 @@ public class JewelChatDataProvider extends ContentProvider {
 
 				try{
 					id = db.insertOrThrow(ChatMessageContract.SQLITE_TABLE_NAME, null, values);
+					Log.i("ID",id+"");
 					getContext().getContentResolver().notifyChange(uri, null);
 					getContext().getContentResolver().notifyChange(Uri.parse(CONTENT_URI + "/chatlist"), null);
-					String creatorid = values.getAsString(ChatMessageContract.CREATOR_ID);
-					String userid = JewelChatApp.getSharedPref().getString(JewelChatPrefs.MY_ID, "");
-					if(!creatorid.equals(userid))
+					long creatorid = values.getAsLong(ChatMessageContract.CREATOR_ID);
+					long userid = JewelChatApp.getSharedPref().getLong(JewelChatPrefs.MY_ID, 0);
+					if(creatorid!=userid)
 						getContext().getContentResolver().notifyChange(Uri.parse(CONTENT_URI + "/"+creatorid), null);
 				}catch(SQLiteConstraintException e){
 					Log.i("ConstraintException", "Duplicate row insertion");
 					id=-1;
 				}catch(SQLException e){
+					Log.i("SQLException", "");
 					id=-1;
 				}catch(Exception e){
+					Log.i("Exception", "");
 					id=-1;
 				}
 
@@ -174,8 +177,8 @@ public class JewelChatDataProvider extends ContentProvider {
 			default:
 				throw new IllegalArgumentException("Unsupported URI: " + uri);
 		}
-
-		return Uri.parse(uri + "/#" + id);
+		//Log.i("INSERT URI", Uri.parse(uri + "/#"+id).toString());
+		return Uri.parse(uri + "/" + id);
 	}
 
 	@Override

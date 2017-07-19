@@ -67,7 +67,7 @@ public class ChatListAdapter extends CursorAdapter {
 
 		int type = cursor.getInt(11);
 		if( type==1 )
-			vLastPost.setText(cursor.getString(12).subSequence(0,25)+"....");
+			vLastPost.setText(cursor.getString(12));
 		else if( type == 2 || type == 4 )
 			vLastPost.setText("Image");
 		else if( type ==3 )
