@@ -150,6 +150,7 @@ public class ActivityRegistration extends BaseNetworkActivity implements TextVie
 			Boolean active = response.getBoolean("active");
 			SharedPreferences.Editor editor = JewelChatApp.getSharedPref().edit();
 			editor.putLong(JewelChatPrefs.MY_ID, userId);
+			editor.putString(JewelChatPrefs.NAME, response.getString("name"));
 			editor.putBoolean(JewelChatPrefs.INITIAL_DETAILS_ENTERED, active);
 			editor.putString(JewelChatPrefs.MY_PHONE, this.e164formatNumber);
 			editor.apply();

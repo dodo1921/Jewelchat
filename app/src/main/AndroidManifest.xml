@@ -99,6 +99,13 @@
 			android:launchMode="singleTask"
 			android:screenOrientation="portrait">
 		</activity>
+		<activity
+			android:name=".screens.ActivityContacts"
+			android:label="@string/app_name"
+			android:theme="@style/AppTheme.NoActionBar"
+			android:launchMode="singleTask"
+			android:screenOrientation="portrait">
+		</activity>
 		<service
 			android:name=".service.JewelChatService">
 			<intent-filter>
@@ -131,6 +138,9 @@
 			android:exported="false"/>
 		<service
 			android:name=".service.DecrementUnreadCounterService"
+			android:exported="false"/>
+		<service
+			android:name=".service.FirstTimeContactDownloadService"
 			android:exported="false"/>
 		<service
 			android:name=".service.ScreenLockReceiveService"

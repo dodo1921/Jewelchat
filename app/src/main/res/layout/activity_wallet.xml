@@ -22,6 +22,17 @@
 			android:id="@+id/jewelchat_xpbar"
 			layout="@layout/jewelchat_xpbar"/>
 
+		<ProgressBar
+			android:id="@+id/top_progress_bar"
+			style="@android:style/Widget.ProgressBar.Horizontal"
+			xmlns:android="http://schemas.android.com/apk/res/android"
+			android:layout_width="match_parent"
+			android:layout_height="6dp"
+			android:indeterminateOnly="true"
+			android:visibility="gone">
+
+		</ProgressBar>
+
 	</android.support.design.widget.AppBarLayout>
 
 
@@ -32,30 +43,57 @@
 
 
 		<LinearLayout android:orientation="vertical"
+		              android:gravity="center_vertical"
 		              android:layout_width="match_parent"
 		              android:layout_height="match_parent">
 
-			<TextView
-				android:layout_marginTop="50dp"
-				android:layout_marginBottom="50dp"
+			<LinearLayout
 				android:layout_gravity="center"
-				android:text="100.00"
-				android:textSize="35dp"
-				android:textStyle="bold"
+				android:orientation="horizontal"
 				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"/>
+				android:layout_height="wrap_content">
+
+				<ImageView
+					android:layout_marginTop="50dp"
+					android:layout_marginBottom="50dp"
+					android:layout_gravity="center"
+					android:src="@drawable/money"
+					android:layout_width="40dp"
+					android:layout_height="40dp"/>
+
+
+				<TextView
+					android:id="@+id/amount"
+					android:layout_marginTop="50dp"
+					android:layout_marginBottom="50dp"
+					android:layout_gravity="center"
+					android:text="0.00"
+					android:textSize="35dp"
+					android:textStyle="bold"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"/>
+
+
+
+			</LinearLayout>
+
+
 
 			<RelativeLayout
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content">
 
 				<Button
-					android:text="Redeem 50 rupees"
+					android:text="Redeem 50 rupees daily to Paytm"
+					android:textAllCaps="false"
 					android:layout_marginLeft="25dp"
 					android:layout_width="150dp"
 					android:layout_height="100dp"/>
+
+
 				<Button
-					android:text="Add money to wallet"
+					android:text="Add money to Wallet"
+					android:textAllCaps="false"
 					android:layout_marginRight="25dp"
 					android:layout_alignParentRight="true"
 					android:layout_width="150dp"
@@ -86,14 +124,14 @@
 
 				<ImageView
 					android:id="@+id/d2"
-					android:src="@drawable/d1"
+					android:src="@drawable/d2"
 					android:layout_centerHorizontal="true"
 					android:layout_width="100dp"
 					android:layout_height="100dp"/>
 
 				<ImageView
 					android:id="@+id/d3"
-					android:src="@drawable/d1"
+					android:src="@drawable/d3"
 					android:layout_marginRight="25dp"
 					android:layout_alignParentRight="true"
 					android:layout_width="100dp"
@@ -115,14 +153,14 @@
 
 				<ImageView
 					android:id="@+id/c2"
-					android:src="@drawable/c1"
+					android:src="@drawable/c2"
 					android:layout_centerHorizontal="true"
 					android:layout_width="100dp"
 					android:layout_height="100dp"/>
 
 				<ImageView
 					android:id="@+id/c3"
-					android:src="@drawable/c1"
+					android:src="@drawable/c3"
 					android:layout_marginRight="25dp"
 					android:layout_alignParentRight="true"
 					android:layout_width="100dp"

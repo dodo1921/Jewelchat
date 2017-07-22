@@ -168,10 +168,21 @@ public class JewelChatDataProvider extends ContentProvider {
 				break;
 			}
 			case CONTACT:{
-				id = db.insertOrThrow(ContactContract.SQLITE_TABLE_NAME, null, values);
-				Log.i("ID>>>>>>>>",""+id);
-				getContext().getContentResolver().notifyChange(uri, null);
-				getContext().getContentResolver().notifyChange(Uri.parse(CONTENT_URI + "/chatlist"), null);
+				try {
+					id = db.insertOrThrow(ContactContract.SQLITE_TABLE_NAME, null, values);
+					Log.i("ID>>>>>>>>", "" + id);
+					getContext().getContentResolver().notifyChange(uri, null);
+					getContext().getContentResolver().notifyChange(Uri.parse(CONTENT_URI + "/chatlist"), null);
+				}catch(SQLiteConstraintException e){
+					Log.i("ConstraintException", "Duplicate row insertion");
+					id=-1;
+				}catch(SQLException e){
+					Log.i("SQLException", "");
+					id=-1;
+				}catch(Exception e){
+					Log.i("Exception", "");
+					id=-1;
+				}
 				break;
 			}
 			default:

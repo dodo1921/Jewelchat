@@ -2,27 +2,37 @@ package in.jewelchat.jewelchat.screens;
 
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.android.volley.Request;
 import com.android.volley.Response;
+import com.google.firebase.crash.FirebaseCrash;
 import com.squareup.otto.Subscribe;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import in.jewelchat.jewelchat.BaseNetworkActivity;
 import in.jewelchat.jewelchat.JewelChatApp;
+import in.jewelchat.jewelchat.JewelChatURLS;
 import in.jewelchat.jewelchat.R;
 import in.jewelchat.jewelchat.models.GameStateChangeEvent;
 import in.jewelchat.jewelchat.models.NoInternet;
 import in.jewelchat.jewelchat.models._403NetworkErrorEvent;
+import in.jewelchat.jewelchat.network.JewelChatRequest;
 
 /**
  * Created by mayukhchakraborty on 22/06/17.
  */
 
 public class ActivityWallet extends BaseNetworkActivity implements Response.Listener<JSONObject>{
+
+	Double wallet_value = 0.00;
+	TextView amount;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +42,14 @@ public class ActivityWallet extends BaseNetworkActivity implements Response.List
 		className = getClass().getSimpleName();
 		rootLayout = (CoordinatorLayout) findViewById(R.id.main_content);
 		setUpAppbar();
+
+		progressBar = (ProgressBar) findViewById(R.id.top_progress_bar);
+		amount = (TextView)findViewById(R.id.amount);
+		amount.setText(wallet_value+"");
+
+		JewelChatRequest req = new JewelChatRequest(Request.Method.GET, JewelChatURLS.GETWALLET, null, this,  this);
+		addRequest(req);
+
 
 	}
 
@@ -59,6 +77,26 @@ public class ActivityWallet extends BaseNetworkActivity implements Response.List
 
 	@Override
 	public void onResponse(JSONObject response) {
+
+		JewelChatApp.appLog(Log.INFO,"DOWNLOADCONTACTS","DOWNLOADCONTACTS" + ":onResponse");
+		dismissDialog();
+		try {
+
+			Boolean error = response.getBoolean("error");
+			if(error){
+				String err_msg = response.getString("message");
+				throw new Exception(err_msg);
+			}
+
+			amount.setText(response.getDouble("value")+"");
+
+
+
+		} catch (JSONException e) {
+			FirebaseCrash.report(e);
+		} catch (Exception e) {
+			FirebaseCrash.report(e);
+		}
 
 	}
 

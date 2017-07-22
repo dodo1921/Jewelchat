@@ -111,6 +111,8 @@ public class InsertNewMessage extends IntentService {
 
 			}
 
+			c.close();
+
 			JSONObject deliveryack = new JSONObject();
 
 			deliveryack.put("sender_id", JewelChatApp.getSharedPref().getLong(JewelChatPrefs.MY_ID, 0));

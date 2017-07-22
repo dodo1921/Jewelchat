@@ -20,6 +20,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import in.jewelchat.jewelchat.screens.ActivityContacts;
 import in.jewelchat.jewelchat.screens.ActivitySplashScreen;
 import in.jewelchat.jewelchat.screens.DialogJewelStore;
 import in.jewelchat.jewelchat.screens.DialogJewelStoreFull;
@@ -227,7 +228,14 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
 
 	@Override
 	public boolean onMenuItemClick(MenuItem item) {
-		return false;
+
+		switch(item.getItemId()){
+			case R.id.contacts : Intent service = new Intent(getApplicationContext(), ActivityContacts.class);
+				startActivity(service);
+			break;
+		}
+
+		return true;
 	}
 
 

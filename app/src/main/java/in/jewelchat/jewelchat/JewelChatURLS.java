@@ -15,7 +15,9 @@ public class JewelChatURLS {
 	public static final String INITIAL_DETAILS = baseURL + "/initialDetails";
 	public static final String UPDATE_GCM_TOKEN = baseURL + "/updateGcmToken";
 
+	public static final String INVITE = baseURL + "/invite";
 	public static final String DOWNLOADCONTACT = baseURL + "/downloadContact";
+	public static final String DOWNLOADCONTACT_PHONE = baseURL + "/downloadContact_phone";
 
 	public static final String PICKJEWEL = baseURL +"/pickJewel";
 
@@ -38,6 +40,7 @@ public class JewelChatURLS {
 	public static final String GETTASKS = baseURL + "/getTasks";
 	public static final String REDEEMTASK = baseURL + "/redeemTask";
 
+	public static final String GETWALLET = baseURL + "/getWallet";
 
 
 }
