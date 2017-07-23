@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:background="@android:color/white"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent">
+
+	<android.support.design.widget.CoordinatorLayout
+		android:id="@+id/main_content"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:fitsSystemWindows="false"
+		android:layout_above="@+id/edit_profile_status_submit_options"
+		android:layout_alignParentTop="true"
+		tools:context="in.jewelchat.jewelchat.screens.ActivityEditProfileStatus">
+
+		<android.support.design.widget.AppBarLayout
+			android:id="@+id/appbar"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content">
+
+			<include
+				android:id="@+id/jewelchat_toolbar"
+				layout="@layout/jewelchat_toolbar"/>
+
+			<include
+				android:id="@+id/jewelchat_xpbar"
+				layout="@layout/jewelchat_xpbar"/>
+
+		</android.support.design.widget.AppBarLayout>
+
+		<android.support.v4.widget.NestedScrollView
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:layout_marginBottom="50dp"
+			android:clipToPadding="false"
+			android:scrollbars="vertical"
+			android:paddingBottom="8dp"
+			app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+
+			<LinearLayout
+				android:id="@+id/edit_profile_status_input_options"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_above="@+id/edit_profile_name_submit_options"
+				android:layout_below="@+id/appbar"
+				android:orientation="horizontal">
+
+
+
+				<github.ankushsachdeva.emojicon.EmojiconEditText
+					android:id="@+id/edit_profile_status_text"
+					android:layout_marginBottom="16dp"
+					android:layout_margin="16dp"
+					android:gravity="center_vertical"
+					android:padding="16dp"
+					android:layout_width="0dp"
+					android:layout_height="wrap_content"
+					android:layout_weight="1"
+					android:background="@drawable/border"
+					android:hint="Enter Profile Status"/>
+
+				<ImageView
+					android:id="@+id/edit_profile_status_emoji"
+					android:layout_width="48dp"
+					android:layout_height="48dp"
+					android:layout_gravity="center"
+					android:layout_marginEnd="16dp"
+					android:layout_marginRight="16dp"
+					android:padding="6dp"
+					android:src="@drawable/smiley_gray"/>
+
+			</LinearLayout>
+
+
+
+		</android.support.v4.widget.NestedScrollView>
+
+	</android.support.design.widget.CoordinatorLayout>
+
+	<LinearLayout
+		android:id="@+id/edit_profile_status_submit_options"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_alignParentBottom="true"
+		android:divider="@drawable/divider_vertical"
+		android:dividerPadding="10dp"
+		android:background="@android:color/white"
+		android:orientation="horizontal"
+		android:showDividers="middle">
+
+		<Button
+			android:id="@+id/edit_profile_status_cancel"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_weight="0.5"
+			android:background="@drawable/image_button_states"
+			android:text="Cancel"/>
+
+		<Button
+			android:id="@+id/edit_profile_status_save"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_weight="0.5"
+			android:background="@drawable/image_button_states"
+			android:text="Save"/>
+
+	</LinearLayout>
+
+</RelativeLayout>
+
+
+
+
+

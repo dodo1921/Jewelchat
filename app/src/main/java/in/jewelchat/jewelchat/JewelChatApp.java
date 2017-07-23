@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.android.volley.RequestQueue;
@@ -27,6 +28,8 @@ import in.jewelchat.jewelchat.util.JewelChatImageGetter;
 public class JewelChatApp extends Application {
 
 	private FirebaseAnalytics mFirebaseAnalytics;
+
+	private static BaseActivity mAppCompatActivity;
 	private static JewelChatApp mInstance;
 	private static RequestQueue mRequestQueue;
 	private static SharedPreferences sharedPref;
@@ -40,6 +43,14 @@ public class JewelChatApp extends Application {
 
 
 	public static final int CONNECTION_TIMEOUT = 10000;
+
+	public static BaseActivity getAppActivity() {
+		return mAppCompatActivity;
+	}
+
+	public static void setAppActivity(@Nullable BaseActivity mAppCompatActivity) {
+		JewelChatApp.mAppCompatActivity = mAppCompatActivity;
+	}
 
 	public static JewelChatApp getInstance() {
 		return mInstance;

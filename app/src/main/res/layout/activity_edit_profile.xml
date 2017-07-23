@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+	android:id="@+id/main_content"
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:fitsSystemWindows="true"
+	tools:context="in.jewelchat.jewelchat.screens.ActivityJewelFactories">
+
+	<android.support.design.widget.AppBarLayout
+		android:id="@+id/appbar"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content">
+
+		<include
+			android:id="@+id/jewelchat_toolbar"
+			layout="@layout/jewelchat_toolbar"/>
+
+		<include
+			android:id="@+id/jewelchat_xpbar"
+			layout="@layout/jewelchat_xpbar"/>
+
+		<ProgressBar
+			android:id="@+id/top_progress_bar"
+			style="@android:style/Widget.ProgressBar.Horizontal"
+			xmlns:android="http://schemas.android.com/apk/res/android"
+			android:layout_width="match_parent"
+			android:layout_height="6dp"
+			android:indeterminateOnly="true"
+			android:visibility="gone">
+
+		</ProgressBar>
+
+	</android.support.design.widget.AppBarLayout>
+
+
+	<android.support.v4.widget.NestedScrollView
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:background="@android:color/white"
+		app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:background="@android:color/white"
+			android:orientation="vertical">
+
+			<RelativeLayout
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content">
+
+				<RelativeLayout
+					android:id="@+id/profile_image_root"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:paddingLeft="16dp"
+					android:paddingRight="16dp"
+					android:paddingTop="16dp">
+
+					<in.jewelchat.jewelchat.util.SquareImageView
+						android:id="@+id/profile_image"
+						android:layout_marginBottom="16dp"
+						android:background="@color/gray"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						tools:src="@drawable/person"/>
+
+					<View
+						android:layout_width="1dp"
+						android:layout_height="32dp"
+						android:layout_alignBottom="@id/profile_image"
+						android:layout_margin="8dp"
+						android:layout_toLeftOf="@+id/edit_profile_image"
+						android:background="@android:color/white" />
+
+					<ImageButton
+						android:id="@+id/edit_profile_image"
+						android:layout_width="32dp"
+						android:layout_height="32dp"
+						android:layout_alignBottom="@id/profile_image"
+						android:layout_alignRight="@id/profile_image"
+						android:layout_marginBottom="8dp"
+						android:background="#00000000"
+						android:elevation="5dp"
+						android:scaleType="fitCenter"
+						android:src="@drawable/edit_white"/>
+
+				</RelativeLayout>
+
+				<ImageButton
+					android:id="@+id/remove_profile_image"
+					android:layout_width="36dp"
+					android:layout_height="36dp"
+					android:layout_alignRight="@id/profile_image_root"
+					android:layout_alignTop="@id/profile_image_root"
+					android:background="#00ffffff"
+					android:scaleType="fitCenter"
+					android:src="@drawable/cancel_image_preview"/>
+
+			</RelativeLayout>
+
+			<LinearLayout
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
+				android:background="@android:color/white"
+				android:orientation="vertical"
+				android:paddingBottom="16dp"
+				android:paddingLeft="16dp"
+				android:paddingRight="16dp">
+
+				<RelativeLayout
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:layout_marginBottom="8dp"
+					android:layout_marginTop="8dp"
+					android:paddingLeft="10dp"
+					android:background="@color/gray"
+					android:gravity="center_vertical"
+					android:orientation="horizontal">
+
+
+
+					<github.ankushsachdeva.emojicon.EmojiconTextView
+						android:id="@+id/edit_profile_name"
+						android:layout_width="wrap_content"
+						android:layout_height="match_parent"
+						android:hint="Profile Name"
+						android:layout_centerVertical="true"
+						android:lineSpacingExtra="2dp"
+						android:paddingBottom="2dp"
+						tools:text="Alok Bansal" />
+
+
+
+					<View
+						android:layout_width="1dp"
+						android:layout_height="32dp"
+						android:layout_marginLeft="8dp"
+						android:layout_marginRight="8dp"
+						android:layout_marginTop="10dp"
+						android:layout_centerVertical="true"
+						android:layout_toLeftOf="@+id/edit_name_button"
+						android:background="@android:color/white" />
+
+					<ImageButton
+						android:id="@+id/edit_name_button"
+						android:scaleType="fitCenter"
+						android:background="#00ffffff"
+						android:layout_alignParentRight="true"
+						android:layout_centerVertical="true"
+						android:layout_width="32dp"
+						android:layout_height="32dp"
+						android:src="@drawable/edit_white"/>
+
+				</RelativeLayout>
+
+				<RelativeLayout
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:layout_marginBottom="8dp"
+					android:background="@color/gray"
+					android:paddingLeft="10dp"
+					android:gravity="center_vertical"
+					android:orientation="horizontal">
+
+
+
+					<github.ankushsachdeva.emojicon.EmojiconTextView
+						android:id="@+id/edit_profile_status"
+						android:layout_width="wrap_content"
+						android:layout_centerVertical="true"
+						android:layout_height="wrap_content"
+						android:layout_gravity="center_vertical"
+						android:hint="Profile Status"
+						android:lineSpacingExtra="2dp"
+						android:paddingBottom="2dp"
+						tools:text="CitiTalk Rocks!" />
+
+
+
+					<View
+						android:layout_width="1dp"
+						android:layout_height="32dp"
+						android:layout_marginTop="10dp"
+						android:layout_marginLeft="8dp"
+						android:layout_marginRight="8dp"
+						android:layout_centerVertical="true"
+						android:layout_toLeftOf="@+id/edit_status_button"
+						android:background="@android:color/white" />
+
+					<ImageButton
+						android:id="@+id/edit_status_button"
+						android:scaleType="fitCenter"
+						android:background="#00ffffff"
+						android:layout_alignParentRight="true"
+						android:layout_centerVertical="true"
+						android:layout_width="32dp"
+						android:layout_height="32dp"
+						android:src="@drawable/edit_white"/>
+
+				</RelativeLayout>
+
+
+				<LinearLayout
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:layout_marginBottom="8dp"
+					android:layout_marginTop="8dp"
+					android:paddingLeft="10dp"
+					android:background="@color/gray"
+					android:gravity="center_vertical"
+					android:orientation="horizontal">
+
+
+					<github.ankushsachdeva.emojicon.EmojiconTextView
+						android:id="@+id/profile_number"
+						android:layout_width="wrap_content"
+						android:layout_height="match_parent"
+						android:layout_gravity="center_vertical"
+						android:gravity="center"
+						android:lineSpacingExtra="2dp"
+						android:minHeight="48dp"
+						android:paddingBottom="2dp"
+						android:paddingLeft="4dp"
+						tools:text="+919407666014" />
+				</LinearLayout>
+
+			</LinearLayout>
+		</LinearLayout>
+
+
+	</android.support.v4.widget.NestedScrollView>
+
+
+</android.support.design.widget.CoordinatorLayout>
+
+
+
+
+
+

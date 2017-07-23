@@ -76,6 +76,9 @@ public class FragmentAchievements extends Fragment implements Response.ErrorList
 		if(achivementList == null)
 			achivementList = new ArrayList<Achievement>();
 
+
+
+
 	}
 
 	@Override
@@ -107,7 +110,6 @@ public class FragmentAchievements extends Fragment implements Response.ErrorList
 						checkAchievement(achivementList.get(pos).id);
 						break;
 					case R.id.edit_profile:
-
 						Intent intent = new Intent(getActivity(), ActivityEditProfile.class);
 						//intent.putExtra("image_url", contestList.get(pos).contest.small_picture);
 						startActivity(intent);

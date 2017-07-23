@@ -1,5 +1,6 @@
 package in.jewelchat.jewelchat;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -24,11 +25,15 @@ import in.jewelchat.jewelchat.screens.ActivityContacts;
 import in.jewelchat.jewelchat.screens.ActivitySplashScreen;
 import in.jewelchat.jewelchat.screens.DialogJewelStore;
 import in.jewelchat.jewelchat.screens.DialogJewelStoreFull;
+import in.jewelchat.jewelchat.util.ImageFileManager;
 
 /**
  * Created by mayukhchakraborty on 06/03/16.
  */
 public abstract class BaseActivity extends AppCompatActivity implements View.OnClickListener, PopupMenu.OnMenuItemClickListener  {
+
+	protected Context context;
+	protected ImageFileManager imageFileManager;
 
 	protected String className;
 
@@ -86,6 +91,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
 	protected void onCreate(Bundle savedInstanceState) {
 		className = getClass().getSimpleName();
 		JewelChatApp.appLog(Log.INFO, "Activity",className + ":onCreate");
+		JewelChatApp.setAppActivity(this);
 		super.onCreate(savedInstanceState);
 	}
 

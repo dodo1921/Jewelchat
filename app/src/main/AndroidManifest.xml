@@ -84,14 +84,6 @@
 			android:launchMode="singleTask"
 			android:screenOrientation="portrait">
 		</activity>
-
-		<activity
-			android:name=".screens.ActivityEditProfile"
-			android:label="@string/app_name"
-			android:theme="@style/AppTheme.NoActionBar"
-			android:launchMode="singleTask"
-			android:screenOrientation="portrait">
-		</activity>
 		<activity
 			android:name=".screens.ActivityChatRoom"
 			android:label="@string/app_name"
@@ -101,6 +93,27 @@
 		</activity>
 		<activity
 			android:name=".screens.ActivityContacts"
+			android:label="@string/app_name"
+			android:theme="@style/AppTheme.NoActionBar"
+			android:launchMode="singleTask"
+			android:screenOrientation="portrait">
+		</activity>
+		<activity
+			android:name=".screens.ActivityEditProfile"
+			android:label="@string/app_name"
+			android:theme="@style/AppTheme.NoActionBar"
+			android:launchMode="singleTask"
+			android:screenOrientation="portrait">
+		</activity>
+		<activity
+			android:name=".screens.ActivityEditProfileName"
+			android:label="@string/app_name"
+			android:theme="@style/AppTheme.NoActionBar"
+			android:launchMode="singleTask"
+			android:screenOrientation="portrait">
+		</activity>
+		<activity
+			android:name=".screens.ActivityEditProfileStatus"
 			android:label="@string/app_name"
 			android:theme="@style/AppTheme.NoActionBar"
 			android:launchMode="singleTask"
