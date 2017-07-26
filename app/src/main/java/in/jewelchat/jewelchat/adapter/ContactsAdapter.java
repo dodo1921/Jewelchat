@@ -72,11 +72,18 @@ public class ContactsAdapter extends BaseAdapter<ContactsAdapter.ViewHolder>  {
 		}else if(is_invited==1){
 			holder.contact_item_invite.setVisibility(View.VISIBLE);
 			holder.contact_item_invite.setBackgroundColor(ContextCompat.getColor(JewelChatApp.getInstance().getApplicationContext(), R.color.gray));
+			holder.contact_item_invite.setText("INVITED");
 		}else if(is_invited == 0){
 			holder.contact_item_invite.setVisibility(View.VISIBLE);
 			holder.contact_item_invite.setBackgroundColor(ContextCompat.getColor(JewelChatApp.getInstance().getApplicationContext(), R.color.colorAccent));
 
 		}
+
+		//String x= "/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAFA3PEY8MlBGQUZaVVBfeMiCeG5uePWvuZHI////////////////////////////////////////////////////2wBDAVVaWnhpeOuCguv/////////////////////////////////////////////////////////////////////////wAARCAAtAC0DASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwC5TS/ZQTStz16VCZudq4AHFADmcqeTUisCoNQuFdOOvrQ6uIVC/iKBEwdSM7hilqpA6K2MYPoatjmkmMjl3FSF61CsRC7cZz3q1SMcKcYziiwDY4wo96fTMvuYAj2zSjdnkjGaYEU8O8ZX7wp6FguD1qSjFKwBUTbjIG8rOPU808oCSSTz70FBxyePemBHgkHMI5PTP1oKg8eUD+PenFArDluff2pHIVA2CfxoAdECq7cYA6c9akqMRqG6tz7+lOUbVAJz70Af/9k=";
+		//String x = "/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAFA3PEY8MlBGQUZaVVBfeMiCeG5uePWvuZHI////////////////////////////////////////////////////2wBDAVVaWnhpeOuCguv/////////////////////////////////////////////////////////////////////////wAARCABQAFADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwB24L0yTRln6dPWkCqvXk0yaU4wO9IY5pVTuWNRNOxP/wBeoyOAc9aQDJwKdhEnmn3/ADpwkz3Ip8dsCMuae9um35etK6GNGT3/AFp24L3yag5Q4PSnZz9aq19hDmkJPWkyx7mkUVKAB1qRkRNRScmpdoHU5pr4I4FCAhqxBHn5jUGOcVejXEYHemwQpbFJuqJ2ZWwVp65NSMbKuRUGcVYY1WbhjVREx+7vUiFcZJ/CoO1SREbhnvTeoiQ7KWNFcnjgURQbjkkkVYWNUzt4zUjM8ptfaeueKuA4FOeJZByMMOhpmcHDcGhghxbjpQHGDUbOBTVdX6Uihsqk8qagNXD0qo/3qaJYnY1JCNzqKip8bbXB9DViNELgYHApvz5B/OnE00OO3aoADuAXJyTwfaldQ4w350nmDjjninkZFMCo6tGeeR2NIMDmrLYI2sMiqs0TR8qSU/lSHcV3wKgPNLtzznNHsaAGUoop0K5lUe9UI0iAaRUA9PyprDJPzGgLzknNSA7avoKQsR2pNgyOeB29aFByRknigBeopvselIA3cge1OPIpDKbr5UuP4T0odalnR22jaevWjaW6CmBWNS2q5lz6CmyRsvUVLZD5mPbFV0Ef/9k=";
+		//byte[] decodedString = Base64.decode(x, Base64.DEFAULT);
+		//Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+		//holder.contact_image.setImageBitmap(decodedByte);
 
 		if(!(image_phonebook==null) && !image_phonebook.equals(""))
 			holder.contact_image.setImageURI(Uri.parse(image_phonebook));
@@ -124,7 +131,7 @@ public class ContactsAdapter extends BaseAdapter<ContactsAdapter.ViewHolder>  {
 		@Override
 		public void onClick(View view) {
 			if (mClickListener != null)
-				mClickListener.onItemClick(view, cursor);
+				mClickListener.onItemClick(view, cursor, getAdapterPosition());
 		}
 
 		@Override

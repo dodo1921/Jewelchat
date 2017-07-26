@@ -84,6 +84,7 @@
 				android:layout_height="wrap_content">
 
 				<Button
+					android:id="@+id/redeem"
 					android:text="Redeem 50 rupees daily to Paytm"
 					android:textAllCaps="false"
 					android:layout_marginLeft="25dp"
@@ -92,6 +93,7 @@
 
 
 				<Button
+					android:id="@+id/add"
 					android:text="Add money to Wallet"
 					android:textAllCaps="false"
 					android:layout_marginRight="25dp"

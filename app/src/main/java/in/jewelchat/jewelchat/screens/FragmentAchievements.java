@@ -165,6 +165,7 @@ public class FragmentAchievements extends Fragment implements Response.ErrorList
 	public void onResume(){
 		super.onResume();
 		Log.i("Task>>>","onResume");
+		achievementAdapter.notifyDataSetChanged();
 	}
 
 	@Override

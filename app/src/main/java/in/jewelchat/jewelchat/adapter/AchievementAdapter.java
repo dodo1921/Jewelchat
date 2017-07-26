@@ -1,6 +1,7 @@
 package in.jewelchat.jewelchat.adapter;
 
 import android.content.Context;
+import android.graphics.BitmapFactory;
 import android.support.v7.widget.RecyclerView;
 import android.text.Spanned;
 import android.util.Log;
@@ -67,6 +68,11 @@ public class AchievementAdapter  extends RecyclerView.Adapter<AchievementAdapter
 				holder.diamond_count_header.setText(JewelChatApp.getSharedPref().getInt("0",0)+"");
 				holder.coin_count.setText(JewelChatApp.getSharedPref().getInt("1",1)+"");
 				holder.name.setText(JewelChatApp.getSharedPref().getString(JewelChatPrefs.NAME,""));
+				String path  = JewelChatApp.getSharedPref().getString(JewelChatPrefs.MY_AVATAR_PATH,"");
+				if(!path.equals(""))
+					holder.profile_pic.setImageBitmap(BitmapFactory.decodeFile(path));
+				else
+					holder.profile_pic.setImageResource(R.drawable.person);
 				break;
 			default:
 				int pos = position - 1;

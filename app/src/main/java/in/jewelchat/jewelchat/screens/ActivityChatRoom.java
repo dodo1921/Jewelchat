@@ -234,7 +234,7 @@ public class ActivityChatRoom extends BaseImageActivity implements LoaderManager
 	}
 
 	@Override
-	public void onItemClick(View view, Cursor cursor) {
+	public void onItemClick(View view, Cursor cursor, int adapterPosition) {
 
 		if(view.getId()== R.id.jewel && !pickingJewel){
 			Log.i("Click on Jewel", "Click");

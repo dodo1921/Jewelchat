@@ -175,7 +175,7 @@ public class ActivityContacts extends BaseNetworkActivity implements LoaderManag
 					cv.put(ContactContract.IS_INVITED, invite);
 
 					Uri urimsg = Uri.parse(JewelChatDataProvider.SCHEME + "://" + JewelChatDataProvider.AUTHORITY + "/" + ContactContract.SQLITE_TABLE_NAME);
-					getContentResolver().insert(urimsg, cv);
+					getContentResolver().update(urimsg, cv, ContactContract.CONTACT_NUMBER + " = ? ", new String[]{ response.getLong("phone")+"" } );
 
 					if(is_regis){
 						JSONObject packet  = response.getJSONObject("contact");
@@ -262,16 +262,20 @@ public class ActivityContacts extends BaseNetworkActivity implements LoaderManag
 	}
 
 	@Override
-	public void onItemClick(View view, Cursor cursor) {
+	public void onItemClick(View view, Cursor cursor, int adapterPosition) {
+
+		cursor.moveToPosition(adapterPosition);
+
+		Log.i("Invite>>>", "Invite>>>>"+view.getId()+":::"+R.id.contact_item_invite);
 
 		int is_invited = cursor.getInt(cursor.getColumnIndex(ContactContract.IS_INVITED));
 		int is_regis = cursor.getInt(cursor.getColumnIndex(ContactContract.IS_REGIS));
 
 		if( is_invited==0 && view.getId() == R.id.contact_item_invite){
-			Log.i("Invite", "Invite");
+			//Log.i("Invite", "Invite");
 			sendInvite(cursor);
-		}else if( is_regis==0 && is_invited==1 && view.getId() == R.id.contact_item_invite){
-			Log.i("Invite", "Invite");
+		}else if( is_regis==0 && is_invited==1 && view.getId() == R.id.contact_element){
+			//Log.i("Invite", "Invite");
 			downloadContact(cursor);
 		}else if(is_regis==1 && view.getId() == R.id.contact_element){
 			Log.i("Invite>>>", "Invite>>>>");

@@ -142,7 +142,8 @@ public abstract class BaseNetworkActivity extends in.jewelchat.jewelchat.BaseAct
 				String json = new String(response.data);
 				try{
 					JSONObject obj = new JSONObject(json);
-					String errorMessage = "Please Try Again. Error 500. "+obj.getString("data");
+					String errorMessage = "Please Try Again. Error 500. "+obj.getString("message");
+					Log.i("Network Error", errorMessage);
 					makeToast(errorMessage);
 
 				} catch(JSONException e){

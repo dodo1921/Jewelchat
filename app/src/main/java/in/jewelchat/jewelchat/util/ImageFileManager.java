@@ -8,6 +8,8 @@ import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Base64;
+import android.util.Log;
 
 import com.google.firebase.crash.FirebaseCrash;
 
@@ -129,8 +131,9 @@ public class ImageFileManager {
 			return BitmapFactory.decodeFile(path, o2);
 		} catch (OutOfMemoryError e) {
 			JewelChatApp.appLog(className + ":getBitmapFromFile:" + e.toString());
+			return null;
 		}
-		return null;
+
 	}
 
 	public String savePicture(byte[] data, int dir_type) {
@@ -292,6 +295,24 @@ public class ImageFileManager {
 			FirebaseCrash.report(e);
 		}
 		return null;
+	}
+
+
+	public String getBase64StringImage(String path){
+
+		Bitmap bitmap = null;
+		ByteArrayOutputStream stream = new ByteArrayOutputStream();
+		try {
+			bitmap = getBitmapFromFile(path, 50);
+			Log.i("BitCount",bitmap.getByteCount()+"");
+			bitmap.compress(Bitmap.CompressFormat.JPEG, 10, stream);
+
+		} catch (OutOfMemoryError e) {
+			FirebaseCrash.report(e);
+		}
+
+		return Base64.encodeToString(stream.toByteArray(),	Base64.NO_WRAP);
+
 	}
 
 	public String getBigImage(String picPath) throws IOException {

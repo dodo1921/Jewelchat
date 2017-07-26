@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -33,6 +34,7 @@ public class ActivityWallet extends BaseNetworkActivity implements Response.List
 
 	Double wallet_value = 0.00;
 	TextView amount;
+	Button redeem;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +48,8 @@ public class ActivityWallet extends BaseNetworkActivity implements Response.List
 		progressBar = (ProgressBar) findViewById(R.id.top_progress_bar);
 		amount = (TextView)findViewById(R.id.amount);
 		amount.setText(wallet_value+"");
+
+		redeem = (Button)findViewById(R.id.redeem);
 
 		JewelChatRequest req = new JewelChatRequest(Request.Method.GET, JewelChatURLS.GETWALLET, null, this,  this);
 		addRequest(req);
@@ -89,6 +93,8 @@ public class ActivityWallet extends BaseNetworkActivity implements Response.List
 			}
 
 			amount.setText(response.getDouble("value")+"");
+			redeem.setEnabled(response.getBoolean("flag"));
+
 
 
 

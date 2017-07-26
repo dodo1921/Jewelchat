@@ -89,7 +89,7 @@ public abstract class BaseAdapter<VH extends BaseAdapter.ViewHolder> extends Rec
 
 	public interface OnClickHandler {
 
-		void onItemClick(View view, Cursor cursor);
+		void onItemClick(View view, Cursor cursor, int adapterPosition);
 	}
 
 	public interface OnLongClickHandler {
@@ -108,7 +108,7 @@ public abstract class BaseAdapter<VH extends BaseAdapter.ViewHolder> extends Rec
 			cursor.moveToPosition(getAdapterPosition());
 			OnClickHandler handler = mClickHandler.get();
 			if (handler != null)
-				handler.onItemClick(view, cursor);
+				handler.onItemClick(view, cursor, getAdapterPosition());
 		}
 
 		@Override
@@ -116,7 +116,7 @@ public abstract class BaseAdapter<VH extends BaseAdapter.ViewHolder> extends Rec
 			cursor.moveToPosition(getAdapterPosition());
 			OnClickHandler handler = mClickHandler.get();
 			if (handler != null) {
-				handler.onItemClick(view, cursor);
+				handler.onItemClick(view, cursor, getAdapterPosition());
 				return true;
 			}
 			return false;

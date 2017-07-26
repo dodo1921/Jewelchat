@@ -93,14 +93,14 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
 		JewelChatApp.appLog(Log.INFO, "Activity",className + ":onCreate");
 		JewelChatApp.setAppActivity(this);
 		super.onCreate(savedInstanceState);
+		context = this;
+		imageFileManager = ImageFileManager.getInstance(context);
 	}
 
 	@Override
 	protected void onStop() {
 		JewelChatApp.appLog(Log.INFO, "Activity",className + ":onStop");
 		super.onStop();
-
-
 	}
 
 	@Override
@@ -215,9 +215,6 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
 
 	}
 
-/*
-
-*/
 
 
 	protected void makeToast(String message) {

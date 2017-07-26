@@ -2,44 +2,74 @@ package in.jewelchat.jewelchat.screens;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.android.volley.VolleyError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.crash.FirebaseCrash;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.squareup.otto.Subscribe;
 
-import in.jewelchat.jewelchat.BaseImageActivity;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.File;
+import java.io.IOException;
+
+import in.jewelchat.jewelchat.BaseNetworkActivity;
 import in.jewelchat.jewelchat.JewelChatApp;
 import in.jewelchat.jewelchat.JewelChatPrefs;
+import in.jewelchat.jewelchat.JewelChatURLS;
 import in.jewelchat.jewelchat.R;
 import in.jewelchat.jewelchat.models.GameStateChangeEvent;
 import in.jewelchat.jewelchat.models.NoInternet;
 import in.jewelchat.jewelchat.models._403NetworkErrorEvent;
+import in.jewelchat.jewelchat.network.JewelChatRequest;
+import in.jewelchat.jewelchat.util.NetworkConnectivityStatus;
+
+import static in.jewelchat.jewelchat.JewelChatApp.appLog;
 
 /**
  * Created by mayukhchakraborty on 23/06/17.
  */
 
-public class ActivityEditProfile extends BaseImageActivity {
+public class ActivityEditProfile extends BaseNetworkActivity {
 
 	public static final String CONTENT = "content";
 	public static boolean deleting = false;
 	private static ActivityEditProfile mInstance;
 	private final int EDIT_PROFILE_NAME = 30;
 	private final int EDIT_PROFILE_STATUS = 40;
-	private final int EDIT_PROFILE_ADDRESS = 50;
 	public ImageView profilePic;
 	public ImageButton buttonRemoveProfileImage;
 	private TextView profileName;
 	private TextView profileStatus;
-	private TextView profileAddress;
 	private TextView profileNumber;
+
+	protected final int REQUEST_LOAD_IMAGE = 1;
+	protected final int REQUEST_CROP_IMAGE = 2;
+
+	protected String croppedImagePath;
+	protected Bitmap croppedBitmap = null;
+
+	protected String bigPicLocal = null;
+	protected String smallPicLocal = null;
 
 
 	public static ActivityEditProfile getInstance() {
@@ -91,10 +121,6 @@ public class ActivityEditProfile extends BaseImageActivity {
 		});
 	}
 
-	@Override
-	public void onErrorResponse(VolleyError error) {
-		super.onErrorResponse(error);
-	}
 
 	@Override
 	protected void onResume() {
@@ -110,9 +136,10 @@ public class ActivityEditProfile extends BaseImageActivity {
 		profileStatus.setText(JewelChatApp.getSharedPref().getString(JewelChatPrefs.MY_STATUS_MESSAGE, ""));
 		profileNumber.setText(JewelChatApp.getSharedPref().getString(JewelChatPrefs.MY_PHONE, ""));
 
-		if (JewelChatApp.getSharedPref().getBoolean(JewelChatPrefs.PROFILE_PIC_EMPTY, true)) {
+		if (JewelChatApp.getSharedPref().getString(JewelChatPrefs.MY_AVATAR_PATH, "").equals("")) {
 			buttonRemoveProfileImage.setVisibility(View.GONE);
 		}
+
 	}
 
 	@Override
@@ -122,7 +149,7 @@ public class ActivityEditProfile extends BaseImageActivity {
 		switch (view.getId()) {
 			case R.id.edit_profile_image:
 				JewelChatApp.appLog(className + ":onClick:editImage");
-				getPhotoFromGallery(FROM_PROFILE);
+				getPhotoFromGallery(6);
 				break;
 			case R.id.edit_name_button:
 				JewelChatApp.appLog(className + ":onClick:editButton");
@@ -140,6 +167,7 @@ public class ActivityEditProfile extends BaseImageActivity {
 				break;
 		}
 	}
+
 	private void createOptionDialog() {
 		JewelChatApp.appLog(className + ":createChooseOptionsDialog");
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -148,7 +176,7 @@ public class ActivityEditProfile extends BaseImageActivity {
 			public void onClick(DialogInterface dialog, int id) {
 				deleting = true;
 				createDialog("Removing...");
-				//deleteAWS();
+				deleteProfilePic();
 				dialog.dismiss();
 			}
 		});
@@ -162,13 +190,15 @@ public class ActivityEditProfile extends BaseImageActivity {
 		dialog.show();
 	}
 
+
+
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 		if (requestCode == REQUEST_LOAD_IMAGE && resultCode == RESULT_OK && data != null) {
 			onImageReturn(data);
 		} else if (requestCode == REQUEST_CROP_IMAGE && resultCode == RESULT_OK && data != null) {
-			onCropImageReturn(data, FROM_PROFILE);
+			onCropImageReturn(data, 6);
 			createDialog("Uploading...");
 		} else if (requestCode == EDIT_PROFILE_NAME && resultCode == RESULT_OK && data != null) {
 			Bundle res = data.getExtras();
@@ -182,178 +212,296 @@ public class ActivityEditProfile extends BaseImageActivity {
 	}
 
 	private void updateName(String tempName) {
+
 		final String name = tempName.trim();
 		if (name.equals("")) {
 			makeToast("Enter name");
 			return;
 		}
-		/*
-		nameContainer.startShimmerAnimation();
-		Map<String, String> jsonParams = new HashMap<>();
-		jsonParams.put("name", name);
-		Response.Listener<JSONObject> responseListener = new Response.Listener<JSONObject>() {
+		Response.Listener<JSONObject> response = new Response.Listener<JSONObject>() {
 			@Override
 			public void onResponse(JSONObject response) {
+				JewelChatApp.appLog(Log.INFO, "SENDINVITE", "SENDINVITE" + ":onResponse");
+
 				try {
-					response.getString("Error");
-					nameContainer.stopShimmerAnimation();
-					makeToast("Name update failed");
-				} catch (JSONException error) {
-					try {
-						response.getString("status");
-						editor.putString(CitiTalkPrefs.getMyName(), name);
-						if (editor.commit()) {
-							if (Pattern.compile("\\s").matcher(name).find()) {
-								CitiTalk.logEvent("ProfileEdit", "Name", "Multiple-Words");
-							} else {
-								CitiTalk.logEvent("ProfileEdit", "Name", "Single-Word");
-							}
-							profileName.setText(name);
-							nameContainer.stopShimmerAnimation();
-							makeToast("Name update successful");
-							editor.putLong(CitiTalkPrefs.getNameChangeTime(), System.currentTimeMillis());
-							editor.commit();
-							return;
-						}
-						nameContainer.stopShimmerAnimation();
-						makeToast("Name update failed");
-					} catch (JSONException e) {
-						CitiTalk.appLog(className + ":nameUpdateError:" + e.toString());
-						nameContainer.stopShimmerAnimation();
-						makeToast("Name update failed");
+
+					Boolean error = response.getBoolean("error");
+					if (error) {
+						String err_msg = response.getString("message");
+						throw new Exception(err_msg);
 					}
+
+					profileName.setText(name);
+					JewelChatApp.getSharedPref().edit().putString(JewelChatPrefs.NAME, name).apply();
+
+					dismissDialog();
+
+				} catch (JSONException e) {
+					FirebaseCrash.report(e);
+				} catch (Exception e) {
+					FirebaseCrash.report(e);
 				}
 			}
+
 		};
 
-		CitiTalkRequest request = new CitiTalkRequest(Request.Method.POST, CitiTalkURLS.UPDATE_NAME,
-				new JSONObject(jsonParams), responseListener, this);
-		if (!addRequest(request)) {
-			nameContainer.stopShimmerAnimation();
+		JSONObject t = new JSONObject();
+
+		try {
+			t.put("name", name );
+			JewelChatRequest req = new JewelChatRequest(Request.Method.POST, JewelChatURLS.UPDATEPROFILENAME, t, response,  this);
+			if (NetworkConnectivityStatus.getConnectivityStatus() == NetworkConnectivityStatus.CONNECTED) {
+				JewelChatApp.getRequestQueue().add(req);
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
 		}
-		*/
 	}
 
-	private void updateStatus(String tempStatus) {
+	private void updateStatus(final String tempStatus) {
+
 		final String status = tempStatus.trim();
 		if (status.equals("")) {
 			makeToast("Enter status");
 			return;
 		}
-		/*
-		statusContainer.startShimmerAnimation();
-		Map<String, String> jsonParams = new HashMap<>();
-		jsonParams.put("statusmsg", status);
-		Respose.Listener<JSONObject> responseListener = new Response.Listener<JSONObject>() {
+
+		Response.Listener<JSONObject> response = new Response.Listener<JSONObject>() {
 			@Override
 			public void onResponse(JSONObject response) {
+				JewelChatApp.appLog(Log.INFO, "SENDINVITE", "SENDINVITE" + ":onResponse");
+
 				try {
-					response.getString("Error");
-					statusContainer.stopShimmerAnimation();
-					makeToast("Status update failed");
-				} catch (JSONException error) {
-					try {
-						response.getString("status");
-						editor.putString(CitiTalkPrefs.getMyStatusMessage(), status);
-						if (editor.commit()) {
-							if (status.contains("/[\u2190-\u21FF]|[\u2600-\u26FF]|[\u2700-\u27BF]|[\u3000-\u303F]|[\u1F300-\u1F64F]|[\u1F680-\u1F6FF]/g")) {
-								CitiTalk.logEvent("ProfileEdit", "Status", "Emoticon");
-							} else {
-								CitiTalk.logEvent("ProfileEdit", "Status", "Simple");
-							}
-							profileStatus.setText(status);
-							statusContainer.stopShimmerAnimation();
-							makeToast("Status update successful");
-							return;
-						}
-						statusContainer.stopShimmerAnimation();
-						makeToast("Status update failed");
-					} catch (JSONException e) {
-						CitiTalk.appLog(className + ":statusUpdateError:" + e.toString());
-						statusContainer.stopShimmerAnimation();
-						makeToast("Status update failed");
+
+					Boolean error = response.getBoolean("error");
+					if (error) {
+						String err_msg = response.getString("message");
+						throw new Exception(err_msg);
 					}
+
+					profileStatus.setText(status);
+					JewelChatApp.getSharedPref().edit().putString(JewelChatPrefs.MY_STATUS_MESSAGE, status).apply();
+
+					dismissDialog();
+
+				} catch (JSONException e) {
+					FirebaseCrash.report(e);
+				} catch (Exception e) {
+					FirebaseCrash.report(e);
 				}
 			}
+
 		};
 
-		CitiTalkRequest request = new CitiTalkRequest(Request.Method.POST, CitiTalkURLS.UPDATE_STATUS_MSG,
-				new JSONObject(jsonParams), responseListener, this);
-		if (!addRequest(request)) {
-			statusContainer.stopShimmerAnimation();
+		JSONObject t = new JSONObject();
+
+		try {
+			t.put("status", status );
+			JewelChatRequest req = new JewelChatRequest(Request.Method.POST, JewelChatURLS.UPDATEPROFILESTATUS, t, response,  this);
+			if (NetworkConnectivityStatus.getConnectivityStatus() == NetworkConnectivityStatus.CONNECTED) {
+				JewelChatApp.getRequestQueue().add(req);
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
 		}
 
-		*/
 	}
 
 
 
+	protected void getPhotoFromGallery(int calledFrom) {
+		appLog(className + ":getPhotoFromGallery");
+		//this.calledFrom = calledFrom;
+		Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+		//Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+		//intent.setType("image/* video/*");
+		if (intent.resolveActivity(getPackageManager()) != null)
+			startActivityForResult(intent, REQUEST_LOAD_IMAGE);
+	}
+
+	protected void onImageReturn(Intent data) {
+		appLog(className + ":ImageReturn");
+		Uri selectedImage = data.getData();
+		Cursor cursor = getContentResolver().query(selectedImage, null, null, null, null);
+		String picPath = "";
+		if (cursor != null && cursor.moveToFirst()) {
+			int columnIndex = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+			picPath = cursor.getString(columnIndex);
+			cursor.close();
+		}
+		if (picPath != null && !picPath.isEmpty()) {
+			try {
+				runCropImage(imageFileManager.getBigImage(picPath));
+			} catch (IOException e) {
+				appLog(className + ":onImageReturn:" + e.toString());
+			}
+		}
+	}
+
+	protected void runCropImage(String filePath) {
+		appLog(className + ":runCropImage");
+		Intent intent = new Intent(this, ActivityCropImage.class);
+		intent.putExtra(ActivityCropImage.IMAGE_TO_BE_CROPPED_URI, filePath);
+		intent.putExtra(ActivityCropImage.CALLED_FROM, 6);
+		startActivityForResult(intent, REQUEST_CROP_IMAGE);
+	}
+
+	protected void onCropImageReturn(Intent data, int id) {
+
+		appLog(className + ":onCropImageReturn");
+		croppedImagePath = data.getStringExtra(ActivityCropImage.IMAGE_CROPPED_URI);
+
+		if (croppedImagePath != null && !croppedImagePath.isEmpty()) {
+			croppedBitmap = imageFileManager.getBitmapFromFile(croppedImagePath);
+			if (croppedBitmap == null || croppedBitmap.getHeight() < 20) {
+				makeToast("Picture has to be more than 20px");
+				return;
+			}
+			try {
+				bigPicLocal = imageFileManager.getBigImage(croppedImagePath);
+			} catch (IOException e) {
+				appLog(className + ":onCropImageReturn:" + e.toString());
+			}
+
+			Uri file = Uri.fromFile(new File(bigPicLocal));
+			StorageReference profileRef = JewelChatApp.getStorageRef()
+					.child("profileLarge/profile"+JewelChatApp.getSharedPref().getLong(JewelChatPrefs.MY_ID,0)+".jpg");
+
+			profileRef.putFile(file)
+					.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+						@Override
+						public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+							createUploadBlob();
+						}
+					})
+					.addOnFailureListener(new OnFailureListener() {
+						@Override
+						public void onFailure(@NonNull Exception exception) {
+							dismissDialog();
+						}
+					});
+
+		}
+	}
 
 
-	public void onAwsSuccess() {
+	private void createUploadBlob(){
 
-		/*
-		Map<String, String> jsonParams = new HashMap<>();
-		jsonParams.put("smallpicpath", smallPicCloud);
-		jsonParams.put("largepicpath", bigPicCloud);
-		Response.Listener<JSONObject> responseListener = new Response.Listener<JSONObject>() {
+		Response.Listener<JSONObject> response = new Response.Listener<JSONObject>() {
 			@Override
 			public void onResponse(JSONObject response) {
+				JewelChatApp.appLog(Log.INFO, "SENDINVITE", "SENDINVITE" + ":onResponse");
+
 				try {
-					response.getString("Error");
-					dismissDialog();
-					makeToast("Image update failed");
-				} catch (JSONException error) {
-					try {
-						response.getString("status");
-						String path = imageFileManager.savePicture(bigPicLocal, ImageFileManager.FILE_TYPE_IMAGE_PROFILE, preferences.getString(CitiTalkPrefs.getMyId(), ""));
-						editor.putString(CitiTalkPrefs.getMyAvatarPath(), path);
-						if (editor.commit()) {
-							Bitmap bitmap = imageFileManager.getBitmapFromFile(path);
-							if (bitmap != null) {
-								CitiTalk.logEvent("ProfileEdit", "Pic", "Added");
-								profilePic.setImageBitmap(bitmap);
-								dismissDialog();
-								makeToast("Image update successful");
-								String pathInvalidate = "file:" + preferences.getString(CitiTalkPrefs.getMyAvatarPath(), "");
-								Picasso.with(context).invalidate(pathInvalidate);
-								editor.putBoolean(CitiTalkPrefs.getProfilePicEmpty(), false);
-								editor.commit();
-								buttonRemoveProfileImage.setVisibility(View.VISIBLE);
-								return;
-							}
-						}
-						dismissDialog();
-						makeToast("Image update failed");
-					} catch (JSONException e) {
-						CitiTalk.appLog(className + ":picUpdateError:" + e.toString());
-						dismissDialog();
-						makeToast("Image update failed");
+
+					Boolean error = response.getBoolean("error");
+					if (error) {
+						String err_msg = response.getString("message");
+						throw new Exception(err_msg);
 					}
+
+
+					profilePic.setImageBitmap(BitmapFactory.decodeFile(bigPicLocal));
+
+					JewelChatApp.getSharedPref().edit().putString(JewelChatPrefs.MY_AVATAR_PATH, bigPicLocal).apply();
+					buttonRemoveProfileImage.setVisibility(View.VISIBLE);
+					dismissDialog();
+
+				} catch (JSONException e) {
+					FirebaseCrash.report(e);
+				} catch (Exception e) {
+					FirebaseCrash.report(e);
 				}
 			}
+
 		};
 
-		CitiTalkRequest request = new CitiTalkRequest(Request.Method.POST, CitiTalkURLS.UPDATE_PROF_PIC,
-				new JSONObject(jsonParams), responseListener, this);
-		addRequest(request);
+		JSONObject t = new JSONObject();
+		String x = imageFileManager.getBase64StringImage(bigPicLocal);
+		try {
+			t.put("pic", x);
+			JewelChatRequest req = new JewelChatRequest(Request.Method.POST, JewelChatURLS.UPDATEPROFILEPIC, t, response,  this);
+			if (NetworkConnectivityStatus.getConnectivityStatus() == NetworkConnectivityStatus.CONNECTED) {
+				JewelChatApp.getRequestQueue().add(req);
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
 
-		*/
-	}
-	/*
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.menu_edit_profile, menu);
-		return true;
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		int id = item.getItemId();
-		return id == R.id.action_settings || super.onOptionsItemSelected(item);
 	}
 
-	*/
+
+
+
+	private void deleteProfilePic() {
+
+		Uri file = Uri.fromFile(new File(JewelChatApp.getSharedPref().getString(JewelChatPrefs.MY_AVATAR_PATH,"")));
+		StorageReference profileRef = JewelChatApp.getStorageRef()
+				.child("profileLarge/profile"+JewelChatApp.getSharedPref().getLong(JewelChatPrefs.MY_ID,0)+".jpg");
+
+		profileRef.delete()
+				.addOnSuccessListener(new OnSuccessListener<Void>() {
+					@Override
+					public void onSuccess(Void aVoid) {
+						// File deleted successfully
+						eraseBlob();
+					}
+				}).addOnFailureListener(new OnFailureListener() {
+			@Override
+			public void onFailure(@NonNull Exception exception) {
+				// Uh-oh, an error occurred!
+				dismissDialog();
+			}
+		});
+
+
+	}
+
+
+	private void eraseBlob(){
+
+		Response.Listener<JSONObject> response = new Response.Listener<JSONObject>() {
+			@Override
+			public void onResponse(JSONObject response) {
+				JewelChatApp.appLog(Log.INFO, "SENDINVITE", "SENDINVITE" + ":onResponse");
+
+				try {
+
+					Boolean error = response.getBoolean("error");
+					if (error) {
+						String err_msg = response.getString("message");
+						throw new Exception(err_msg);
+					}
+
+
+					profilePic.setImageResource(R.drawable.default_profile);
+
+					JewelChatApp.getSharedPref().edit().putString(JewelChatPrefs.MY_AVATAR_PATH, "").apply();
+					buttonRemoveProfileImage.setVisibility(View.GONE);
+					dismissDialog();
+
+				} catch (JSONException e) {
+					FirebaseCrash.report(e);
+				} catch (Exception e) {
+					FirebaseCrash.report(e);
+				}
+			}
+
+		};
+
+		JSONObject t = new JSONObject();
+		try {
+			t.put("pic", " ");
+			JewelChatRequest req = new JewelChatRequest(Request.Method.POST, JewelChatURLS.UPDATEPROFILEPIC, t, response,  this);
+			if (NetworkConnectivityStatus.getConnectivityStatus() == NetworkConnectivityStatus.CONNECTED) {
+				JewelChatApp.getRequestQueue().add(req);
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+
+	}
+
 
 
 	@Subscribe
@@ -383,4 +531,7 @@ public class ActivityEditProfile extends BaseImageActivity {
 	public void on_403NetworkErrorEvent( _403NetworkErrorEvent event) {
 		show403Dialog();
 	}
+
+
+
 }

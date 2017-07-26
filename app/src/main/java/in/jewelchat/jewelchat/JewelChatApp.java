@@ -11,7 +11,10 @@ import android.util.Log;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.crash.FirebaseCrash;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Produce;
 import com.squareup.picasso.Picasso;
@@ -37,6 +40,11 @@ public class JewelChatApp extends Application {
 	private static Picasso mPicasso;
 	private static JewelChatSocket jcSocket;
 	private static JewelChatImageGetter imageGetter;
+	private static float APP_VERSION=1.0f;
+
+	private static StorageReference mStorageRef;
+	private static FirebaseAuth mAuth;
+
 	private static final Bus BUS = new Bus();
 
 	private static String GCLB = null;
@@ -163,6 +171,23 @@ public class JewelChatApp extends Application {
 	}
 
 
+	public static StorageReference getStorageRef(){
+
+		if( mStorageRef == null )
+			mStorageRef = FirebaseStorage.getInstance().getReference();
+
+		return mStorageRef;
+	}
+
+	public static FirebaseAuth getFirebaseAuth(){
+
+		if( mAuth == null )
+			mAuth = FirebaseAuth.getInstance();;
+
+		return mAuth;
+	}
+
+
 	@Override
 	public void onCreate() {
 		super.onCreate();
@@ -170,7 +195,9 @@ public class JewelChatApp extends Application {
 		mInstance = this;
 
 		startService(new Intent(getBaseContext(), ScreenLockReceiveService.class));
-
+// ...
+		mAuth = FirebaseAuth.getInstance();
+		mStorageRef = FirebaseStorage.getInstance().getReference();
 
 	}
 

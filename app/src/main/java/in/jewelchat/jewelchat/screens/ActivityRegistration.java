@@ -151,6 +151,7 @@ public class ActivityRegistration extends BaseNetworkActivity implements TextVie
 			SharedPreferences.Editor editor = JewelChatApp.getSharedPref().edit();
 			editor.putLong(JewelChatPrefs.MY_ID, userId);
 			editor.putString(JewelChatPrefs.NAME, response.getString("name"));
+			editor.putString(JewelChatPrefs.MY_STATUS_MESSAGE, response.getString("status_msg"));
 			editor.putBoolean(JewelChatPrefs.INITIAL_DETAILS_ENTERED, active);
 			editor.putString(JewelChatPrefs.MY_PHONE, this.e164formatNumber);
 			editor.apply();

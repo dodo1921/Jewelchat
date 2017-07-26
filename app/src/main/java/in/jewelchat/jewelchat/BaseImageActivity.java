@@ -5,10 +5,20 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
+import android.util.Log;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
+import java.io.File;
 import java.io.IOException;
 
 import in.jewelchat.jewelchat.screens.ActivityCropImage;
+
+import static in.jewelchat.jewelchat.JewelChatApp.appLog;
 
 /**
  * Created by mayukhchakraborty on 06/03/16.
@@ -36,15 +46,17 @@ public abstract class BaseImageActivity extends BaseNetworkActivity {
 	private int calledFrom;
 
 	protected void getPhotoFromGallery(int calledFrom) {
-		JewelChatApp.appLog(className + ":getPhotoFromGallery");
+		appLog(className + ":getPhotoFromGallery");
 		this.calledFrom = calledFrom;
 		Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+		//Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+		//intent.setType("image/* video/*");
 		if (intent.resolveActivity(getPackageManager()) != null)
 			startActivityForResult(intent, REQUEST_LOAD_IMAGE);
 	}
 
 	protected void onImageReturn(Intent data) {
-		JewelChatApp.appLog(className + ":ImageReturn");
+		appLog(className + ":ImageReturn");
 		Uri selectedImage = data.getData();
 		Cursor cursor = getContentResolver().query(selectedImage, null, null, null, null);
 		String picPath = "";
@@ -57,13 +69,13 @@ public abstract class BaseImageActivity extends BaseNetworkActivity {
 			try {
 				runCropImage(imageFileManager.getBigImage(picPath));
 			} catch (IOException e) {
-				JewelChatApp.appLog(className + ":onImageReturn:" + e.toString());
+				appLog(className + ":onImageReturn:" + e.toString());
 			}
 		}
 	}
 
 	protected void runCropImage(String filePath) {
-		JewelChatApp.appLog(className + ":runCropImage");
+		appLog(className + ":runCropImage");
 		Intent intent = new Intent(this, ActivityCropImage.class);
 		intent.putExtra(ActivityCropImage.IMAGE_TO_BE_CROPPED_URI, filePath);
 		intent.putExtra(ActivityCropImage.CALLED_FROM, calledFrom);
@@ -71,7 +83,7 @@ public abstract class BaseImageActivity extends BaseNetworkActivity {
 	}
 
 	protected void onCropImageReturn(Intent data, int id) {
-		JewelChatApp.appLog(className + ":onCropImageReturn");
+		appLog(className + ":onCropImageReturn");
 		croppedImagePath = data.getStringExtra(ActivityCropImage.IMAGE_CROPPED_URI);
 
 		if (croppedImagePath != null && !croppedImagePath.isEmpty()) {
@@ -83,13 +95,38 @@ public abstract class BaseImageActivity extends BaseNetworkActivity {
 			try {
 				bigPicLocal = imageFileManager.getBigImage(croppedImagePath);
 			} catch (IOException e) {
-				JewelChatApp.appLog(className + ":onCropImageReturn:" + e.toString());
+				appLog(className + ":onCropImageReturn:" + e.toString());
 			}
 			smallPicLocal = imageFileManager.getSmallImage(bigPicLocal);
 
 
+			Uri file = Uri.fromFile(new File(bigPicLocal));
+			StorageReference riversRef = JewelChatApp.getStorageRef()
+					.child("images/rivers"+JewelChatApp.getSharedPref().getLong(JewelChatPrefs.MY_ID,0)+".jpg");
+
+
+
+			riversRef.putFile(file)
+					.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+						@Override
+						public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+							// Get a URL to the uploaded content
+							Uri downloadUrl = taskSnapshot.getDownloadUrl();
+							Log.i(">>>>>>>>>>ImageURL", downloadUrl.toString());
+						}
+					})
+					.addOnFailureListener(new OnFailureListener() {
+						@Override
+						public void onFailure(@NonNull Exception exception) {
+							// Handle unsuccessful uploads
+							// ...
+						}
+					});
+
 		}
 	}
+
+
 
 
 }

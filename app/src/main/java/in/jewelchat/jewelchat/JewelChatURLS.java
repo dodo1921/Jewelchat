@@ -15,7 +15,13 @@ public class JewelChatURLS {
 	public static final String INITIAL_DETAILS = baseURL + "/initialDetails";
 	public static final String UPDATE_GCM_TOKEN = baseURL + "/updateGcmToken";
 
-	public static final String INVITE = baseURL + "/invite";
+	public static final String GETCUSTOMTOKEN = baseURL + "/getCustomTokenFirebase";
+
+	public static final String UPDATEPROFILEPIC = baseURL + "/updateProfilePic";
+	public static final String UPDATEPROFILESTATUS = baseURL + "/updateProfileStatus";
+	public static final String UPDATEPROFILENAME = baseURL + "/updateProfileName";
+
+	public static final String INVITE = baseURL + "/inviteUser";
 	public static final String DOWNLOADCONTACT = baseURL + "/downloadContact";
 	public static final String DOWNLOADCONTACT_PHONE = baseURL + "/downloadContact_phone";
 

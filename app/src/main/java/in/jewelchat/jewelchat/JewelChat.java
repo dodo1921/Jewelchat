@@ -8,10 +8,17 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.google.firebase.crash.FirebaseCrash;
 import com.squareup.otto.Subscribe;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +26,7 @@ import java.util.List;
 import in.jewelchat.jewelchat.models.GameStateChangeEvent;
 import in.jewelchat.jewelchat.models.NoInternet;
 import in.jewelchat.jewelchat.models._403NetworkErrorEvent;
+import in.jewelchat.jewelchat.network.JewelChatRequest;
 import in.jewelchat.jewelchat.screens.FragmentAchievements;
 import in.jewelchat.jewelchat.screens.FragmentChatList;
 import in.jewelchat.jewelchat.screens.FragmentTasks;
@@ -28,6 +36,7 @@ import in.jewelchat.jewelchat.service.GameStateLoadService;
 import in.jewelchat.jewelchat.service.GroupChatDownloadService;
 import in.jewelchat.jewelchat.service.OneToOneChatDownloadService;
 import in.jewelchat.jewelchat.service.RegistrationIntentService;
+import in.jewelchat.jewelchat.util.NetworkConnectivityStatus;
 
 /**
  * Created by mayukhchakraborty on 20/06/17.
@@ -127,6 +136,47 @@ public class JewelChat extends BaseNetworkActivity {
 			//remove level7 cookie
 			JewelChatApp.setGCLB(null);
 			JewelChatApp.getJCSocket().getSocket().connect();
+		}
+
+
+		getFirebaseCustomToken();
+
+	}
+
+	private void getFirebaseCustomToken() {
+
+
+		Response.Listener<JSONObject> response = new Response.Listener<JSONObject>() {
+			@Override
+			public void onResponse(JSONObject response) {
+				JewelChatApp.appLog(Log.INFO, "CUSTOM FIREBASE TOKEN", "CUSTOM FIREBASE TOKEN" + ":onResponse");
+
+				try {
+
+					Boolean error = response.getBoolean("error");
+					if (error) {
+						String err_msg = response.getString("message");
+						throw new Exception(err_msg);
+					}
+
+
+					JewelChatApp.getFirebaseAuth().signInWithCustomToken(response.getString("customToken"));
+
+
+				} catch (JSONException e) {
+					FirebaseCrash.report(e);
+				} catch (Exception e) {
+					FirebaseCrash.report(e);
+				}
+			}
+
+		};
+
+		JSONObject t = new JSONObject();
+
+		JewelChatRequest req = new JewelChatRequest(Request.Method.GET, JewelChatURLS.GETCUSTOMTOKEN, null, response,  this);
+		if (NetworkConnectivityStatus.getConnectivityStatus() == NetworkConnectivityStatus.CONNECTED) {
+			JewelChatApp.getRequestQueue().add(req);
 		}
 
 	}

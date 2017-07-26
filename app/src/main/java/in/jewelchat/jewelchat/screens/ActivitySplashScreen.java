@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.os.Handler;
 
 import com.google.firebase.FirebaseApp;
-import com.google.firebase.crash.FirebaseCrash;
 
 import in.jewelchat.jewelchat.JewelChat;
 import in.jewelchat.jewelchat.JewelChatApp;
@@ -25,7 +24,7 @@ public class ActivitySplashScreen extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		FirebaseApp.initializeApp(this);
-		FirebaseCrash.report(new Exception("My first Android non-fatal error"));
+		//FirebaseCrash.report(new Exception("My first Android non-fatal error"));
 		setContentView(R.layout.activity_splashscreen);
 
 		if(JewelChatApp.getSharedPref().getBoolean(JewelChatPrefs.IS_LOGGED, false)
