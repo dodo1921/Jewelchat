@@ -65,12 +65,12 @@ public class ChatMessageContract implements BaseColumns {
 			JEWEL_TYPE + "  INTEGER" + "," +
 			IS_JEWEL_PICKED + "  INTEGER DEFAULT 0 " + "," +
 			MSG_TEXT + "  TEXT" + "," +
-			IMAGE_BLOB + "  BLOB" + "," +
+			IMAGE_BLOB + "  TEXT" + "," +
 			IS_IMAGE_DOWNLOADED + "  INTEGER DEFAULT 0 " + "," +
 			IS_IMAGE_UPLOADED + " INTEGER DEFAULT 0 " + ","+
 			IMAGE_PATH_LOCAL + "  TEXT" + "," +
 			IMAGE_PATH_CLOUD + "  TEXT" + "," +
-			VIDEO_BLOB + "  BLOB" + "," +
+			VIDEO_BLOB + "  TEXT" + "," +
 			IS_VIDEO_DOWNLOADED + "  INTEGER DEFAULT 0 " + "," +
 			IS_VIDEO_UPLOADED + " INTEGER DEFAULT 0 " + ","+
 			VIDEO_PATH_LOCAL + "  TEXT" + "," +

@@ -48,5 +48,7 @@ public class JewelChatURLS {
 
 	public static final String GETWALLET = baseURL + "/getWallet";
 
+	public static final String DELIVERY = baseURL + "/delivery";
+
 
 }

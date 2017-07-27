@@ -2,10 +2,13 @@ package in.jewelchat.jewelchat.adapter;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -65,6 +68,7 @@ public class ContactsAdapter extends BaseAdapter<ContactsAdapter.ViewHolder>  {
 		String image_phonebook = cursor.getString(cursor.getColumnIndex(ContactContract.IMAGE_PHONEBOOK));
 		int is_invited = cursor.getInt(cursor.getColumnIndex(ContactContract.IS_INVITED));
 		int is_regis = cursor.getInt(cursor.getColumnIndex(ContactContract.IS_REGIS));
+		String image = cursor.getString(cursor.getColumnIndex(ContactContract.IMAGE_PATH));
 
 		if(is_regis==1) {
 			holder.contact_item_invite.setVisibility(View.GONE);
@@ -85,11 +89,20 @@ public class ContactsAdapter extends BaseAdapter<ContactsAdapter.ViewHolder>  {
 		//Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
 		//holder.contact_image.setImageBitmap(decodedByte);
 
-		if(!(image_phonebook==null) && !image_phonebook.equals(""))
+		if(is_regis==0 && !(image_phonebook==null) && !image_phonebook.equals(""))
 			holder.contact_image.setImageURI(Uri.parse(image_phonebook));
 		else {
-			holder.contact_image.setBackgroundColor(ContextCompat.getColor(JewelChatApp.getInstance().getApplicationContext(), R.color.gray));
-			holder.contact_image.setImageResource(R.drawable.person);
+
+			if(image.equals("")){
+				holder.contact_image.setBackgroundColor(ContextCompat.getColor(JewelChatApp.getInstance().getApplicationContext(), R.color.gray));
+				holder.contact_image.setImageResource(R.drawable.person);
+			}else{
+				byte[] decodedString = Base64.decode(image, Base64.DEFAULT);
+				Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+				holder.contact_image.setImageBitmap(decodedByte);
+			}
+
+
 		}
 
 		if( contact_name==null || contact_name.equals("") ){

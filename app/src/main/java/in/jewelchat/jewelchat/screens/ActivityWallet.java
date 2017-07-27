@@ -93,7 +93,7 @@ public class ActivityWallet extends BaseNetworkActivity implements Response.List
 			}
 
 			amount.setText(response.getDouble("value")+"");
-			redeem.setEnabled(response.getBoolean("flag"));
+			redeem.setEnabled((response.getDouble("value")>=50.0) && response.getBoolean("flag"));
 
 
 

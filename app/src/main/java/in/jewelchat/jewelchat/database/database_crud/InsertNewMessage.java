@@ -7,20 +7,30 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.util.Log;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.google.firebase.crash.FirebaseCrash;
+
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import in.jewelchat.jewelchat.JewelChatApp;
 import in.jewelchat.jewelchat.JewelChatPrefs;
+import in.jewelchat.jewelchat.JewelChatURLS;
 import in.jewelchat.jewelchat.database.ChatMessageContract;
 import in.jewelchat.jewelchat.database.ContactContract;
 import in.jewelchat.jewelchat.database.JewelChatDataProvider;
+import in.jewelchat.jewelchat.network.JewelChatRequest;
+import in.jewelchat.jewelchat.util.NetworkConnectivityStatus;
+
+import static android.R.attr.data;
 
 /**
  * Created by mayukhchakraborty on 03/07/17.
  */
-public class InsertNewMessage extends IntentService {
+public class InsertNewMessage extends IntentService implements Response.ErrorListener, Response.Listener<JSONObject>  {
 
 	public InsertNewMessage() {
 		super("InsertNewMessage");
@@ -86,8 +96,8 @@ public class InsertNewMessage extends IntentService {
 
 			Uri urimsg1 = Uri.parse(JewelChatDataProvider.SCHEME+"://" + JewelChatDataProvider.AUTHORITY + "/"+ ContactContract.SQLITE_TABLE_NAME);
 			Cursor c = getContentResolver().query(urimsg1, new String[]{ContactContract.UNREAD_COUNT}
-					, ContactContract.JEWELCHAT_ID + " = ? "
-					, new String[]{data.getInt("sender_id")+""}, ContactContract.KEY_ROWID );
+					, ContactContract.JEWELCHAT_ID + " = ? OR "+ ContactContract.CONTACT_NUMBER + " = ?"
+					, new String[]{data.getInt("sender_id")+"", data.getLong("sender_phone")+""}, ContactContract.KEY_ROWID );
 
 			if(c.getCount() == 0){ // insert contact if not present
 
@@ -102,12 +112,17 @@ public class InsertNewMessage extends IntentService {
 				getContentResolver().insert(urimsg3, cv1);
 
 			}else{
-				c.moveToFirst();
+				//c.moveToFirst();
 				ContentValues cv2 = new ContentValues();
+				cv2.put(ContactContract.JEWELCHAT_ID, data.getInt("sender_id"));
+				cv2.put(ContactContract.CONTACT_NAME, data.getString("name"));
+				cv2.put(ContactContract.IS_REGIS, 1);
+				cv2.put(ContactContract.CONTACT_NUMBER, data.getInt("sender_phone"));
 				cv2.put(ContactContract.UNREAD_COUNT, c.getInt(c.getColumnIndex(ContactContract.UNREAD_COUNT))+1);
 
 				Uri urimsg4 = Uri.parse(JewelChatDataProvider.SCHEME+"://" + JewelChatDataProvider.AUTHORITY + "/"+ ContactContract.SQLITE_TABLE_NAME);
-				getContentResolver().update(urimsg4, cv2, ContactContract.JEWELCHAT_ID + "= ?", new String[]{ data.getInt("sender_id")+"" }  );
+				getContentResolver().update(urimsg4, cv2, ContactContract.JEWELCHAT_ID + "= ? OR " + ContactContract.CONTACT_NUMBER + "= ?"
+						, new String[]{ data.getInt("sender_id")+"", data.getLong("sender_phone")+"" }  );
 
 			}
 
@@ -121,8 +136,18 @@ public class InsertNewMessage extends IntentService {
 			deliveryack.put("eventname", "msg_delivery");
 			deliveryack.put("chat_id", data.getInt("sender_msgid"));
 
+			JSONObject t = new JSONObject();
+			t.put("data", deliveryack);
+
 			if(JewelChatApp.getJCSocket().getSocket().connected())
 				JewelChatApp.getJCSocket().getSocket().emit( "delivery", deliveryack);
+			else{
+
+				JewelChatRequest req = new JewelChatRequest(Request.Method.POST, JewelChatURLS.DELIVERY, t, this, this);
+				if (NetworkConnectivityStatus.getConnectivityStatus() == NetworkConnectivityStatus.CONNECTED)
+					JewelChatApp.getRequestQueue().add(req);
+
+			}
 
 		} catch (JSONException e) {
 			e.printStackTrace();
@@ -130,4 +155,41 @@ public class InsertNewMessage extends IntentService {
 		}
 
 	}
+
+	@Override
+	public void onErrorResponse(VolleyError error) {
+
+
+
+	}
+
+	@Override
+	public void onResponse(JSONObject response) {
+
+		JewelChatApp.appLog("Devivery" + ":onResponse");
+		try {
+
+			Boolean error = response.getBoolean("error");
+			if(error){
+				String err_msg = response.getString("message");
+				throw new Exception(err_msg);
+			}
+
+			ContentValues cv = new ContentValues();
+			cv.put(ChatMessageContract.IS_DELIVERED, 1);
+			cv.put(ChatMessageContract.TIME_DELIVERED, response.getInt("delivered"));
+
+			Uri urimsg = Uri.parse(JewelChatDataProvider.SCHEME+"://" + JewelChatDataProvider.AUTHORITY + "/"+ ChatMessageContract.SQLITE_TABLE_NAME);
+			getContentResolver().update(urimsg, cv, ChatMessageContract.KEY_ROWID + "= ?", new String[]{ response.getInt("sender_msgid")+"" }  );
+
+
+		} catch (JSONException e) {
+			FirebaseCrash.report(e);
+		} catch (Exception e) {
+			FirebaseCrash.report(e);
+		}
+
+	}
+
+
 }

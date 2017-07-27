@@ -2,7 +2,11 @@ package in.jewelchat.jewelchat.adapter;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.support.v4.content.ContextCompat;
 import android.text.format.DateUtils;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,10 +50,20 @@ public class ChatListAdapter extends CursorAdapter {
 		TextView vUnreadCounter = (TextView)view.findViewById(R.id.unread_chat_count);
 
 		int jewelchat_id = cursor.getInt(0);
+		String image = cursor.getString(3);
+
 		if(jewelchat_id == JewelChatApp.getSharedPref().getInt(JewelChatPrefs.TEAM_JC_ID,0)) {
 			vContactAvatar.setImageResource(R.drawable.diamond_small);
 			vContactName.setText("Team JewelChat");
 		}else{
+			if(image.equals("")){
+				vContactAvatar.setBackgroundColor(ContextCompat.getColor(JewelChatApp.getInstance().getApplicationContext(), R.color.gray));
+				vContactAvatar.setImageResource(R.drawable.person);
+			}else{
+				byte[] decodedString = Base64.decode(image, Base64.DEFAULT);
+				Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+				vContactAvatar.setImageBitmap(decodedByte);
+			}
 			vContactAvatar.setImageResource(R.drawable.person);
 			vContactName.setText(cursor.getString(1));
 		}
