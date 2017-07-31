@@ -101,6 +101,8 @@ public class PickJewelService extends IntentService implements Response.ErrorLis
 		Uri urimsg4 = Uri.parse(JewelChatDataProvider.SCHEME+"://" + JewelChatDataProvider.AUTHORITY + "/"+ ChatMessageContract.SQLITE_TABLE_NAME);
 		getContentResolver().update(urimsg4, cv2, ChatMessageContract.KEY_ROWID + "= ?", new String[]{ msg_id+"" } );
 
+		JewelChatApp.getBusInstance().post(JewelChatApp.produceJewelChangeEvent());
+
 	}
 
 

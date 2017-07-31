@@ -33,20 +33,20 @@ public class ContactContract implements BaseColumns {
 
 	private static final String DATABASE_CREATE =
 			"CREATE TABLE if not exists " + SQLITE_TABLE_NAME + " (" +
-					KEY_ROWID + " integer PRIMARY KEY autoincrement," +
-					JEWELCHAT_ID + "  INTEGER" +  ", " +
-					CONTACT_NUMBER + "  INTEGER" +  ", " +
-					CONTACT_NAME + "  TEXT" +  ", " +
-					PHONEBOOK_CONTACT_NAME + "  TEXT" +  ", " +
-					IS_GROUP + "  INTEGER DEFAULT 0 " +  ", " +
-					STATUS_MSG + "  TEXT" +  ", " +
-					IS_REGIS + "  INTEGER" +  ", " +
-					IS_GROUP_ADMIN + "  INTEGER" +  ", " +
-					IS_INVITED + "  INTEGER DEFAULT 0" +  ", " +
-					IS_BLOCKED + "  INTEGER DEFAULT 0 " +  ", " +
-					IS_PHONEBOOK_CONTACT + "  INTEGER" +  ", " +
-					IMAGE_PHONEBOOK + "  TEXT" +  ", " +
-					UNREAD_COUNT + "  INTEGER DEFAULT 0 " +  ", " +
+					KEY_ROWID + " integer PRIMARY KEY autoincrement," +//0
+					JEWELCHAT_ID + "  INTEGER" +  ", " +//1
+					CONTACT_NUMBER + "  INTEGER" +  ", " +//2
+					CONTACT_NAME + "  TEXT" +  ", " +//3
+					PHONEBOOK_CONTACT_NAME + "  TEXT" +  ", " +//4
+					IS_GROUP + "  INTEGER DEFAULT 0 " +  ", " +//5
+					STATUS_MSG + "  TEXT" +  ", " +//6
+					IS_REGIS + "  INTEGER DEFAULT 0" +  ", " +//7
+					IS_GROUP_ADMIN + "  INTEGER" +  ", " +//8
+					IS_INVITED + "  INTEGER DEFAULT 0" +  ", " +//9
+					IS_BLOCKED + "  INTEGER DEFAULT 0 " +  ", " +//10
+					IS_PHONEBOOK_CONTACT + "  INTEGER" +  ", " +//11
+					IMAGE_PHONEBOOK + "  TEXT" +  ", " +//12
+					UNREAD_COUNT + "  INTEGER DEFAULT 0 " +  ", " +//13
 					IMAGE_PATH + "  TEXT , unique ( " + JEWELCHAT_ID + ", " +IS_GROUP+ " ), unique ( "+ CONTACT_NUMBER + " ) )";
 
 	public static void onCreate(SQLiteDatabase db) {

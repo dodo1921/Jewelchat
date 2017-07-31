@@ -10,7 +10,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class JewelChatDatabaseHelper extends SQLiteOpenHelper {
 
 	private static final String DATABASE_NAME = "JewelChatAppDB";
-	private static final int DATABASE_VERSION = 1;
+	private static final int DATABASE_VERSION = 2;
 
 	private static JewelChatDatabaseHelper instance;
 

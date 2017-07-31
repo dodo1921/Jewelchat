@@ -137,7 +137,7 @@ public class ActivityContacts extends BaseNetworkActivity implements LoaderManag
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 		Uri uri = Uri.parse(JewelChatDataProvider.SCHEME+"://" + JewelChatDataProvider.AUTHORITY + "/"+ ContactContract.SQLITE_TABLE_NAME);
 		CursorLoader cursorLoader = new CursorLoader(getApplicationContext(),
-				uri, null, null, null, null);
+				uri, null, ContactContract.IS_PHONEBOOK_CONTACT+" = 1", null, ContactContract.IS_REGIS+" ASC, "+ContactContract.CONTACT_NAME+" ASC, "+ContactContract.PHONEBOOK_CONTACT_NAME+" ASC");
 		return cursorLoader;
 	}
 
@@ -266,7 +266,7 @@ public class ActivityContacts extends BaseNetworkActivity implements LoaderManag
 
 		cursor.moveToPosition(adapterPosition);
 
-		Log.i("Invite>>>", "Invite>>>>"+view.getId()+":::"+R.id.contact_item_invite);
+		//Log.i("Invite>>>", "Invite>>>>"+view.getId()+":::"+R.id.contact_item_invite);
 
 		int is_invited = cursor.getInt(cursor.getColumnIndex(ContactContract.IS_INVITED));
 		int is_regis = cursor.getInt(cursor.getColumnIndex(ContactContract.IS_REGIS));
@@ -281,16 +281,17 @@ public class ActivityContacts extends BaseNetworkActivity implements LoaderManag
 			Log.i("Invite>>>", "Invite>>>>");
 			//open chatroom
 			Bundle bundle = new Bundle();
-			bundle.putInt(ContactContract.JEWELCHAT_ID, cursor.getInt(0));
-			bundle.putString(ContactContract.CONTACT_NAME, cursor.getString(1));
+			bundle.putInt(ContactContract.JEWELCHAT_ID, cursor.getInt(1));
+			bundle.putString(ContactContract.CONTACT_NAME, cursor.getString(3));
 			bundle.putLong(ContactContract.CONTACT_NUMBER, cursor.getLong(2));
-			bundle.putString(ContactContract.IMAGE_PATH, cursor.getString(3));
-			bundle.putInt(ChatMessageContract.CHAT_ROOM, cursor.getInt(17));
+			bundle.putString(ContactContract.IMAGE_PATH, cursor.getString(14));
+			bundle.putInt(ChatMessageContract.CHAT_ROOM, cursor.getInt(1));
 			bundle.putBoolean(ContactContract.IS_GROUP, cursor.getInt(5)==1?true:false);
 
 			Intent i = new Intent(this, ActivityChatRoom.class);
 			i.putExtras(bundle);
 			startActivity(i);
+
 		}
 
 

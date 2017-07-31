@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.text.Html;
 import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -118,7 +117,7 @@ public class ActivityRegistration extends BaseNetworkActivity implements TextVie
 			createDialog(getString(R.string.please_wait));
 			Map<String, String> jsonParams = new HashMap<String, String>();
 			jsonParams.put("phone", e164formatNumber);
-			Log.i(">>>>", "action:omg "+e164formatNumber);
+			//Log.i(">>>>", "action:omg "+e164formatNumber);
 			JewelChatRequest request = new JewelChatRequest(Request.Method.POST,
 					JewelChatURLS.REGISTRATION_URL, new JSONObject(jsonParams), this, this);
 			addRequest(request);

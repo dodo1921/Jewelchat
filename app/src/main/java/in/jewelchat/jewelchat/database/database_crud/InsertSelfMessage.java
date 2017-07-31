@@ -65,7 +65,7 @@ public class InsertSelfMessage extends IntentService {
 		try {
 			p.put("sender_id", JewelChatApp.getSharedPref().getLong(JewelChatPrefs.MY_ID,0));
 			p.put("sender_msgid", Integer.parseInt(msg_id));
-			//p.put("name", JewelChatApp.getSharedPref().getString(JewelChatPrefs.NAME,"Mayukh") );
+			p.put("name", JewelChatApp.getSharedPref().getString(JewelChatPrefs.NAME,"Mayukh") );
 			p.put("sender_phone", Long.parseLong(JewelChatApp.getSharedPref().getString(JewelChatPrefs.MY_PHONE,"") ));
 			p.put("receiver_id", chatroom);
 			p.put("eventname","new_msg");

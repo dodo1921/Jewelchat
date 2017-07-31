@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -53,7 +54,7 @@ public class ChatRoomAdapter extends BaseAdapter<ChatRoomAdapter.ViewHolder> {
 		cursor.moveToPosition(position);
 		holder.chatroom_msg_date.setVisibility(View.GONE);
 
-		holder.jewel.setImageResource(getJewelDrawable(cursor.getInt(cursor.getColumnIndex(ChatMessageContract.JEWEL_TYPE))));
+
 
 		if(cursor.getLong(cursor.getColumnIndex(ChatMessageContract.CREATOR_ID))
 				== JewelChatApp.getSharedPref().getLong(JewelChatPrefs.MY_ID,0)){
@@ -72,19 +73,29 @@ public class ChatRoomAdapter extends BaseAdapter<ChatRoomAdapter.ViewHolder> {
 			if(cursor.getInt(cursor.getColumnIndex(ChatMessageContract.IS_JEWEL_PICKED))==1){
 				holder.jewel_type.setVisibility(View.VISIBLE);
 				holder.jewel.setVisibility(View.GONE);
+				holder.jewel.setScaleX(1.0f); holder.jewel.setScaleY(1.0f);
+				holder.jewel.setImageResource(getJewelDrawable(cursor.getInt(cursor.getColumnIndex(ChatMessageContract.JEWEL_TYPE))));
 			}else if(cursor.getInt(cursor.getColumnIndex(ChatMessageContract.IS_JEWEL_PICKED))==2 && ActivityChatRoom.getInstance().getIsPicking()){
 				holder.jewel_type.setVisibility(View.VISIBLE);
+				holder.jewel.setVisibility(View.VISIBLE);
+				holder.jewel.setImageResource(getJewelDrawable(cursor.getInt(cursor.getColumnIndex(ChatMessageContract.JEWEL_TYPE))));
 				holder.jewel.setScaleX(0.5f); holder.jewel.setScaleY(0.5f);
-			}else{
+			}else {
 				holder.jewel_type.setVisibility(View.VISIBLE);
+				holder.jewel.setVisibility(View.VISIBLE);
+				holder.jewel.setImageResource(getJewelDrawable(cursor.getInt(cursor.getColumnIndex(ChatMessageContract.JEWEL_TYPE))));
 				holder.jewel.setScaleX(1.0f); holder.jewel.setScaleY(1.0f);
 			}
+
+			Log.i("room",cursor.getInt(cursor.getColumnIndex(ChatMessageContract.IS_JEWEL_PICKED))
+					+":"+cursor.getInt(cursor.getColumnIndex(ChatMessageContract.KEY_ROWID))
+					+":"+cursor.getInt(cursor.getColumnIndex(ChatMessageContract.JEWEL_TYPE)));
 
 		}
 
 
 		holder.chatroom_msg_date.setVisibility(View.GONE);
-		holder.chatroom_item_text.setText(cursor.getString(cursor.getColumnIndex(ChatMessageContract.MSG_TEXT)));
+		holder.chatroom_item_text.setText(cursor.getInt(cursor.getColumnIndex(ChatMessageContract.KEY_ROWID))+"::"+cursor.getString(cursor.getColumnIndex(ChatMessageContract.MSG_TEXT)));
 
 	}
 

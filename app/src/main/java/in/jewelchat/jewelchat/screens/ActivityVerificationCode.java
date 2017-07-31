@@ -103,7 +103,9 @@ public class ActivityVerificationCode extends BaseNetworkActivity implements Tex
 
 				ContentValues cv = new ContentValues();
 				cv.put(ContactContract.JEWELCHAT_ID, response.getInt("teamjcid"));
+				cv.put(ContactContract.CONTACT_NUMBER, response.getLong("teamjcphone"));
 				cv.put(ContactContract.CONTACT_NAME, "Team JewelChat");
+				cv.put(ContactContract.PHONEBOOK_CONTACT_NAME, "Team JewelChat");
 				cv.put(ContactContract.IS_REGIS, 1);
 				cv.put(ContactContract.IS_PHONEBOOK_CONTACT, 0);
 				cv.put(ContactContract.STATUS_MSG, 0);
@@ -111,8 +113,10 @@ public class ActivityVerificationCode extends BaseNetworkActivity implements Tex
 				Uri urimsg = Uri.parse(JewelChatDataProvider.SCHEME+"://" + JewelChatDataProvider.AUTHORITY + "/"+ ContactContract.SQLITE_TABLE_NAME);
 				getContentResolver().delete(urimsg, null, null);
 
-				if(JewelChatApp.getSharedPref().getLong(JewelChatPrefs.MY_ID,0) != response.getInt("teamjcid"))
-					getContentResolver().insert(urimsg, cv);
+				//if(JewelChatApp.getSharedPref().getLong(JewelChatPrefs.MY_ID,0) != response.getInt("teamjcid"))
+				String msg_id = getContentResolver().insert(urimsg, cv).getLastPathSegment();
+
+				Log.i("TEAM JC", msg_id);
 
 				hideKeyBoard();
 				dismissDialog();

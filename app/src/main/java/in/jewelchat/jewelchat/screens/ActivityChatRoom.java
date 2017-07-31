@@ -3,14 +3,18 @@ package in.jewelchat.jewelchat.screens;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.LoaderManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -22,7 +26,6 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.google.firebase.crash.FirebaseCrash;
 import com.squareup.otto.Subscribe;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -107,6 +110,7 @@ public class ActivityChatRoom extends BaseImageActivity implements LoaderManager
 		setupChatBottomBar();
 
 		Intent service = new Intent(getApplicationContext(), DecrementUnreadCounterService.class);
+		service.putExtra("chatroom", this.chatroom);
 		startService(service);
 
 		downloadContact();
@@ -141,17 +145,26 @@ public class ActivityChatRoom extends BaseImageActivity implements LoaderManager
 		//Toolbar toolbar = (Toolbar) appbarRoot.findViewById(R.id.jewelchat_toolbar);
 		TextView titleText = (TextView) appbarRoot.findViewById(R.id.toolbarTitle);
 		ImageView profile_pic = (ImageView) appbarRoot.findViewById(R.id.toolbarImage);
-		profile_pic.setBackgroundColor(getResources().getColor(R.color.gray));
+		//profile_pic.setBackgroundColor(getResources().getColor(R.color.gray));
 
 		if(this.contact_name == null)
 			titleText.setText("+"+this.contact_number);
 		else
 			titleText.setText(this.contact_name.substring(0, this.contact_name.length()>16?16:this.contact_name.length() ) );
 
-		Picasso.with(getApplicationContext()).load(this.image_path)
-				.placeholder(R.drawable.person)
-				.error(R.drawable.person)
-				.into(profile_pic);
+		//Picasso.with(getApplicationContext()).load(this.image_path)
+		//		.placeholder(R.drawable.person)
+		//		.error(R.drawable.person)
+		//		.into(profile_pic);
+
+		if(image_path==null || image_path.equals("")){
+			profile_pic.setBackgroundColor(ContextCompat.getColor(JewelChatApp.getInstance().getApplicationContext(), R.color.gray));
+			profile_pic.setImageResource(R.drawable.person);
+		}else{
+			byte[] decodedString = Base64.decode(image_path, Base64.DEFAULT);
+			Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+			profile_pic.setImageBitmap(decodedByte);
+		}
 
 		toolbar_back.setVisibility(View.VISIBLE);
 		toolbar_back.setOnClickListener(new View.OnClickListener() {
@@ -318,10 +331,14 @@ public class ActivityChatRoom extends BaseImageActivity implements LoaderManager
 
 					titleText.setText(contact_name.substring(0, contact_name.length()>16?16:contact_name.length()));
 
-					Picasso.with(getApplicationContext()).load(image_path)
-							.placeholder(R.drawable.person)
-							.error(R.drawable.person)
-							.into(profile_pic);
+					if(image_path==null || image_path.equals("")){
+						profile_pic.setBackgroundColor(ContextCompat.getColor(JewelChatApp.getInstance().getApplicationContext(), R.color.gray));
+						profile_pic.setImageResource(R.drawable.person);
+					}else{
+						byte[] decodedString = Base64.decode(image_path, Base64.DEFAULT);
+						Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+						profile_pic.setImageBitmap(decodedByte);
+					}
 
 					Intent s = new Intent(JewelChatApp.getInstance(), UpdateContact.class);
 					s.putExtra("json", packet.toString());

@@ -56,7 +56,7 @@ public class FirstTimeContactDownloadService extends IntentService{
 			return;
 		}
 
-		Log.i("Here","Here");
+		//Log.i("Here","Here");
 		Phonenumber.PhoneNumber pn;
 		PhoneNumberUtil phoneNumberUtil = PhoneNumberUtil.getInstance();
 		String phoneStr;

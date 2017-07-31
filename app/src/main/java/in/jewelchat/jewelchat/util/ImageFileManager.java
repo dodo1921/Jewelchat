@@ -305,7 +305,7 @@ public class ImageFileManager {
 		try {
 			bitmap = getBitmapFromFile(path, 50);
 			Log.i("BitCount",bitmap.getByteCount()+"");
-			bitmap.compress(Bitmap.CompressFormat.JPEG, 10, stream);
+			bitmap.compress(Bitmap.CompressFormat.JPEG, 50, stream);
 
 		} catch (OutOfMemoryError e) {
 			FirebaseCrash.report(e);

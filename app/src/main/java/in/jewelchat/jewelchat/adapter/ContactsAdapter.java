@@ -93,7 +93,7 @@ public class ContactsAdapter extends BaseAdapter<ContactsAdapter.ViewHolder>  {
 			holder.contact_image.setImageURI(Uri.parse(image_phonebook));
 		else {
 
-			if(image.equals("")){
+			if(image==null || image.equals("")){
 				holder.contact_image.setBackgroundColor(ContextCompat.getColor(JewelChatApp.getInstance().getApplicationContext(), R.color.gray));
 				holder.contact_image.setImageResource(R.drawable.person);
 			}else{
@@ -101,7 +101,6 @@ public class ContactsAdapter extends BaseAdapter<ContactsAdapter.ViewHolder>  {
 				Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
 				holder.contact_image.setImageBitmap(decodedByte);
 			}
-
 
 		}
 

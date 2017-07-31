@@ -16,7 +16,6 @@ import android.widget.TextView;
 
 import github.ankushsachdeva.emojicon.EmojiconTextView;
 import in.jewelchat.jewelchat.JewelChatApp;
-import in.jewelchat.jewelchat.JewelChatPrefs;
 import in.jewelchat.jewelchat.R;
 
 /**
@@ -52,11 +51,11 @@ public class ChatListAdapter extends CursorAdapter {
 		int jewelchat_id = cursor.getInt(0);
 		String image = cursor.getString(3);
 
-		if(jewelchat_id == JewelChatApp.getSharedPref().getInt(JewelChatPrefs.TEAM_JC_ID,0)) {
-			vContactAvatar.setImageResource(R.drawable.diamond_small);
-			vContactName.setText("Team JewelChat");
-		}else{
-			if(image.equals("")){
+		//if(jewelchat_id == JewelChatApp.getSharedPref().getInt(JewelChatPrefs.TEAM_JC_ID,0)) {
+		//	vContactAvatar.setImageResource(R.drawable.diamond_small);
+		//	vContactName.setText("Team JewelChat");
+		//}else{
+			if(image== null || image.equals("")){
 				vContactAvatar.setBackgroundColor(ContextCompat.getColor(JewelChatApp.getInstance().getApplicationContext(), R.color.gray));
 				vContactAvatar.setImageResource(R.drawable.person);
 			}else{
@@ -66,7 +65,7 @@ public class ChatListAdapter extends CursorAdapter {
 			}
 			vContactAvatar.setImageResource(R.drawable.person);
 			vContactName.setText(cursor.getString(1));
-		}
+		//}
 
 		long time = cursor.getLong(13);
 		//Log.i("TIME", time+"");

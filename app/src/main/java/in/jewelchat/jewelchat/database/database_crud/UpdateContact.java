@@ -28,6 +28,8 @@ public class UpdateContact extends IntentService {
 
 		JewelChatApp.appLog(Log.INFO, "UpdateContact", "UpdateContact");
 
+		Log.i("UpdateContact>>>", "Update Contact Service");
+
 		try {
 			JSONObject data = new JSONObject(intent.getStringExtra("json"));
 
@@ -36,6 +38,7 @@ public class UpdateContact extends IntentService {
 			cv.put(ContactContract.IMAGE_PATH, data.getString("pic"));
 			cv.put(ContactContract.CONTACT_NAME, data.getString("name"));
 			cv.put(ContactContract.STATUS_MSG, data.getString("status"));
+			cv.put(ContactContract.IS_REGIS, 1);
 
 
 			Uri urimsg = Uri.parse(JewelChatDataProvider.SCHEME+"://" + JewelChatDataProvider.AUTHORITY + "/"+ ContactContract.SQLITE_TABLE_NAME);
