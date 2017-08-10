@@ -12,8 +12,7 @@
 		android:theme="@style/AppTheme.NoActionBar">
 		<activity
 			android:name=".screens.ActivitySplashScreen"
-			android:label="@string/app_name"
-			android:excludeFromRecents="true">
+			android:label="@string/app_name">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN"/>
 				<category android:name="android.intent.category.LAUNCHER"/>
@@ -159,6 +158,9 @@
 			android:exported="false"/>
 		<service
 			android:name=".service.FirstTimeContactDownloadService"
+			android:exported="false"/>
+		<service
+			android:name=".service.PublishUnSubmittedService"
 			android:exported="false"/>
 		<service
 			android:name=".service.ScreenLockReceiveService"

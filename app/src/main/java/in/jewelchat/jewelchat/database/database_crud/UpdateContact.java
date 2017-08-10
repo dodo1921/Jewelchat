@@ -35,17 +35,22 @@ public class UpdateContact extends IntentService {
 
 			ContentValues cv = new ContentValues();
 			cv.put(ContactContract.JEWELCHAT_ID, data.getInt("id"));
-			cv.put(ContactContract.IMAGE_PATH, data.getString("pic"));
+			cv.put(ContactContract.IMAGE_PATH, data.getString("pic").equals("null")?null:data.getString("pic"));
 			cv.put(ContactContract.CONTACT_NAME, data.getString("name"));
 			cv.put(ContactContract.STATUS_MSG, data.getString("status"));
+			cv.put(ContactContract.IS_GROUP, 0);
 			cv.put(ContactContract.IS_REGIS, 1);
 
 
 			Uri urimsg = Uri.parse(JewelChatDataProvider.SCHEME+"://" + JewelChatDataProvider.AUTHORITY + "/"+ ContactContract.SQLITE_TABLE_NAME);
-			getContentResolver().update(urimsg, cv, ContactContract.CONTACT_NUMBER + "= ?", new String[]{ data.getLong("phone")+"" }  );
+			int x = getContentResolver().update(urimsg, cv, ContactContract.CONTACT_NUMBER + "= ?", new String[]{ data.getLong("phone")+"" }  );
 
+			Log.i(">>>>>UpdateCount", x+"");
 
 		} catch (JSONException e) {
+			e.printStackTrace();
+			JewelChatApp.appLog(getClass().getSimpleName()+":"+e.toString());
+		}catch (Exception e) {
 			e.printStackTrace();
 			JewelChatApp.appLog(getClass().getSimpleName()+":"+e.toString());
 		}

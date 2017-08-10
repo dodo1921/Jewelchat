@@ -121,6 +121,7 @@ public class JewelChatSocket {
 
 			@Override
 			public void call(Object... args) {
+				Log.i(">>>>>>>>>Event", "publish_ack");
 				Message msg = Message.obtain(null, 0, args[0]);
 				try {
 					mMessenger.send(msg);
@@ -133,7 +134,7 @@ public class JewelChatSocket {
 
 			@Override
 			public void call(Object... args) {
-				Log.i("NEW MSG", "NEW MSG");
+				Log.i(">>>>>>>>>Event", "new_msg");
 				Message msg = Message.obtain(null, 0, args[0]);
 				try {
 					mMessenger.send(msg);
@@ -146,6 +147,7 @@ public class JewelChatSocket {
 
 			@Override
 			public void call(Object... args) {
+				Log.i(">>>>>>>>>Event", "delivery_ack");
 				Message msg = Message.obtain(null, 0, args[0]);
 				try {
 					mMessenger.send(msg);
@@ -158,6 +160,7 @@ public class JewelChatSocket {
 
 			@Override
 			public void call(Object... args) {
+				Log.i(">>>>>>>>>Event", "msg_delivery");
 				Message msg = Message.obtain(null, 0, args[0]);
 				try {
 					mMessenger.send(msg);
@@ -170,6 +173,7 @@ public class JewelChatSocket {
 
 			@Override
 			public void call(Object... args) {
+				Log.i(">>>>>>>>>Event", "read_ack");
 				Message msg = Message.obtain(null, 0, args[0]);
 				try {
 					mMessenger.send(msg);
@@ -178,10 +182,11 @@ public class JewelChatSocket {
 				}
 			}
 
-		}).on( "msg_ack" , new Emitter.Listener() {
+		}).on( "msg_read" , new Emitter.Listener() {
 
 			@Override
 			public void call(Object... args) {
+				Log.i(">>>>>>>>>Event", "msg_read");
 				Message msg = Message.obtain(null, 0, args[0]);
 				try {
 					mMessenger.send(msg);
@@ -194,6 +199,7 @@ public class JewelChatSocket {
 
 			@Override
 			public void call(Object... args) {
+				Log.i(">>>>>>>>>Event", "publish_group_ack");
 				Message msg = Message.obtain(null, 0, args[0]);
 				try {
 					mMessenger.send(msg);
@@ -206,6 +212,7 @@ public class JewelChatSocket {
 
 			@Override
 			public void call(Object... args) {
+				Log.i(">>>>>>>>>Event", "new_group_msg");
 				Message msg = Message.obtain(null, 0, args[0]);
 				try {
 					mMessenger.send(msg);
@@ -218,6 +225,7 @@ public class JewelChatSocket {
 
 			@Override
 			public void call(Object... args) {
+				Log.i(">>>>>>>>>Event", "msg_group_delivery");
 				Message msg = Message.obtain(null, 0, args[0]);
 				try {
 					mMessenger.send(msg);
@@ -230,6 +238,7 @@ public class JewelChatSocket {
 
 			@Override
 			public void call(Object... args) {
+				Log.i(">>>>>>>>>Event", "delivery_group_ack");
 				Message msg = Message.obtain(null, 0, args[0]);
 				try {
 					mMessenger.send(msg);
@@ -242,6 +251,7 @@ public class JewelChatSocket {
 
 			@Override
 			public void call(Object... args) {
+				Log.i(">>>>>>>>>Event", "msg_group_read");
 				Message msg = Message.obtain(null, 0, args[0]);
 				try {
 					mMessenger.send(msg);
@@ -254,6 +264,7 @@ public class JewelChatSocket {
 
 			@Override
 			public void call(Object... args) {
+				Log.i(">>>>>>>>>Event", "read_group_ack");
 				Message msg = Message.obtain(null, 0, args[0]);
 				try {
 					mMessenger.send(msg);

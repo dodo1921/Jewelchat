@@ -34,11 +34,10 @@
 			android:id="@+id/chat_room_list"
 			android:layout_width="match_parent"
 			android:layout_height="match_parent"
-			android:layout_marginBottom="50dp"
+			android:layout_marginTop="60dp"
 			android:clipToPadding="false"
 			android:scrollbars="vertical"
 			android:paddingBottom="8dp"
-			app:layout_behavior="@string/appbar_scrolling_view_behavior"
 			/>
 
 	</android.support.design.widget.CoordinatorLayout>

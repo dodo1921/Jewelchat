@@ -29,7 +29,7 @@ public class UpdateDeliveryAck extends IntentService {
 
 			ContentValues cv = new ContentValues();
 			cv.put(ChatMessageContract.IS_DELIVERED, 1);
-			cv.put(ChatMessageContract.TIME_DELIVERED, data.getInt("delivered"));
+			cv.put(ChatMessageContract.TIME_DELIVERED, data.getLong("delivered"));
 
 			Uri urimsg = Uri.parse(JewelChatDataProvider.SCHEME+"://" + JewelChatDataProvider.AUTHORITY + "/"+ ChatMessageContract.SQLITE_TABLE_NAME);
 			getContentResolver().update(urimsg, cv, ChatMessageContract.KEY_ROWID + "= ?", new String[]{ data.getInt("sender_msgid")+"" }  );

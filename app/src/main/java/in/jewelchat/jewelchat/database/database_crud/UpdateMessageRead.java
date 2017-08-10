@@ -4,6 +4,7 @@ import android.app.IntentService;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.net.Uri;
+import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -29,7 +30,8 @@ public class UpdateMessageRead extends IntentService {
 
 			ContentValues cv = new ContentValues();
 			cv.put(ChatMessageContract.IS_READ, 1);
-			cv.put(ChatMessageContract.TIME_READ, data.getInt("created_at"));
+			cv.put(ChatMessageContract.TIME_READ, data.getLong("created_at"));
+			Log.i(">>>>>>>>>Event:","msg_read"+data.getInt("chat_id"));
 
 			Uri urimsg = Uri.parse(JewelChatDataProvider.SCHEME+"://" + JewelChatDataProvider.AUTHORITY + "/"+ ChatMessageContract.SQLITE_TABLE_NAME);
 			getContentResolver().update(urimsg, cv, ChatMessageContract.KEY_ROWID + "= ?", new String[]{ data.getInt("chat_id")+"" }  );

@@ -61,10 +61,13 @@ public class FactoryAdapter extends RecyclerView.Adapter<FactoryAdapter.MyViewHo
 		holder.factory_on.setVisibility(factoryList.get(pos).is_on?View.VISIBLE:View.GONE);
 		holder.factory_timer.setText(factoryList.get(pos).time_left);
 
-		if(factoryList.get(pos).open)
+		if(factoryList.get(pos).open) {
 			holder.factory_details.setVisibility(View.VISIBLE);
-		else
+			holder.drawer_state.setImageResource(R.drawable.task_open);
+		}else {
 			holder.factory_details.setVisibility(View.GONE);
+			holder.drawer_state.setImageResource(R.drawable.task_closed);
+		}
 
 		holder.line1.setVisibility(View.GONE); holder.tick1.setVisibility(View.INVISIBLE);
 		holder.line2.setVisibility(View.GONE); holder.tick2.setVisibility(View.INVISIBLE);
@@ -76,7 +79,7 @@ public class FactoryAdapter extends RecyclerView.Adapter<FactoryAdapter.MyViewHo
 		for(int i=0; i<m.size();i++){
 			if(i==0){
 				holder.line1.setVisibility(View.VISIBLE);
-				holder.quantity1.setText(JewelChatApp.getSharedPref().getInt(m.get(i).jeweltype_id+"",0)+"/"+m.get(i).count+"");
+				holder.quantity1.setText("["+JewelChatApp.getSharedPref().getInt(m.get(i).jeweltype_id+"",0)+"]"+m.get(i).count+"");
 				holder.material1.setImageResource(getJewelDrawable(m.get(i).jeweltype_id));
 				if(m.get(i).tick)
 					holder.tick1.setVisibility(View.VISIBLE);
@@ -84,7 +87,7 @@ public class FactoryAdapter extends RecyclerView.Adapter<FactoryAdapter.MyViewHo
 					holder.tick1.setVisibility(View.INVISIBLE);
 			}else if(i==1){
 				holder.line2.setVisibility(View.VISIBLE);
-				holder.quantity2.setText(JewelChatApp.getSharedPref().getInt(m.get(i).jeweltype_id+"",0)+"/"+m.get(i).count+"");
+				holder.quantity2.setText("["+JewelChatApp.getSharedPref().getInt(m.get(i).jeweltype_id+"",0)+"]"+m.get(i).count+"");
 				holder.material2.setImageResource(getJewelDrawable(m.get(i).jeweltype_id));
 				if(m.get(i).tick)
 					holder.tick2.setVisibility(View.VISIBLE);
@@ -92,7 +95,7 @@ public class FactoryAdapter extends RecyclerView.Adapter<FactoryAdapter.MyViewHo
 					holder.tick2.setVisibility(View.INVISIBLE);
 			}else if(i==2){
 				holder.line3.setVisibility(View.VISIBLE);
-				holder.quantity3.setText(JewelChatApp.getSharedPref().getInt(m.get(i).jeweltype_id+"",0)+"/"+m.get(i).count+"");
+				holder.quantity3.setText("["+JewelChatApp.getSharedPref().getInt(m.get(i).jeweltype_id+"",0)+"]"+m.get(i).count+"");
 				holder.material3.setImageResource(getJewelDrawable(m.get(i).jeweltype_id));
 				if(m.get(i).tick)
 					holder.tick3.setVisibility(View.VISIBLE);
@@ -100,7 +103,7 @@ public class FactoryAdapter extends RecyclerView.Adapter<FactoryAdapter.MyViewHo
 					holder.tick3.setVisibility(View.INVISIBLE);
 			}else if(i==3){
 				holder.line4.setVisibility(View.VISIBLE);
-				holder.quantity4.setText(JewelChatApp.getSharedPref().getInt(m.get(i).jeweltype_id+"",0)+"/"+m.get(i).count+"");
+				holder.quantity4.setText("["+JewelChatApp.getSharedPref().getInt(m.get(i).jeweltype_id+"",0)+"]"+m.get(i).count+"");
 				holder.material4.setImageResource(getJewelDrawable(m.get(i).jeweltype_id));
 				if(m.get(i).tick)
 					holder.tick4.setVisibility(View.VISIBLE);
@@ -108,7 +111,7 @@ public class FactoryAdapter extends RecyclerView.Adapter<FactoryAdapter.MyViewHo
 					holder.tick4.setVisibility(View.INVISIBLE);
 			}else if(i==4){
 				holder.line5.setVisibility(View.VISIBLE);
-				holder.quantity5.setText(JewelChatApp.getSharedPref().getInt(m.get(i).jeweltype_id+"",0)+"/"+m.get(i).count+"");
+				holder.quantity5.setText("["+JewelChatApp.getSharedPref().getInt(m.get(i).jeweltype_id+"",0)+"]"+m.get(i).count+"");
 				holder.material5.setImageResource(getJewelDrawable(m.get(i).jeweltype_id));
 				if(m.get(i).tick)
 					holder.tick5.setVisibility(View.VISIBLE);
@@ -117,16 +120,21 @@ public class FactoryAdapter extends RecyclerView.Adapter<FactoryAdapter.MyViewHo
 			}
 		}
 
+		holder.flush.setVisibility(View.GONE);
+
 		if(!factoryList.get(pos).all_materials_present && factoryList.get(pos).buttonState==0) {
 			holder.start.setEnabled(false);holder.start.setText("Start");
+
 		}else if(factoryList.get(pos).all_materials_present && factoryList.get(pos).buttonState==0) {
 			holder.start.setEnabled(true);holder.start.setText("Start");
+
 		}else if(factoryList.get(pos).buttonState==1){
 			holder.start.setEnabled(true);holder.start.setText("Fast track production with "+factoryList.get(pos).diamond+" diamonds");
 		}else if(factoryList.get(pos).buttonState==2){
 			//Animation animation = AnimationUtils.loadAnimation(this.mContext, R.anim.jewel_rotate);
 			//holder.thumbnail.startAnimation(animation);
 			holder.start.setEnabled(true);holder.start.setText("Transfer jewels to Jewel Store");
+			holder.flush.setVisibility(View.VISIBLE);
 		}
 	}
 
@@ -187,7 +195,8 @@ public class FactoryAdapter extends RecyclerView.Adapter<FactoryAdapter.MyViewHo
 		public RelativeLayout factory;
 		public LinearLayout factory_details;
 		public Button start;
-
+		public Button flush;
+		public ImageView drawer_state;
 
 
 		public RelativeLayout line1;
@@ -224,7 +233,9 @@ public class FactoryAdapter extends RecyclerView.Adapter<FactoryAdapter.MyViewHo
 			factory = (RelativeLayout)itemView.findViewById(R.id.factory);
 			factory.setOnClickListener(this);
 			factory_details = (LinearLayout)itemView.findViewById(R.id.factory_details);
-
+			drawer_state = (ImageView)itemView.findViewById(R.id.drawer_state);
+			flush = (Button)itemView.findViewById(R.id.flush);
+			flush.setOnClickListener(this);
 
 			line1 = (RelativeLayout)itemView.findViewById(R.id.line1);
 			quantity1 = (TextView) itemView.findViewById(R.id.quantity1);

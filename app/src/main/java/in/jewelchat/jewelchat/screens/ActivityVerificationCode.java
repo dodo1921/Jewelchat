@@ -99,6 +99,7 @@ public class ActivityVerificationCode extends BaseNetworkActivity implements Tex
 				editor.putLong(JewelChatPrefs.LAST_OTO_MSG, response.getLong("created_at"));
 				editor.putLong(JewelChatPrefs.LAST_GROUP_MSG, response.getLong("created_at"));
 				editor.putInt(JewelChatPrefs.TEAM_JC_ID, response.getInt("teamjcid"));
+				editor.putLong(JewelChatPrefs.TEAM_JC_PHONE, response.getLong("teamjcphone"));
 				editor.apply();
 
 				ContentValues cv = new ContentValues();

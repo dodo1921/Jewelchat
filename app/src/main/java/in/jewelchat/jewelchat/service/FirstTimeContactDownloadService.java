@@ -99,12 +99,28 @@ public class FirstTimeContactDownloadService extends IntentService{
 			cv.put(ContactContract.PHONEBOOK_CONTACT_NAME, i.contactName);
 			cv.put(ContactContract.IMAGE_PHONEBOOK, i.contactImage);
 			cv.put(ContactContract.IS_PHONEBOOK_CONTACT, 1);
+			cv.put(ContactContract.IS_GROUP, 0);
+			cv.put(ContactContract.IS_REGIS, 0);
 			cv.put(ContactContract.IS_INVITED, 0);
 			count++;
 
 			Uri uri = Uri.parse(JewelChatDataProvider.SCHEME+"://" + JewelChatDataProvider.AUTHORITY + "/"+ ContactContract.SQLITE_TABLE_NAME);
 
-			getContentResolver().insert(uri, cv);
+			String msg_id = getContentResolver().insert(uri, cv).getLastPathSegment();
+
+			if(msg_id.equals("-1")){
+				ContentValues cvv = new ContentValues();
+
+				cvv.put(ContactContract.PHONEBOOK_CONTACT_NAME, i.contactName);
+				cvv.put(ContactContract.IMAGE_PHONEBOOK, i.contactImage);
+				cvv.put(ContactContract.IS_PHONEBOOK_CONTACT, 1);
+
+
+				Uri uri1 = Uri.parse(JewelChatDataProvider.SCHEME+"://" + JewelChatDataProvider.AUTHORITY + "/"+ ContactContract.SQLITE_TABLE_NAME);
+				getContentResolver().update(uri1, cvv, ContactContract.CONTACT_NUMBER+" = ?", new String[]{i.contactNumber+""});
+
+			}
+
 
 		}
 

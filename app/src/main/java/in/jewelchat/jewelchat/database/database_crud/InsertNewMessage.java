@@ -98,16 +98,17 @@ public class InsertNewMessage extends IntentService implements Response.ErrorLis
 			if(!msg_id.equals("-1")) {
 				Uri urimsg1 = Uri.parse(JewelChatDataProvider.SCHEME + "://" + JewelChatDataProvider.AUTHORITY + "/" + ContactContract.SQLITE_TABLE_NAME);
 				Cursor c = getContentResolver().query(urimsg1, new String[]{ContactContract.UNREAD_COUNT}
-						, ContactContract.JEWELCHAT_ID + " = ? OR " + ContactContract.CONTACT_NUMBER + " = ?"
-						, new String[]{data.getInt("sender_id") + "", data.getLong("sender_phone") + ""}, ContactContract.KEY_ROWID);
+						, "( "+ContactContract.JEWELCHAT_ID + " = ? AND "+ContactContract.IS_GROUP +" = ? ) OR " + ContactContract.CONTACT_NUMBER + " = ?"
+						, new String[]{data.getInt("sender_id") + "", "0" , data.getLong("sender_phone") + ""}, ContactContract.KEY_ROWID);
 
 				if (c.getCount() == 0) { // insert contact if not present
-					Log.i("INSERT NEW CONTACT>>>", data.getInt("sender_phone")+"::"+data.getInt("sender_id"));
+					Log.i("INSERT NEW CONTACT>>>", data.getString("sender_phone")+"::"+data.getInt("sender_id"));
 					ContentValues cv1 = new ContentValues();
 					cv1.put(ContactContract.JEWELCHAT_ID, data.getInt("sender_id"));
+					cv1.put(ContactContract.IS_GROUP, 0);
 					cv1.put(ContactContract.CONTACT_NAME, data.getString("name"));
 					cv1.put(ContactContract.IS_REGIS, 1);
-					cv1.put(ContactContract.CONTACT_NUMBER, data.getInt("sender_phone"));
+					cv1.put(ContactContract.CONTACT_NUMBER, data.getString("sender_phone"));
 					cv1.put(ContactContract.UNREAD_COUNT, 1);
 
 					Uri urimsg3 = Uri.parse(JewelChatDataProvider.SCHEME + "://" + JewelChatDataProvider.AUTHORITY + "/" + ContactContract.SQLITE_TABLE_NAME);
@@ -115,12 +116,12 @@ public class InsertNewMessage extends IntentService implements Response.ErrorLis
 
 				} else {
 					c.moveToFirst();
-					Log.i("UPDATE CONTACT>>>", data.getInt("sender_phone")+"::"+data.getInt("sender_id"));
+					Log.i("UPDATE CONTACT>>>", data.getString("sender_phone")+"::"+data.getInt("sender_id"));
 					ContentValues cv2 = new ContentValues();
 					cv2.put(ContactContract.JEWELCHAT_ID, data.getInt("sender_id"));
 					cv2.put(ContactContract.CONTACT_NAME, data.getString("name"));
 					cv2.put(ContactContract.IS_REGIS, 1);
-					cv2.put(ContactContract.CONTACT_NUMBER, data.getInt("sender_phone"));
+					cv2.put(ContactContract.CONTACT_NUMBER, data.getString("sender_phone"));
 					cv2.put(ContactContract.UNREAD_COUNT, c.getInt(0) + 1);
 
 					Uri urimsg4 = Uri.parse(JewelChatDataProvider.SCHEME + "://" + JewelChatDataProvider.AUTHORITY + "/" + ContactContract.SQLITE_TABLE_NAME);

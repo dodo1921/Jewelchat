@@ -29,7 +29,7 @@ public class UpdateMessageDelivered extends IntentService {
 
 			ContentValues cv = new ContentValues();
 			cv.put(ChatMessageContract.IS_DELIVERED, 1);
-			cv.put(ChatMessageContract.TIME_DELIVERED, data.getInt("created_at"));
+			cv.put(ChatMessageContract.TIME_DELIVERED, data.getLong("created_at"));
 
 			Uri urimsg = Uri.parse(JewelChatDataProvider.SCHEME+"://" + JewelChatDataProvider.AUTHORITY + "/"+ ChatMessageContract.SQLITE_TABLE_NAME);
 			getContentResolver().update(urimsg, cv, ChatMessageContract.KEY_ROWID + "= ?", new String[]{ data.getInt("chat_id")+"" }  );

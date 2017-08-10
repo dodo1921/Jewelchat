@@ -15,6 +15,7 @@ public class JewelChatPrefs {
 	public static final String LAST_OTO_MSG = "last_oto_msg";
 	public static final String LAST_GROUP_MSG = "last_group_msg";
 	public static final String TEAM_JC_ID = "team_jc_id";
+	public static final String TEAM_JC_PHONE = "team_jc_phone";
 	public static final String MSG_STACK = "msg_stack";
 	public static final String CONTACTS_DOWNLOAED = "contacts_downloaded";
 
@@ -44,7 +45,6 @@ public class JewelChatPrefs {
 	public static final String XP = "xp";
 	public static final String STORE_MAX = "storemax";
 	public static final String XP_MAX = "xpmax";
-
 
 
 }

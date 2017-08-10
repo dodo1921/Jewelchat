@@ -172,6 +172,7 @@ public class ActivityChatRoom extends BaseImageActivity implements LoaderManager
 			public void onClick(View view) {
 
 				Intent service = new Intent(getApplicationContext(), DecrementUnreadCounterService.class);
+				service.putExtra("chatroom", chatroom);
 				startService(service);
 				onBackPressed();
 
@@ -221,6 +222,7 @@ public class ActivityChatRoom extends BaseImageActivity implements LoaderManager
 	@Override
 	public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
 		this.chatRoomAdapter.swapCursor(data);
+
 	}
 
 	@Override
@@ -293,6 +295,15 @@ public class ActivityChatRoom extends BaseImageActivity implements LoaderManager
 		XP.setMax(event.LEVEL_XP);XP.setProgress(event.XP);
 		LEVEL_SCORE.setText(event.XP+"/"+event.LEVEL_XP);
 
+	}
+
+
+	@Override
+	public void onBackPressed() {
+		Intent service = new Intent(getApplicationContext(), DecrementUnreadCounterService.class);
+		service.putExtra("chatroom", this.chatroom);
+		startService(service);
+		super.onBackPressed();
 	}
 
 	@Subscribe

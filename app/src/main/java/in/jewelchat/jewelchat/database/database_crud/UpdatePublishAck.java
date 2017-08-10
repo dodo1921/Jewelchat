@@ -29,9 +29,9 @@ public class UpdatePublishAck extends IntentService {
 
 			ContentValues cv = new ContentValues();
 			cv.put(ChatMessageContract.SERVER_ID, data.getInt("chat_id"));
-			cv.put(ChatMessageContract.CREATED_TIME, data.getInt("created_at"));
+			//cv.put(ChatMessageContract.CREATED_TIME, data.getInt("created_at"));
 			cv.put(ChatMessageContract.IS_SUBMITTED, 1);
-			cv.put(ChatMessageContract.TIME_SUBMITTED, data.getInt("created_at"));
+			cv.put(ChatMessageContract.TIME_SUBMITTED, data.getLong("created_at"));
 
 			Uri urimsg = Uri.parse(JewelChatDataProvider.SCHEME+"://" + JewelChatDataProvider.AUTHORITY + "/"+ ChatMessageContract.SQLITE_TABLE_NAME);
 			getContentResolver().update(urimsg, cv, ChatMessageContract.KEY_ROWID + "= ?", new String[]{ data.getInt("sender_msgid")+"" }  );

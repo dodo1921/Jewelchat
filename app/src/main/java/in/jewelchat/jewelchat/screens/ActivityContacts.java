@@ -137,7 +137,7 @@ public class ActivityContacts extends BaseNetworkActivity implements LoaderManag
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 		Uri uri = Uri.parse(JewelChatDataProvider.SCHEME+"://" + JewelChatDataProvider.AUTHORITY + "/"+ ContactContract.SQLITE_TABLE_NAME);
 		CursorLoader cursorLoader = new CursorLoader(getApplicationContext(),
-				uri, null, ContactContract.IS_PHONEBOOK_CONTACT+" = 1", null, ContactContract.IS_REGIS+" ASC, "+ContactContract.CONTACT_NAME+" ASC, "+ContactContract.PHONEBOOK_CONTACT_NAME+" ASC");
+				uri, null, null, null, ContactContract.IS_REGIS+" ASC, "+ContactContract.CONTACT_NAME+" ASC, "+ContactContract.PHONEBOOK_CONTACT_NAME+" ASC");
 		return cursorLoader;
 	}
 

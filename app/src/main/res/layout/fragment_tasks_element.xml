@@ -124,22 +124,21 @@
 
 				</LinearLayout>
 
-				<TextView
-					android:id="@+id/time_left"
+				<ImageView
+					android:id="@+id/drawer_state"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:layout_alignParentRight="true"
 					android:layout_alignParentBottom="true"
-					android:text="Time Left: 02:50:10:05 "
 					android:textColor="@android:color/white"
-					android:textSize="16dp"/>
+					android:src="@drawable/task_closed"/>
 
 				<TextView
 					android:id="@+id/qty"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
+					android:layout_alignParentTop="true"
 					android:layout_alignParentRight="true"
-					android:layout_above="@+id/time_left"
 					android:text="Qty: 100/500 "
 					android:textColor="@android:color/white"
 					android:textSize="16dp"/>

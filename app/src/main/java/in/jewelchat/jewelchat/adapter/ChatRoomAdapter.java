@@ -6,7 +6,7 @@ import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
-import android.util.Log;
+import android.text.format.DateUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +14,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import github.ankushsachdeva.emojicon.EmojiconTextView;
 import in.jewelchat.jewelchat.JewelChatApp;
@@ -63,6 +66,23 @@ public class ChatRoomAdapter extends BaseAdapter<ChatRoomAdapter.ViewHolder> {
 			holder.chatroom_item.setGravity(Gravity.RIGHT);
 			holder.chatroom_item_card.setCardBackgroundColor(this.mContext.getResources().getColor(R.color.colorAccent));
 			holder.chatroom_item_text.setTextColor(Color.WHITE);
+			holder.chatroom_item_time.setText(DateUtils.formatDateTime(this.mContext, cursor.getLong(4), DateUtils.FORMAT_SHOW_TIME));
+
+			holder.chatroom_item_delivery_status.setVisibility(View.VISIBLE);
+
+			int isSubmitted = cursor.getInt(cursor.getColumnIndex(ChatMessageContract.IS_SUBMITTED));
+			int isDelivery = cursor.getInt(cursor.getColumnIndex(ChatMessageContract.IS_DELIVERED));
+			int isRead = cursor.getInt(cursor.getColumnIndex(ChatMessageContract.IS_READ));
+
+			if(isRead>0)
+				holder.chatroom_item_delivery_status.setImageResource(R.drawable.read);
+			else if(isDelivery>0)
+				holder.chatroom_item_delivery_status.setImageResource(R.drawable.delivered);
+			else if(isSubmitted>0)
+				holder.chatroom_item_delivery_status.setImageResource(R.drawable.submitted);
+			else
+				holder.chatroom_item_delivery_status.setImageResource(R.drawable.inserted);
+
 
 		}else{
 
@@ -87,15 +107,46 @@ public class ChatRoomAdapter extends BaseAdapter<ChatRoomAdapter.ViewHolder> {
 				holder.jewel.setScaleX(1.0f); holder.jewel.setScaleY(1.0f);
 			}
 
-			Log.i("room",cursor.getInt(cursor.getColumnIndex(ChatMessageContract.IS_JEWEL_PICKED))
-					+":"+cursor.getInt(cursor.getColumnIndex(ChatMessageContract.KEY_ROWID))
-					+":"+cursor.getInt(cursor.getColumnIndex(ChatMessageContract.JEWEL_TYPE)));
+			holder.chatroom_item_time.setText(DateUtils.formatDateTime(context, cursor.getLong(4), DateUtils.FORMAT_SHOW_TIME));
+			holder.chatroom_item_delivery_status.setVisibility(View.GONE);
+
+			//Log.i("room",cursor.getInt(cursor.getColumnIndex(ChatMessageContract.IS_JEWEL_PICKED))
+			//		+":"+cursor.getInt(cursor.getColumnIndex(ChatMessageContract.KEY_ROWID))
+			//		+":"+cursor.getInt(cursor.getColumnIndex(ChatMessageContract.JEWEL_TYPE)));
+
+
+			int isread = cursor.getInt(cursor.getColumnIndex(ChatMessageContract.IS_READ));
+
+			if(isread==0) {
+
+				JSONObject readack = new JSONObject();
+				try {
+					readack.put("sender_id", JewelChatApp.getSharedPref().getLong(JewelChatPrefs.MY_ID, 0));
+					readack.put("sender_msgid", cursor.getInt(cursor.getColumnIndex(ChatMessageContract.KEY_ROWID)));
+					readack.put("receiver_id", cursor.getInt(cursor.getColumnIndex(ChatMessageContract.CHAT_ROOM)));
+					readack.put("eventname", "msg_read");
+					readack.put("chat_id", cursor.getInt(cursor.getColumnIndex(ChatMessageContract.SENDER_MSG_ID)));
+
+					JSONObject t = new JSONObject();
+					t.put("data", readack);
+
+					if (JewelChatApp.getJCSocket().getSocket().connected())
+						JewelChatApp.getJCSocket().getSocket().emit("read", readack);
+
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
+
+			}
 
 		}
 
 
 		holder.chatroom_msg_date.setVisibility(View.GONE);
-		holder.chatroom_item_text.setText(cursor.getInt(cursor.getColumnIndex(ChatMessageContract.KEY_ROWID))+"::"+cursor.getString(cursor.getColumnIndex(ChatMessageContract.MSG_TEXT)));
+		holder.chatroom_item_text.setText(cursor.getString(cursor.getColumnIndex(ChatMessageContract.MSG_TEXT)));
+
+
+
 
 	}
 
@@ -150,6 +201,7 @@ public class ChatRoomAdapter extends BaseAdapter<ChatRoomAdapter.ViewHolder> {
 		notifyDataSetChanged();
 
 		layoutManager.scrollToPosition(0);
+
 	}
 
 
@@ -165,6 +217,7 @@ public class ChatRoomAdapter extends BaseAdapter<ChatRoomAdapter.ViewHolder> {
 		public CardView chatroom_item_card;
 		public EmojiconTextView chatroom_item_text;
 		public TextView chatroom_item_time;
+		public ImageView chatroom_item_delivery_status;
 
 		public ViewHolder(View itemView) {
 			super(itemView);
@@ -178,6 +231,8 @@ public class ChatRoomAdapter extends BaseAdapter<ChatRoomAdapter.ViewHolder> {
 			chatroom_item_card = (CardView)itemView.findViewById(R.id.chatroom_item_card);
 			chatroom_item_text = (EmojiconTextView)itemView.findViewById(R.id.chatroom_item_text);
 			chatroom_item_time = (TextView)itemView.findViewById(R.id.chatroom_item_time);
+
+			chatroom_item_delivery_status = (ImageView)itemView.findViewById(R.id.chatroom_item_delivery_status);
 		}
 
 		@Override

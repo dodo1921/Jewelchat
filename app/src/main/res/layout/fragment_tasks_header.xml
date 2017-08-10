@@ -20,7 +20,7 @@
 			android:src="@drawable/wallet"
 			android:padding="5dp"
 			app:civ_border_color="@color/colorAccent"
-			app:civ_border_width="4dp"
+			app:civ_border_width="1dp"
 			android:background="@drawable/image_button_states2"
 			android:layout_alignParentLeft="true"/>
 

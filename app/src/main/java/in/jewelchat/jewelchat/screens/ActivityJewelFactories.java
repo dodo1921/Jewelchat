@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.google.firebase.crash.FirebaseCrash;
 import com.squareup.otto.Subscribe;
 
@@ -61,6 +62,7 @@ public class ActivityJewelFactories extends BaseNetworkActivity implements Respo
 	private int pageCounter = 0;
 	private boolean no_more_items_to_load = false;
 	private int pos;
+	private boolean network_call_is_on = false;
 
 
 	@Override
@@ -82,6 +84,7 @@ public class ActivityJewelFactories extends BaseNetworkActivity implements Respo
 		mOnItemClickListener = new FactoryAdapter.OnItemClickListener() {
 			@Override
 			public void onItemClick(View view, int position) {
+
 				pos = position;
 				switch (view.getId()) {
 					case R.id.factory:
@@ -136,6 +139,12 @@ public class ActivityJewelFactories extends BaseNetworkActivity implements Respo
 								snackbarMsg("Not enough space in Jewel Store...");
 						}
 						break;
+
+					case R.id.flush:
+						Log.i("Flush", "Flush");
+						flushFactory(factoryList.get(pos).id);
+						break;
+
 					default:
 						Log.i("click event","Redeem");
 
@@ -170,11 +179,72 @@ public class ActivityJewelFactories extends BaseNetworkActivity implements Respo
 	}
 
 
+	@Override
+	public void onErrorResponse(VolleyError error) {
+		network_call_is_on = false;
+		super.onErrorResponse(error);
+	}
+
+
+	private void flushFactory(int id){
+
+		Response.Listener<JSONObject> response = new Response.Listener<JSONObject>() {
+			@Override
+			public void onResponse(JSONObject response) {
+				network_call_is_on = false;
+				JewelChatApp.appLog(Log.INFO,"FLUSH","FLUSHFACTORY" + ":onResponse");
+				dismissDialog();
+				try {
+
+					Boolean error = response.getBoolean("error");
+					if(error){
+						String err_msg = response.getString("message");
+						throw new Exception(err_msg);
+					}
+
+					//Intent service1 = new Intent(getApplicationContext(), GameStateLoadService.class);
+					//startService(service1);
+
+					factoryList.clear();
+					pageCounter = 0;
+					loading = true;
+					no_more_items_to_load = false;
+					loadFactories();
+
+
+
+				} catch (JSONException e) {
+					FirebaseCrash.report(e);
+				} catch (Exception e) {
+					FirebaseCrash.report(e);
+				}
+			}
+		};
+
+
+
+		JSONObject t = new JSONObject();
+		try {
+			t.put("id", id);
+			//Log.i(">>>NETWORK",pageCounter+"");
+			JewelChatRequest req = new JewelChatRequest(Request.Method.POST, JewelChatURLS.FLUSHFACTORY, t, response, this);
+			if (NetworkConnectivityStatus.getConnectivityStatus() == NetworkConnectivityStatus.CONNECTED) {
+				createDialog("Please Wait");
+				network_call_is_on = true;
+				JewelChatApp.getRequestQueue().add(req);
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+	}
+
+
 	private void startFactory(int id){
 
 		Response.Listener<JSONObject> response = new Response.Listener<JSONObject>() {
 			@Override
 			public void onResponse(JSONObject response) {
+				network_call_is_on = false;
 				JewelChatApp.appLog(Log.INFO,"REDEEMTASK","REDEEMTASK" + ":onResponse");
 				dismissDialog();
 				try {
@@ -232,6 +302,7 @@ public class ActivityJewelFactories extends BaseNetworkActivity implements Respo
 			JewelChatRequest req = new JewelChatRequest(Request.Method.POST, JewelChatURLS.STARTFACTORY, t, response, this);
 			if (NetworkConnectivityStatus.getConnectivityStatus() == NetworkConnectivityStatus.CONNECTED) {
 				createDialog("Please Wait");
+				network_call_is_on = true;
 				JewelChatApp.getRequestQueue().add(req);
 			}
 		} catch (JSONException e) {
@@ -246,6 +317,7 @@ public class ActivityJewelFactories extends BaseNetworkActivity implements Respo
 		Response.Listener<JSONObject> response = new Response.Listener<JSONObject>() {
 			@Override
 			public void onResponse(JSONObject response) {
+				network_call_is_on = false;
 				JewelChatApp.appLog(Log.INFO,"REDEEMTASK","REDEEMTASK" + ":onResponse");
 				dismissDialog();
 				try {
@@ -284,6 +356,7 @@ public class ActivityJewelFactories extends BaseNetworkActivity implements Respo
 			JewelChatRequest req = new JewelChatRequest(Request.Method.POST, JewelChatURLS.STOPFACTORY, t, response, this);
 			if (NetworkConnectivityStatus.getConnectivityStatus() == NetworkConnectivityStatus.CONNECTED) {
 				createDialog("Please Wait");
+				network_call_is_on = true;
 				JewelChatApp.getRequestQueue().add(req);
 			}
 		} catch (JSONException e) {

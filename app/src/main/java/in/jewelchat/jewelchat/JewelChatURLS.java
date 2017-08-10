@@ -40,6 +40,8 @@ public class JewelChatURLS {
 
 	public static final String STARTFACTORY = baseURL + "/startFactory";
 	public static final String STOPFACTORY = baseURL + "/stopFactory";
+	public static final String FLUSHFACTORY = baseURL + "/flushFactory";
+
 
 	public static final String GETACHIEVEMENTS = baseURL + "/getAchievements";
 	public static final String REDEEMACHIEVEMENT = baseURL + "/redeemAchievement";

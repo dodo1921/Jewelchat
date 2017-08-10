@@ -16,6 +16,7 @@
 		<ImageView
 			android:id="@+id/toolbar_back"
 			android:src="@drawable/toolbar_back"
+			android:background="@drawable/image_button_states3"
 			android:layout_alignParentLeft="true"
 			android:visibility="visible"
 			android:layout_centerVertical="true"
@@ -86,6 +87,7 @@
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:layout_alignParentLeft="true"
+				android:background="@drawable/image_button_states3"
 				android:src="@drawable/js_full"/>
 
 

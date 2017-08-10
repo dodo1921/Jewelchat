@@ -2,63 +2,76 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="fill_parent"
                 android:layout_height="74dp"
-                android:orientation="horizontal"
-                android:paddingBottom="10dp"
-                android:paddingLeft="20dp"
-                android:paddingRight="5dp"
-                android:paddingTop="10dp"
-                android:descendantFocusability="blocksDescendants"
-                android:id="@+id/contact_element" >
+                android:background="@android:color/white"
+                >
 
-	<ImageView
-		android:id="@+id/contact_image"
-		android:layout_width="54dp"
-		android:layout_height="54dp"
-		android:layout_alignParentLeft="true"
-		android:layout_alignParentTop="true"
-		android:layout_marginRight="15dp"
-		android:adjustViewBounds="true"
-		android:focusable="false" />
+	<RelativeLayout
+	                android:layout_width="fill_parent"
+	                android:layout_height="74dp"
+	                android:paddingBottom="10dp"
+	                android:paddingLeft="20dp"
+	                android:paddingRight="5dp"
+	                android:paddingTop="10dp"
+	                android:descendantFocusability="blocksDescendants"
+	                android:id="@+id/contact_element" >
 
-	<TextView
-		android:id="@+id/contact_name"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_alignTop="@+id/contact_image"
-		android:layout_marginBottom="5dp"
-		android:layout_toRightOf="@+id/contact_image"
-		android:ellipsize="end"
-		android:lines="1"
-		android:text="Mayukh"
-		android:textColor="#000000"
-		android:textSize="18sp" />
+		<ImageView
+			android:id="@+id/contact_image"
+			android:layout_width="54dp"
+			android:layout_height="54dp"
+			android:layout_alignParentLeft="true"
+			android:layout_alignParentTop="true"
+			android:layout_marginRight="15dp"
+			android:adjustViewBounds="true"
+			android:focusable="false" />
 
-	<TextView
-		android:id="@+id/contact_number"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_toRightOf="@+id/contact_image"
-		android:layout_below="@id/contact_name"
-		android:ellipsize="end"
-		android:lines="1"
-		android:text="+919005835708"
-		android:textColor="#666"
-		android:textSize="14sp" />
+		<TextView
+			android:id="@+id/contact_name"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_alignTop="@+id/contact_image"
+			android:layout_marginBottom="5dp"
+			android:layout_toRightOf="@+id/contact_image"
+			android:ellipsize="end"
+			android:lines="1"
+			android:text="Mayukh"
+			android:textColor="#000000"
+			android:textSize="18sp" />
 
-
-	<TextView
-		android:id="@+id/contact_item_invite"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_weight="1"
-		android:padding="5dp"
-		android:layout_marginRight="10dp"
-		android:background="@color/colorAccent"
-		android:textColor="@android:color/white"
-		android:layout_centerVertical="true"
-		android:layout_alignParentRight="true"
-		android:text="INVITE"/>
+		<TextView
+			android:id="@+id/contact_number"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_toRightOf="@+id/contact_image"
+			android:layout_below="@id/contact_name"
+			android:ellipsize="end"
+			android:lines="1"
+			android:text="+919005835708"
+			android:textColor="#666"
+			android:textSize="14sp" />
 
 
+		<TextView
+			android:id="@+id/contact_item_invite"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_weight="1"
+			android:padding="5dp"
+			android:layout_marginRight="10dp"
+			android:background="@color/colorAccent"
+			android:textColor="@android:color/white"
+			android:layout_centerVertical="true"
+			android:layout_alignParentRight="true"
+			android:text="INVITE"/>
+
+
+
+	</RelativeLayout>
+
+	<View
+		android:background="@color/gray"
+		android:layout_alignParentBottom="true"
+		android:layout_width="match_parent"
+		android:layout_height="1dp"/>
 
 </RelativeLayout>

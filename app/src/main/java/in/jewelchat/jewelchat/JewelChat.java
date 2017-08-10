@@ -1,5 +1,7 @@
 package in.jewelchat.jewelchat;
 
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
@@ -35,6 +37,7 @@ import in.jewelchat.jewelchat.service.DownloadGroupsService;
 import in.jewelchat.jewelchat.service.GameStateLoadService;
 import in.jewelchat.jewelchat.service.GroupChatDownloadService;
 import in.jewelchat.jewelchat.service.OneToOneChatDownloadService;
+import in.jewelchat.jewelchat.service.PublishUnSubmittedService;
 import in.jewelchat.jewelchat.service.RegistrationIntentService;
 import in.jewelchat.jewelchat.util.NetworkConnectivityStatus;
 
@@ -131,6 +134,9 @@ public class JewelChat extends BaseNetworkActivity {
 		service3.putExtras(b2);
 		startService(service3);
 
+		Intent service4 = new Intent(getApplicationContext(), PublishUnSubmittedService.class);
+		startService(service4);
+
 
 		if(!JewelChatApp.getJCSocket().getSocket().connected()){
 			//remove level7 cookie
@@ -140,6 +146,10 @@ public class JewelChat extends BaseNetworkActivity {
 
 
 		getFirebaseCustomToken();
+
+
+		NotificationManager nMgr = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+		nMgr.cancelAll();
 
 	}
 

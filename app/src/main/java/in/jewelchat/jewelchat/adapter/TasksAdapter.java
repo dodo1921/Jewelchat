@@ -104,16 +104,19 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.MyViewHolder
 				}
 
 				if(taskList.get(pos).has_duration){
-					holder.time_left.setVisibility(View.VISIBLE);
-					holder.time_left.setText("Expires at :"+taskList.get(pos).duration);
+					//holder.time_left.setVisibility(View.VISIBLE);
+					//holder.time_left.setText("Expires at :"+taskList.get(pos).duration);
 				}else{
-					holder.time_left.setVisibility(View.GONE);
+					//holder.time_left.setVisibility(View.GONE);
 				}
 
-				if(taskList.get(pos).open)
+				if(taskList.get(pos).open) {
 					holder.task_details.setVisibility(View.VISIBLE);
-				else
+					holder.drawer_state.setImageResource(R.drawable.task_open);
+				}else {
 					holder.task_details.setVisibility(View.GONE);
+					holder.drawer_state.setImageResource(R.drawable.task_closed);
+				}
 
 				//holder.level_lock.setVisibility(View.GONE);
 
@@ -127,7 +130,7 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.MyViewHolder
 				for(int i=0; i<m.size();i++){
 					if(i==0){
 						holder.line1.setVisibility(View.VISIBLE);
-						holder.quantity1.setText(JewelChatApp.getSharedPref().getInt(m.get(i).jeweltype_id+"",0)+"/"+m.get(i).count+"");
+						holder.quantity1.setText("["+JewelChatApp.getSharedPref().getInt(m.get(i).jeweltype_id+"",0)+"]"+m.get(i).count+"");
 						holder.material1.setImageResource(getJewelDrawable(m.get(i).jeweltype_id));
 						if(m.get(i).tick)
 							holder.tick1.setVisibility(View.VISIBLE);
@@ -135,7 +138,7 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.MyViewHolder
 							holder.tick1.setVisibility(View.INVISIBLE);
 					}else if(i==1){
 						holder.line2.setVisibility(View.VISIBLE);
-						holder.quantity2.setText(JewelChatApp.getSharedPref().getInt(m.get(i).jeweltype_id+"",0)+"/"+m.get(i).count+"");
+						holder.quantity2.setText("["+JewelChatApp.getSharedPref().getInt(m.get(i).jeweltype_id+"",0)+"]"+m.get(i).count+"");
 						holder.material2.setImageResource(getJewelDrawable(m.get(i).jeweltype_id));
 						if(m.get(i).tick)
 							holder.tick2.setVisibility(View.VISIBLE);
@@ -143,7 +146,7 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.MyViewHolder
 							holder.tick2.setVisibility(View.INVISIBLE);
 					}else if(i==2){
 						holder.line3.setVisibility(View.VISIBLE);
-						holder.quantity3.setText(JewelChatApp.getSharedPref().getInt(m.get(i).jeweltype_id+"",0)+"/"+m.get(i).count+"");
+						holder.quantity3.setText("["+JewelChatApp.getSharedPref().getInt(m.get(i).jeweltype_id+"",0)+"]"+m.get(i).count+"");
 						holder.material3.setImageResource(getJewelDrawable(m.get(i).jeweltype_id));
 						if(m.get(i).tick)
 							holder.tick3.setVisibility(View.VISIBLE);
@@ -151,7 +154,7 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.MyViewHolder
 							holder.tick3.setVisibility(View.INVISIBLE);
 					}else if(i==3){
 						holder.line4.setVisibility(View.VISIBLE);
-						holder.quantity4.setText(JewelChatApp.getSharedPref().getInt(m.get(i).jeweltype_id+"",0)+"/"+m.get(i).count+"");
+						holder.quantity4.setText("["+JewelChatApp.getSharedPref().getInt(m.get(i).jeweltype_id+"",0)+"]"+m.get(i).count+"");
 						holder.material4.setImageResource(getJewelDrawable(m.get(i).jeweltype_id));
 						if(m.get(i).tick)
 							holder.tick4.setVisibility(View.VISIBLE);
@@ -159,7 +162,7 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.MyViewHolder
 							holder.tick4.setVisibility(View.INVISIBLE);
 					}else if(i==4){
 						holder.line5.setVisibility(View.VISIBLE);
-						holder.quantity5.setText(JewelChatApp.getSharedPref().getInt(m.get(i).jeweltype_id+"",0)+"/"+m.get(i).count+"");
+						holder.quantity5.setText("["+JewelChatApp.getSharedPref().getInt(m.get(i).jeweltype_id+"",0)+"]"+m.get(i).count+"");
 						holder.material5.setImageResource(getJewelDrawable(m.get(i).jeweltype_id));
 						if(m.get(i).tick)
 							holder.tick5.setVisibility(View.VISIBLE);
@@ -242,6 +245,7 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.MyViewHolder
 		public LinearLayout level_lock;
 		public TextView level_lock_text;
 		public LinearLayout task_details;
+		public ImageView drawer_state;
 
 		public RelativeLayout line1;
 		public TextView quantity1;
@@ -286,11 +290,12 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.MyViewHolder
 					coins = (TextView)itemView.findViewById(R.id.coins);
 					money_row = (LinearLayout)itemView.findViewById(R.id.money_row);
 					money = (TextView)itemView.findViewById(R.id.money);
-					time_left = (TextView)itemView.findViewById(R.id.time_left);
+					//time_left = (TextView)itemView.findViewById(R.id.time_left);
 					qty = (TextView)itemView.findViewById(R.id.qty);
 					level_lock = (LinearLayout)itemView.findViewById(R.id.level_lock);
 					level_lock_text = (TextView)itemView.findViewById(R.id.level_lock_text);
 					task_details = (LinearLayout)itemView.findViewById(R.id.task_details);
+					drawer_state = (ImageView)itemView.findViewById(R.id.drawer_state);
 
 					line1 = (RelativeLayout)itemView.findViewById(R.id.line1);
 					quantity1 = (TextView) itemView.findViewById(R.id.quantity1);

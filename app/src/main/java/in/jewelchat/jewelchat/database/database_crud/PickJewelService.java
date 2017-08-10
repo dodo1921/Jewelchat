@@ -32,13 +32,15 @@ public class PickJewelService extends IntentService implements Response.ErrorLis
 	}
 
 	private int msg_id;
+	private int jewel_type;
+
 
 	@Override
 	protected void onHandleIntent(Intent intent) {
 
 		Log.i("Service","PickJewelService");
 
-		int jewel_type = intent.getIntExtra("jewel_type", -1 );
+		jewel_type = intent.getIntExtra("jewel_type", -1 );
 		int serverId = intent.getIntExtra("serverId",0);
 		msg_id = intent.getIntExtra("msg_id",0);
 		int is_group = intent.getIntExtra("is_group",0);
@@ -100,6 +102,9 @@ public class PickJewelService extends IntentService implements Response.ErrorLis
 
 		Uri urimsg4 = Uri.parse(JewelChatDataProvider.SCHEME+"://" + JewelChatDataProvider.AUTHORITY + "/"+ ChatMessageContract.SQLITE_TABLE_NAME);
 		getContentResolver().update(urimsg4, cv2, ChatMessageContract.KEY_ROWID + "= ?", new String[]{ msg_id+"" } );
+
+		int count = JewelChatApp.getSharedPref().getInt(jewel_type+"",0);
+		JewelChatApp.getSharedPref().edit().putInt(jewel_type+"", count+1).commit();
 
 		JewelChatApp.getBusInstance().post(JewelChatApp.produceJewelChangeEvent());
 
